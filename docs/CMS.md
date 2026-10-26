@@ -40,6 +40,19 @@ GitHub Ruleset では PR 必須、必要なチェック、force push とブラ�
 
 写真は生成していません。`xxx-hero-01.webp` などの名前は差し替え位置を示すものです。サイト上の写真枠と HTML の `PHOTO SLOT` コメントを照合できます。
 
+写真の設定は JSON / Pages CMS が優先されます。HTML の `img src` だけを変更すると、データ読み込み後に CMS の設定へ置き換わる箇所があります。特に PHOTO STORY は `data/profile.json` の `stories` から再描画するため、必ず対応する `image` も更新してください。
+
+現在登録されている写真の対応：
+
+| 掲載位置 | 設定項目 | 写真 |
+| --- | --- | --- |
+| TOPのメイン写真 | `data/site.json` → `heroImage` | `yusuke.hero_01.jpg` |
+| CURRENT SEASON | `data/site.json` → `photos.currentRace` | `yusuke.hero_02.jpg` |
+| プロフィール | `data/profile.json` → `portraitImage` | `yusuke.hero_03.jpg` |
+| PHOTO STORYの1枚目 | `data/profile.json` → `stories` の1件目 → `image` | `yusuke.hero_04.jpg` |
+
+ファイルは `assets/images/` にあります。`yusuke.hero_04` はファイル名であり、TOPのメイン写真への自動割り当てではありません。TOPで使う写真を変更するときは `heroImage` を変更します。
+
 1. 使用許可のある実際の写真を、WebP または AVIF に変換します。写真原本は別途バックアップします。
 2. Pages CMS のメディアからアップロードします。保存先は `assets/images/uploads/` です。
 3. 対象フォームの写真欄でアップロードしたファイルを選択し、保存します。

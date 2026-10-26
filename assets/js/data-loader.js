@@ -54,36 +54,67 @@
     const image =
       figure.querySelector("[data-photo-image]") || figure.querySelector("img");
     if (!image) return;
-    figure.dataset.photo = source || "";
+    // An authored HTML photo still works while its CMS field is an xxx slot.
+    // A real CMS path takes precedence; unsafe URLs never become image sources.
+    const actual = isPlaceholder(source)
+      ? imageSource(image.getAttribute("src"))
+      : imageSource(source);
+    const mobile = imageSource(mobileSource);
+    const picture = image.closest("picture");
+    const hero = figure.closest(".hero-photo");
+    const setLoaded = (loaded) => {
+      figure.classList.toggle("is-loaded", loaded);
+      hero?.classList.toggle("is-loaded", loaded);
+    };
+    figure.dataset.photo = actual || source || "";
     const label = figure.querySelector(".photo-label > span");
     if (label)
-      label.textContent = String(source || "xxx")
+      label.textContent = String(actual || source || "xxx")
         .split("/")
         .pop();
-    const actual = imageSource(source);
-    if (!actual) return;
-    image.onload = () => {
-      figure.classList.add("is-loaded");
-      figure.closest(".hero-photo")?.classList.add("is-loaded");
+    if (!actual) {
+      setLoaded(false);
+      return;
+    }
+    // A placeholder load can finish after handlers are installed. Check the
+    // actual selected resource before hiding labels or showing the photo overlay.
+    const markLoaded = () => {
+      const selected = image.currentSrc || image.src;
+      if (image.complete && image.naturalWidth > 0 &&
+          (selected === actual || selected === mobile)) setLoaded(true);
     };
+    setLoaded(false);
+    image.onload = markLoaded;
     image.onerror = () => {
+      // A missing mobile crop must not hide an otherwise valid desktop photo.
+      if (mobile && picture?.querySelector("source") &&
+          (image.currentSrc === mobile || window.matchMedia("(max-width: 767px)").matches)) {
+        picture.querySelectorAll("source").forEach((entry) => entry.remove());
+        image.removeAttribute("srcset");
+        if (image.src !== actual) image.src = actual;
+        // Removing <source> starts resource selection even if img.src is unchanged.
+        return;
+      }
       image.onload = null;
       image.onerror = null;
       image.removeAttribute("srcset");
-      image.closest("picture")?.querySelector("source")?.remove();
+      picture?.querySelectorAll("source").forEach((entry) => entry.remove());
       image.src = placeholderImage;
       image.alt = "xxx";
-      figure.classList.remove("is-loaded");
-      figure.closest(".hero-photo")?.classList.remove("is-loaded");
+      setLoaded(false);
     };
-    const mobile = imageSource(mobileSource);
+    picture?.querySelectorAll("source[data-photo-source]").forEach((entry) => entry.remove());
     if (mobile) {
       const sourceNode = node("source");
       sourceNode.media = "(max-width: 767px)";
       sourceNode.srcset = mobile;
-      image.closest("picture")?.prepend(sourceNode);
+      sourceNode.dataset.photoSource = "";
+      picture?.prepend(sourceNode);
     }
-    image.src = actual;
+    // Do not assign an already-loaded src again: the initial HTML and warm cache
+    // use this same path, and may have fired load before the JSON request ended.
+    if (image.src !== actual) image.src = actual;
+    markLoaded();
   };
   const photoNode = (source, alt = "xxx", mobileSource) => {
     const figure = node("figure", "photo-slot");

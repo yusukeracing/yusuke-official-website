@@ -518,8 +518,28 @@ button {
   padding-bottom: 4px;
 }
 .hero-actions .text-link {
-  font-size: 10px;
+  min-height: 58px;
+  padding: 20px 24px;
+  border: 1px solid var(--line);
+  background: var(--white);
+  color: var(--navy);
+  font-size: 11px;
+  line-height: 1.5;
   gap: 24px;
+}
+.hero-actions .text-link:hover {
+  background: var(--navy);
+  border-color: var(--navy);
+  color: var(--white);
+}
+.hero-actions a:focus-visible {
+  outline-color: var(--navy);
+  box-shadow: 0 0 0 3px var(--white);
+}
+/* Navigation and the scroll link stay readable over every photograph. */
+body[data-page="index"] .site-header,
+.hero-foot {
+  background: var(--white);
 }
 .hero-foot {
   position: relative;

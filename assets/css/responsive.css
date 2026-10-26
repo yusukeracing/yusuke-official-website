@@ -308,7 +308,9 @@
   }
   .hero-actions .text-link {
     font-size: 9px;
-    padding: 10px 0;
+    min-height: 53px;
+    padding: 16px 14px;
+    gap: 12px;
   }
   .hero-foot {
     padding-block: 17px;

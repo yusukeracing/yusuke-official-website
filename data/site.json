@@ -8,7 +8,7 @@
   "team": "GarageL8 Racing Team",
   "machine": "YAMAHA YZF-R6",
   "tagline": "速さの先へ。",
-  "heroImage": "assets/images/xxx-hero-01.webp",
+  "heroImage": "assets/images/yusuke.hero_01.jpg",
   "heroMobileImage": "assets/images/xxx-hero-01-mobile.webp",
   "ga4Id": "xxx",
   "googleFormUrl": "xxx",
@@ -35,10 +35,10 @@
       "url": "https://facebook.com/xxx"
     }
   ],
-  "heroAlt": "xxx",
+  "heroAlt": "コーナーを走行する池田優介とゼッケン29のマシン",
   "ogImage": "assets/images/xxx-ogp.png",
   "photos": {
-    "currentRace": "assets/images/xxx-race-current.webp",
+    "currentRace": "assets/images/yusuke.hero_02.jpg",
     "pit": "assets/images/xxx-pit-01.webp",
     "race": "assets/images/xxx-race-01.webp"
   }
