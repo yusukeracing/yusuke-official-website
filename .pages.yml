@@ -1,0 +1,348 @@
+# Pages CMS: GitHub リポジトリの .pages.yml を読み込んで編集できます。
+# 写真の出力は相対パス。GitHub Pages のプロジェクトURLでも動作します。
+media:
+  input: assets/images/uploads
+  output: assets/images/uploads
+  extensions:
+  - webp
+  - avif
+  - jpg
+  - jpeg
+  - png
+  categories:
+  - image
+content:
+- name: site
+  label: サイト設定・SNS
+  type: file
+  path: data/site.json
+  format: json
+  fields:
+  - name: name
+    label: サイト名
+    type: string
+  - name: description
+    label: サイトの説明
+    type: string
+  - name: url
+    label: 公開URL（末尾 /）
+    type: string
+  - name: season
+    label: シーズン
+    type: string
+  - name: category
+    label: 参戦クラス
+    type: string
+  - name: number
+    label: ゼッケン
+    type: string
+  - name: team
+    label: チーム
+    type: string
+  - name: machine
+    label: マシン
+    type: string
+  - name: tagline
+    label: キャッチコピー
+    type: string
+  - name: heroImage
+    label: HERO・PC用写真
+    type: image
+    description: 実際の写真を選択してください。未設定は xxx のままにします。
+  - name: heroMobileImage
+    label: HERO・スマートフォン用写真
+    type: image
+    description: 実際の写真を選択してください。未設定は xxx のままにします。
+  - name: ga4Id
+    label: GA4 測定ID
+    type: string
+    description: 公開用の測定IDのみ（G-...）。未設定は xxx。秘密鍵は入力しないでください。
+  - name: googleFormUrl
+    label: Google Forms 埋め込みURL
+    type: string
+    description: Google Forms の送信 → 埋め込みHTMLの src にある https://docs.google.com/forms/... のURL。未設定は xxx。
+  - name: email
+    label: 公開メールアドレス
+    type: string
+    description: 公開してよいアドレスのみ。未設定は xxx。
+  - name: phone
+    label: 公開電話番号
+    type: string
+    description: 公開してよい番号のみ。未設定は xxx。
+  - name: sponsorPdf
+    label: スポンサー資料PDF URL
+    type: string
+    description: 公開用PDFのHTTPS URLまたは相対パス。未設定は xxx。
+  - name: socials
+    label: SNSリンク
+    type: object
+    fields:
+    - name: platform
+      label: 種類
+      type: select
+      options:
+        values:
+        - instagram
+        - x
+        - facebook
+    - name: label
+      label: 表示名
+      type: string
+    - name: handle
+      label: アカウント名
+      type: string
+    - name: url
+      label: プロフィールURL
+      type: string
+    list: true
+  - name: heroAlt
+    label: HERO写真の説明（読み上げ用）
+    type: string
+    description: 実際に写っている場面を記述。未設定は xxx。
+  - name: ogImage
+    label: SNS共有用 OGP画像
+    type: image
+    description: 推奨1200×630px。相対パスで保存します。
+  - name: photos
+    label: 各セクションの写真
+    type: object
+    fields:
+    - name: currentRace
+      label: CURRENT SEASON の走行写真
+      type: image
+    - name: pit
+      label: ピット写真
+      type: image
+    - name: race
+      label: レース写真
+      type: image
+- name: profile
+  label: プロフィール・ストーリー
+  type: file
+  path: data/profile.json
+  format: json
+  fields:
+  - name: name
+    label: 氏名
+    type: string
+  - name: nameEn
+    label: 英字氏名
+    type: string
+  - name: birth
+    label: 生年月日
+    type: string
+  - name: hometown
+    label: 出身地
+    type: string
+  - name: height
+    label: 身長
+    type: string
+  - name: weight
+    label: 体重
+    type: string
+  - name: shoeSize
+    label: シューズサイズ
+    type: string
+  - name: bloodType
+    label: 血液型
+    type: string
+  - name: favoriteFood
+    label: 好きな食べ物
+    type: string
+  - name: hobby
+    label: 趣味
+    type: string
+  - name: intro
+    label: 紹介文
+    type: text
+  - name: portraitImage
+    label: プロフィール写真
+    type: image
+    description: 実際の写真を選択してください。未設定は xxx のままにします。
+  - name: detailImage
+    label: プロフィール・ディテール写真
+    type: image
+    description: 実際の写真を選択してください。未設定は xxx のままにします。
+  - name: career
+    label: 経歴・戦績
+    type: object
+    fields:
+    - name: year
+      label: 年
+      type: string
+    - name: title
+      label: 参戦クラス・概要
+      type: string
+    - name: description
+      label: 詳細
+      type: text
+    description: 確認済みの情報だけを入力。不明な情報は xxx。
+    list: true
+  - name: stories
+    label: フォトストーリー
+    type: object
+    fields:
+    - name: number
+      label: 番号
+      type: string
+    - name: title
+      label: 見出し
+      type: string
+    - name: body
+      label: 本文
+      type: text
+    - name: image
+      label: 写真
+      type: image
+      description: 実際の写真を選択してください。未設定は xxx のままにします。
+    list: true
+- name: races
+  label: レース予定・結果
+  type: file
+  path: data/races.json
+  format: json
+  fields:
+  - name: next
+    label: 次戦情報
+    type: object
+    fields:
+    - name: round
+      label: ラウンド
+      type: string
+    - name: date
+      label: 日付
+      type: string
+      description: YYYY-MM-DD。未定は TBA。
+    - name: circuit
+      label: サーキット
+      type: string
+    - name: url
+      label: 大会公式URL
+      type: string
+  - name: results
+    label: レース結果
+    type: object
+    fields: &id001
+    - name: round
+      label: ラウンド
+      type: string
+    - name: date
+      label: 日付
+      type: string
+      description: YYYY-MM-DD。未定は TBA。
+    - name: circuit
+      label: サーキット
+      type: string
+    - name: qualify
+      label: 予選
+      type: string
+      description: 未発表は —。
+    - name: race
+      label: 決勝
+      type: string
+      description: 未発表は —。
+    - name: point
+      label: 獲得ポイント
+      type: string
+      description: 未発表は —。
+    - name: url
+      label: 詳細URL
+      type: string
+    description: 公式に確認できた結果のみ追加してください。
+    list: true
+  - name: schedule
+    label: レース予定
+    type: object
+    fields: *id001
+    description: 公式に確認できた開催日程のみ追加してください。
+    list: true
+- name: news
+  label: ニュース
+  type: file
+  path: data/news.json
+  format: json
+  fields:
+  - name: items
+    label: ニュース
+    type: object
+    fields:
+    - name: date
+      label: 公開日
+      type: date
+      options:
+        format: yyyy-MM-dd
+    - name: category
+      label: カテゴリ
+      type: string
+    - name: title
+      label: タイトル
+      type: string
+    - name: description
+      label: 本文・概要
+      type: text
+    - name: image
+      label: 写真
+      type: image
+      description: 実際の写真を選択してください。未設定は xxx のままにします。
+    - name: url
+      label: 関連記事URL
+      type: string
+      description: 任意。空欄はニュース一覧内で本文を表示します。
+    - name: featured
+      label: 注目記事
+      type: boolean
+      default: false
+    description: 実際のお知らせを追加。トップページには日付が新しい3件を表示します。
+    list: true
+- name: sponsors
+  label: スポンサー
+  type: file
+  path: data/sponsors.json
+  format: json
+  fields:
+  - name: items
+    label: スポンサー
+    type: object
+    fields:
+    - name: name
+      label: 名称
+      type: string
+    - name: category
+      label: カテゴリ
+      type: string
+    - name: logo
+      label: ロゴ
+      type: image
+      description: 実際の写真を選択してください。未設定は xxx のままにします。
+    - name: url
+      label: 公式URL
+      type: string
+    description: 掲載許可を得た実在のスポンサーのみ追加してください。
+    list: true
+- name: gallery
+  label: ギャラリー
+  type: file
+  path: data/gallery.json
+  format: json
+  fields:
+  - name: items
+    label: ギャラリー写真
+    type: object
+    fields:
+    - name: image
+      label: PC用写真
+      type: image
+      description: 実際の写真を選択してください。未設定は xxx のままにします。
+    - name: mobileImage
+      label: スマートフォン用写真
+      type: image
+      description: 実際の写真を選択してください。未設定は xxx のままにします。
+    - name: alt
+      label: 写真の説明（読み上げ用）
+      type: string
+      description: 実際に写っている人物・マシン・場面を短く説明。
+    - name: caption
+      label: キャプション
+      type: string
+    description: 複数の項目に写真を選択して管理できます。未設定は xxx。
+    list: true

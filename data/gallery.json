@@ -1,0 +1,76 @@
+{
+  "items": [
+    {
+      "image": "assets/images/xxx-gallery-01.webp",
+      "mobileImage": "assets/images/xxx-gallery-01-mobile.webp",
+      "alt": "xxx",
+      "caption": "xxx"
+    },
+    {
+      "image": "assets/images/xxx-gallery-02.webp",
+      "mobileImage": "assets/images/xxx-gallery-02-mobile.webp",
+      "alt": "xxx",
+      "caption": "xxx"
+    },
+    {
+      "image": "assets/images/xxx-gallery-03.webp",
+      "mobileImage": "assets/images/xxx-gallery-03-mobile.webp",
+      "alt": "xxx",
+      "caption": "xxx"
+    },
+    {
+      "image": "assets/images/xxx-gallery-04.webp",
+      "mobileImage": "assets/images/xxx-gallery-04-mobile.webp",
+      "alt": "xxx",
+      "caption": "xxx"
+    },
+    {
+      "image": "assets/images/xxx-gallery-05.webp",
+      "mobileImage": "assets/images/xxx-gallery-05-mobile.webp",
+      "alt": "xxx",
+      "caption": "xxx"
+    },
+    {
+      "image": "assets/images/xxx-gallery-06.webp",
+      "mobileImage": "assets/images/xxx-gallery-06-mobile.webp",
+      "alt": "xxx",
+      "caption": "xxx"
+    },
+    {
+      "image": "assets/images/xxx-gallery-07.webp",
+      "mobileImage": "assets/images/xxx-gallery-07-mobile.webp",
+      "alt": "xxx",
+      "caption": "xxx"
+    },
+    {
+      "image": "assets/images/xxx-gallery-08.webp",
+      "mobileImage": "assets/images/xxx-gallery-08-mobile.webp",
+      "alt": "xxx",
+      "caption": "xxx"
+    },
+    {
+      "image": "assets/images/xxx-gallery-09.webp",
+      "mobileImage": "assets/images/xxx-gallery-09-mobile.webp",
+      "alt": "xxx",
+      "caption": "xxx"
+    },
+    {
+      "image": "assets/images/xxx-gallery-10.webp",
+      "mobileImage": "assets/images/xxx-gallery-10-mobile.webp",
+      "alt": "xxx",
+      "caption": "xxx"
+    },
+    {
+      "image": "assets/images/xxx-gallery-11.webp",
+      "mobileImage": "assets/images/xxx-gallery-11-mobile.webp",
+      "alt": "xxx",
+      "caption": "xxx"
+    },
+    {
+      "image": "assets/images/xxx-gallery-12.webp",
+      "mobileImage": "assets/images/xxx-gallery-12-mobile.webp",
+      "alt": "xxx",
+      "caption": "xxx"
+    }
+  ]
+}

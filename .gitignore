@@ -1,0 +1,15 @@
+# Local secrets must never be published.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Generated output and local development tools.
+dist/
+node_modules/
+__pycache__/
+*.pyc
+.DS_Store
+*.log
+.lighthouseci/

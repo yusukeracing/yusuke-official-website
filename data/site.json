@@ -1,0 +1,45 @@
+{
+  "name": "YUSUKE IKEDA",
+  "description": "宮城県角田市出身、全日本ロードレース選手権ST600に参戦する池田優介の公式Webサイト。プロフィール、レース情報、戦績、ニュース、スポンサー・支援情報を掲載。",
+  "url": "https://yusukeracing.github.io/yusuke-official-website/",
+  "season": "2026",
+  "category": "ST600",
+  "number": "29",
+  "team": "GarageL8 Racing Team",
+  "machine": "YAMAHA YZF-R6",
+  "tagline": "速さの先へ。",
+  "heroImage": "assets/images/xxx-hero-01.webp",
+  "heroMobileImage": "assets/images/xxx-hero-01-mobile.webp",
+  "ga4Id": "xxx",
+  "googleFormUrl": "xxx",
+  "email": "xxx",
+  "phone": "xxx",
+  "sponsorPdf": "xxx",
+  "socials": [
+    {
+      "platform": "instagram",
+      "label": "Instagram",
+      "handle": "@xxx",
+      "url": "https://instagram.com/xxx"
+    },
+    {
+      "platform": "x",
+      "label": "X",
+      "handle": "@xxx",
+      "url": "https://x.com/xxx"
+    },
+    {
+      "platform": "facebook",
+      "label": "Facebook",
+      "handle": "xxx",
+      "url": "https://facebook.com/xxx"
+    }
+  ],
+  "heroAlt": "xxx",
+  "ogImage": "assets/images/xxx-ogp.png",
+  "photos": {
+    "currentRace": "assets/images/xxx-race-current.webp",
+    "pit": "assets/images/xxx-pit-01.webp",
+    "race": "assets/images/xxx-race-01.webp"
+  }
+}

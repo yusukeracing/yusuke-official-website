@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /yusuke-official-website/maintenance.html
+Disallow: /yusuke-official-website/404.html
+
+Sitemap: https://yusukeracing.github.io/yusuke-official-website/sitemap.xml

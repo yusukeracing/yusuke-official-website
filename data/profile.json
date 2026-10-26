@@ -1,0 +1,67 @@
+{
+  "name": "池田 優介",
+  "nameEn": "YUSUKE IKEDA",
+  "birth": "2004.10.26",
+  "hometown": "宮城県角田市",
+  "height": "166cm",
+  "weight": "61kg",
+  "shoeSize": "25.5cm",
+  "bloodType": "B",
+  "favoriteFood": "ラーメン",
+  "hobby": "音楽鑑賞",
+  "intro": "宮城県角田市出身のロードレーサー。2026年、GarageL8 Racing Teamから全日本ロードレース選手権 ST600に参戦。YAMAHA YZF-R6とともに、全日本のサーキットを走る。",
+  "portraitImage": "assets/images/xxx-profile-01.webp",
+  "detailImage": "assets/images/xxx-profile-02.webp",
+  "career": [
+    {
+      "year": "2021",
+      "title": "xxx",
+      "description": "xxx"
+    },
+    {
+      "year": "2022",
+      "title": "xxx",
+      "description": "xxx"
+    },
+    {
+      "year": "2023",
+      "title": "xxx",
+      "description": "xxx"
+    },
+    {
+      "year": "2024",
+      "title": "xxx",
+      "description": "xxx"
+    },
+    {
+      "year": "2025",
+      "title": "xxx",
+      "description": "xxx"
+    },
+    {
+      "year": "2026",
+      "title": "全日本ロードレース選手権 ST600",
+      "description": "No.29 / GarageL8 Racing Team / YAMAHA YZF-R6"
+    }
+  ],
+  "stories": [
+    {
+      "number": "01",
+      "title": "宮城から、全日本へ。",
+      "body": "宮城県角田市出身。全日本ロードレース選手権 ST600を舞台に走る、池田優介。",
+      "image": "assets/images/xxx-story-01.webp"
+    },
+    {
+      "number": "02",
+      "title": "ともに走る、チームとマシン。",
+      "body": "GarageL8 Racing Team。YAMAHA YZF-R6。2026年シーズンをともに戦う。",
+      "image": "assets/images/xxx-story-02.webp"
+    },
+    {
+      "number": "03",
+      "title": "サーキットの、そのそばで。",
+      "body": "xxx",
+      "image": "assets/images/xxx-story-03.webp"
+    }
+  ]
+}

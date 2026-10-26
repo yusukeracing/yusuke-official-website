@@ -1,0 +1,525 @@
+/* =================================
+   CMS CONTENT
+   Data stays plain text. URLs are allowlisted; CMS never injects HTML.
+================================= */
+(() => {
+  "use strict";
+  const fileNames = ["site", "profile", "races", "news", "sponsors", "gallery"];
+  const content = {};
+  const placeholderImage = "assets/images/xxx-placeholder.svg";
+  const isPlaceholder = (value) => !value || /xxx|^TBA$/i.test(String(value));
+  const node = (tag, className, text) => {
+    const element = document.createElement(tag);
+    if (className) element.className = className;
+    if (text !== undefined) element.textContent = String(text);
+    return element;
+  };
+  const safeUrl = (value, localOnly = false) => {
+    if (typeof value !== "string" || !value.trim()) return null;
+    try {
+      const url = new URL(value, document.baseURI);
+      if (!["https:", "http:"].includes(url.protocol)) return null;
+      if (url.username || url.password) return null;
+      if (localOnly && url.origin !== location.origin) return null;
+      // Never downgrade visitors to an external unencrypted destination.
+      if (url.origin !== location.origin && url.protocol !== "https:")
+        return null;
+      return url.href;
+    } catch {
+      return null;
+    }
+  };
+  const setLink = (anchor, value, track) => {
+    const url = safeUrl(value);
+    if (!url) return false;
+    anchor.href = url;
+    if (new URL(url).origin !== location.origin) {
+      anchor.target = "_blank";
+      anchor.rel = "noopener noreferrer";
+    }
+    if (track) anchor.dataset.track = track;
+    return true;
+  };
+  const getValue = (key) =>
+    key.split(".").reduce((value, part) => value?.[part], content);
+  const imageSource = (value) => {
+    if (isPlaceholder(value)) return null;
+    const url = safeUrl(value, true);
+    // Images uploaded through the configured CMS media folder only.
+    return url && new URL(url).pathname.includes("/assets/images/")
+      ? url
+      : null;
+  };
+  const loadPhoto = (figure, source, mobileSource) => {
+    const image =
+      figure.querySelector("[data-photo-image]") || figure.querySelector("img");
+    if (!image) return;
+    figure.dataset.photo = source || "";
+    const label = figure.querySelector(".photo-label > span");
+    if (label)
+      label.textContent = String(source || "xxx")
+        .split("/")
+        .pop();
+    const actual = imageSource(source);
+    if (!actual) return;
+    image.onload = () => {
+      figure.classList.add("is-loaded");
+      figure.closest(".hero-photo")?.classList.add("is-loaded");
+    };
+    image.onerror = () => {
+      image.onload = null;
+      image.onerror = null;
+      image.removeAttribute("srcset");
+      image.closest("picture")?.querySelector("source")?.remove();
+      image.src = placeholderImage;
+      image.alt = "xxx";
+      figure.classList.remove("is-loaded");
+      figure.closest(".hero-photo")?.classList.remove("is-loaded");
+    };
+    const mobile = imageSource(mobileSource);
+    if (mobile) {
+      const sourceNode = node("source");
+      sourceNode.media = "(max-width: 767px)";
+      sourceNode.srcset = mobile;
+      image.closest("picture")?.prepend(sourceNode);
+    }
+    image.src = actual;
+  };
+  const photoNode = (source, alt = "xxx", mobileSource) => {
+    const figure = node("figure", "photo-slot");
+    const picture = node("picture");
+    const image = node("img");
+    image.src = placeholderImage;
+    image.alt = String(alt || "xxx");
+    image.width = 1600;
+    image.height = 1067;
+    image.loading = "lazy";
+    image.decoding = "async";
+    image.dataset.photoImage = "";
+    picture.append(image);
+    const mark = node("span", "photo-mark", "+");
+    mark.setAttribute("aria-hidden", "true");
+    const label = node("span", "photo-label", "xxx");
+    label.append(
+      node(
+        "span",
+        "",
+        String(source || "xxx")
+          .split("/")
+          .pop(),
+      ),
+    );
+    figure.append(picture, mark, label);
+    loadPhoto(figure, source, mobileSource);
+    return figure;
+  };
+  const bindText = () => {
+    document.querySelectorAll("[data-bind]").forEach((element) => {
+      const value = getValue(element.dataset.bind);
+      if (value !== undefined && value !== null)
+        element.textContent = String(value);
+    });
+    document.querySelectorAll("[data-photo-bind]").forEach((figure) => {
+      const key = figure.dataset.photoBind;
+      if (key === "site.heroImage")
+        figure.querySelector("img").alt = content.site?.heroAlt || "xxx";
+      else if (figure.querySelector("img")?.alt === "xxx")
+        figure.querySelector("img").alt = "池田優介のレース活動";
+      loadPhoto(
+        figure,
+        getValue(key),
+        key === "site.heroImage" ? content.site?.heroMobileImage : null,
+      );
+    });
+    // Slots with no CMS binding remain explicit xxx placeholders.
+    document
+      .querySelectorAll(".photo-slot[data-photo]:not([data-photo-bind])")
+      .forEach((figure) => {
+        loadPhoto(figure, figure.dataset.photo);
+      });
+  };
+  const renderCareer = () => {
+    if (!Array.isArray(content.profile?.career)) return;
+    document.querySelectorAll("[data-career]").forEach((list) => {
+      list.replaceChildren(
+        ...content.profile.career.map((item) => {
+          const row = node("li");
+          const body = node("div");
+          body.append(
+            node("h3", "", item.title || "xxx"),
+            node("p", "", item.description || "xxx"),
+          );
+          row.append(node("span", "career-year", item.year || "xxx"), body);
+          return row;
+        }),
+      );
+    });
+  };
+  const renderStories = () => {
+    if (!Array.isArray(content.profile?.stories)) return;
+    document.querySelectorAll("[data-stories]").forEach((list) => {
+      list.replaceChildren(
+        ...content.profile.stories.map((item, index) => {
+          const article = node("article", "story-row");
+          const photo = photoNode(item.image, item.title);
+          photo.classList.add("reveal-image");
+          const body = node(
+            "div",
+            `story-copy ${index % 2 ? "reveal-left" : "reveal-right"}`,
+          );
+          body.append(
+            node(
+              "span",
+              "story-number",
+              item.number || String(index + 1).padStart(2, "0"),
+            ),
+            node("h3", "", item.title || "xxx"),
+            node("p", "", item.body || "xxx"),
+          );
+          article.append(photo, body);
+          return article;
+        }),
+      );
+    });
+  };
+  const renderRaces = () => {
+    const data = content.races;
+    if (!data) return;
+    document.querySelectorAll("[data-next]").forEach((element) => {
+      element.textContent = String(data.next?.[element.dataset.next] || "TBA");
+    });
+    document.querySelectorAll("[data-next-pending]").forEach((element) => {
+      element.hidden =
+        !isPlaceholder(data.next?.date) && !isPlaceholder(data.next?.circuit);
+    });
+    document.querySelectorAll("[data-race-table]").forEach((table) => {
+      const items = data[table.dataset.raceTable];
+      if (!Array.isArray(items) || !items.length) return;
+      table.replaceChildren(
+        ...items.map((item) => {
+          const row = node("tr");
+          ["round", "date", "circuit", "qualify", "race", "point"].forEach(
+            (key) => {
+              const cell = node("td", "", item[key] ?? "—");
+              if (key === "circuit" && !isPlaceholder(item.url)) {
+                const anchor = node("a", "", item[key] || "TBA");
+                if (setLink(anchor, item.url)) cell.replaceChildren(anchor);
+              }
+              row.append(cell);
+            },
+          );
+          return row;
+        }),
+      );
+    });
+  };
+  let newsFilter = "all";
+  const renderNews = () => {
+    const items = content.news?.items;
+    if (!Array.isArray(items)) return;
+    const ordered = [...items].sort((a, b) =>
+      String(b.date || "").localeCompare(String(a.date || "")),
+    );
+    document.querySelectorAll("[data-news-list]").forEach((list) => {
+      const limit = Number(list.dataset.limit) || 0;
+      const filtered = ordered.filter(
+        (item) =>
+          newsFilter === "all" ||
+          String(item.category).toUpperCase() === newsFilter,
+      );
+      const visible = limit ? filtered.slice(0, limit) : filtered;
+      if (!visible.length) {
+        const empty = node("div", "empty-state");
+        empty.append(
+          node("span", "tiny-caps", "LATEST UPDATES"),
+          node(
+            "p",
+            "",
+            newsFilter === "all"
+              ? "新しいお知らせを準備しています。"
+              : "このカテゴリーのお知らせはまだありません。",
+          ),
+          node("span", "", "レースや活動の情報を、こちらからお届けします。"),
+        );
+        list.replaceChildren(empty);
+      } else {
+        list.replaceChildren(
+          ...visible.map((item) => {
+            const article = node("article", "news-item");
+            const time = node(
+              "time",
+              "",
+              String(item.date || "").replaceAll("-", "."),
+            );
+            if (/^\d{4}-\d{2}-\d{2}$/.test(item.date))
+              time.dateTime = item.date;
+            const heading = node("h3", "", item.title || "xxx");
+            if (!isPlaceholder(item.url)) {
+              const anchor = node("a", "", item.title || "xxx");
+              if (setLink(anchor, item.url)) heading.replaceChildren(anchor);
+            }
+            article.append(
+              time,
+              node("span", "news-category", item.category || "INFORMATION"),
+              heading,
+            );
+            if (!isPlaceholder(item.url) && safeUrl(item.url)) {
+              const anchor = node("a", "news-arrow", "↗");
+              setLink(anchor, item.url);
+              anchor.setAttribute(
+                "aria-label",
+                `${item.title || "ニュース"}の詳細`,
+              );
+              article.append(anchor);
+            }
+            if (item.description)
+              article.append(node("p", "news-description", item.description));
+            if (!isPlaceholder(item.image)) {
+              const photo = photoNode(item.image, item.title);
+              photo.classList.add("news-image");
+              article.append(photo);
+            }
+            return article;
+          }),
+        );
+      }
+      const status = document.querySelector("[data-news-status]");
+      if (status) status.textContent = `${filtered.length}件のお知らせ`;
+    });
+  };
+  document.querySelectorAll("[data-news-filter]").forEach((button) => {
+    button.addEventListener("click", () => {
+      newsFilter = button.dataset.newsFilter;
+      document.querySelectorAll("[data-news-filter]").forEach((other) => {
+        const selected = other === button;
+        other.classList.toggle("is-active", selected);
+        other.setAttribute("aria-pressed", String(selected));
+      });
+      renderNews();
+    });
+  });
+  const renderGallery = () => {
+    if (!Array.isArray(content.gallery?.items)) return;
+    document.querySelectorAll("[data-gallery]").forEach((grid) => {
+      grid.replaceChildren(
+        ...content.gallery.items.map((item, index) => {
+          const button = node("button", "gallery-item reveal-image");
+          button.type = "button";
+          button.dataset.lightbox = "";
+          button.dataset.src = imageSource(item.image) || "xxx";
+          button.dataset.caption = item.caption || "xxx";
+          button.setAttribute(
+            "aria-label",
+            `ギャラリー ${index + 1} を拡大：${item.alt || "xxx"}`,
+          );
+          const marker = node(
+            "span",
+            "gallery-index",
+            String(index + 1).padStart(2, "0"),
+          );
+          const arrow = node("span", "", "↗");
+          arrow.setAttribute("aria-hidden", "true");
+          marker.append(arrow);
+          button.append(
+            photoNode(item.image, item.alt, item.mobileImage),
+            marker,
+          );
+          return button;
+        }),
+      );
+    });
+  };
+  const renderSponsors = () => {
+    if (!Array.isArray(content.sponsors?.items)) return;
+    document.querySelectorAll("[data-sponsors]").forEach((list) => {
+      if (!content.sponsors.items.length) return;
+      list.replaceChildren(
+        ...content.sponsors.items.map((item) => {
+          const card = node("div", "sponsor-logo");
+          const name = node("p", "", item.name || "xxx");
+          const logo = imageSource(item.logo);
+          if (logo) {
+            const image = node("img");
+            image.src = logo;
+            image.alt = item.name || "xxx";
+            image.width = 240;
+            image.height = 100;
+            image.loading = "lazy";
+            image.decoding = "async";
+            card.append(image);
+          }
+          card.append(name);
+          if (item.category)
+            card.append(node("p", "fine-print", item.category));
+          const anchor = node("a");
+          if (
+            !isPlaceholder(item.url) &&
+            setLink(anchor, item.url, "sponsor_click")
+          ) {
+            anchor.append(card);
+            return anchor;
+          }
+          return card;
+        }),
+      );
+    });
+  };
+  const renderSocials = () => {
+    if (!Array.isArray(content.site?.socials)) return;
+    document.querySelectorAll("[data-socials]").forEach((list) => {
+      const full = list.dataset.socials === "full";
+      list.replaceChildren(
+        ...content.site.socials
+          .filter((item) =>
+            ["instagram", "x", "facebook"].includes(item.platform),
+          )
+          .map((item) => {
+            const anchor = node("a");
+            const valid = setLink(anchor, item.url, "social_click");
+            if (!valid) anchor.removeAttribute("href");
+            anchor.target = "_blank";
+            anchor.rel = "noopener noreferrer";
+            anchor.setAttribute(
+              "aria-label",
+              `${item.label} ${item.handle}（新しいタブで開く）`,
+            );
+            const svg = document.createElementNS(
+              "http://www.w3.org/2000/svg",
+              "svg",
+            );
+            svg.setAttribute("aria-hidden", "true");
+            const use = document.createElementNS(
+              "http://www.w3.org/2000/svg",
+              "use",
+            );
+            use.setAttribute(
+              "href",
+              `assets/icons/brands.svg#${item.platform}`,
+            );
+            svg.append(use);
+            anchor.append(svg);
+            if (full) {
+              const label = node("span", "", item.label || item.platform);
+              label.append(
+                document.createTextNode(" "),
+                node("small", "", item.handle || "xxx"),
+              );
+              const arrow = node("span", "", "↗");
+              arrow.setAttribute("aria-hidden", "true");
+              anchor.append(label, arrow);
+            }
+            return anchor;
+          }),
+      );
+    });
+  };
+  const configureServices = () => {
+    const site = content.site;
+    if (!site) return;
+    let hasDirectContact = false;
+    let hasForm = false;
+    document.querySelectorAll("[data-contact]").forEach((element) => {
+      const key = element.dataset.contact;
+      const value = site[key];
+      if (isPlaceholder(value)) return;
+      const valid =
+        key === "email"
+          ? /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
+          : /^[+\d\s()-]{6,30}$/.test(value);
+      if (!valid) return;
+      hasDirectContact = true;
+      const anchor = node("a", "", value);
+      anchor.href =
+        (key === "email" ? "mailto:" : "tel:") + value.replace(/[\r\n]/g, "");
+      element.replaceChildren(anchor);
+    });
+    const formContainer = document.querySelector("[data-contact-form]");
+    const formUrl = safeUrl(site.googleFormUrl);
+    if (formContainer && !isPlaceholder(site.googleFormUrl) && formUrl) {
+      const url = new URL(formUrl);
+      if (
+        url.protocol === "https:" &&
+        url.hostname === "docs.google.com" &&
+        /^\/forms\/(?:d\/e\/|d\/)[\w-]+\/viewform$/.test(url.pathname)
+      ) {
+        url.searchParams.set("embedded", "true");
+        const iframe = node("iframe", "contact-frame");
+        iframe.src = url.href;
+        iframe.title = "池田優介 お問い合わせフォーム（Google Forms）";
+        iframe.loading = "lazy";
+        iframe.referrerPolicy = "strict-origin-when-cross-origin";
+        formContainer.replaceChildren(iframe);
+        hasForm = true;
+      }
+    }
+    const contactNotice = document.querySelector("[data-contact-notice]");
+    if (contactNotice && hasForm) contactNotice.hidden = true;
+    else if (contactNotice && hasDirectContact)
+      contactNotice.textContent =
+        "フォームは準備中です。公開中の連絡先からお問い合わせください。";
+    if (hasForm || hasDirectContact) {
+      document.querySelectorAll(".contact-direct dd").forEach((element) => {
+        if (!element.querySelector("a")) element.closest("div").hidden = true;
+      });
+    }
+    document.querySelectorAll("[data-sponsor-pdf]").forEach((element) => {
+      if (isPlaceholder(site.sponsorPdf)) return;
+      const anchor = node("a", "text-link", "スポンサー資料を見る ↗");
+      if (setLink(anchor, site.sponsorPdf, "sponsor_click"))
+        element.replaceChildren(anchor);
+    });
+    // xxx GA4 ID: only a real public measurement ID enables external analytics.
+    if (
+      /^G-[A-Z0-9]{6,20}$/.test(site.ga4Id) &&
+      !site.ga4Id.includes("XXXXX")
+    ) {
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function () {
+        window.dataLayer.push(arguments);
+      };
+      window.gtag("js", new Date());
+      window.gtag("config", site.ga4Id);
+      const script = node("script");
+      script.async = true;
+      script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(site.ga4Id)}`;
+      document.head.append(script);
+      if (document.body.dataset.page === "contact")
+        window.gtag("event", "contact_page_view");
+    }
+  };
+  Promise.allSettled(
+    fileNames.map(async (name) => {
+      const response = await fetch(`data/${name}.json`, { cache: "no-cache" });
+      if (!response.ok) throw new Error(`Content unavailable: ${name}`);
+      content[name] = await response.json();
+    }),
+  )
+    .then((results) => {
+      bindText();
+      renderCareer();
+      renderStories();
+      renderRaces();
+      renderNews();
+      renderGallery();
+      renderSponsors();
+      renderSocials();
+      configureServices();
+      if (results.some((result) => result.status === "rejected")) {
+        const notice = node(
+          "p",
+          "data-notice",
+          "一部の最新情報を取得できませんでした。時間をおいて再読み込みしてください。",
+        );
+        notice.setAttribute("role", "status");
+        document.querySelector("main")?.append(notice);
+      }
+      document.dispatchEvent(new Event("content:updated"));
+    })
+    .catch(() => {
+      // Keep authored static content readable if a malformed CMS entry interrupts enhancements.
+      document.documentElement.classList.remove("motion-ready");
+      console.warn(
+        "コンテンツの更新に失敗しました。公開データの形式を確認してください。",
+      );
+    });
+})();
