@@ -815,6 +815,7 @@ body[data-page="index"] .site-header,
   color: var(--muted);
   margin-top: 8px;
   overflow-wrap: anywhere;
+  white-space: pre-line;
 }
 .next-race {
   background: var(--blue);
