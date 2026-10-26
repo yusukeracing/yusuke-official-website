@@ -4,43 +4,71 @@
       "image": "assets/images/yusuke.gallery_01.jpg",
       "mobileImage": "assets/images/yusuke.gallery_01.jpg",
       "alt": "xxx",
-      "caption": "xxx"
+      "caption": "xxx",
+      "width": 1566,
+      "height": 1044,
+      "mobileWidth": 1566,
+      "mobileHeight": 1044
     },
     {
       "image": "assets/images/yusuke.gallery_02.jpg",
       "mobileImage": "assets/images/yusuke.gallery_02.jpg",
       "alt": "xxx",
-      "caption": "xxx"
+      "caption": "xxx",
+      "width": 960,
+      "height": 720,
+      "mobileWidth": 960,
+      "mobileHeight": 720
     },
     {
       "image": "assets/images/yusuke.gallery_03.jpg",
       "mobileImage": "assets/images/yusuke.gallery_03.jpg",
       "alt": "xxx",
-      "caption": "xxx"
+      "caption": "xxx",
+      "width": 1477,
+      "height": 1108,
+      "mobileWidth": 1477,
+      "mobileHeight": 1108
     },
     {
       "image": "assets/images/yusuke.gallery_04.jpg",
       "mobileImage": "assets/images/yusuke.gallery_04.jpg",
       "alt": "xxx",
-      "caption": "xxx"
+      "caption": "xxx",
+      "width": 1566,
+      "height": 1044,
+      "mobileWidth": 1566,
+      "mobileHeight": 1044
     },
     {
       "image": "assets/images/yusuke.gallery_05.jpg",
       "mobileImage": "assets/images/yusuke.gallery_05.jpg",
       "alt": "xxx",
-      "caption": "xxx"
+      "caption": "xxx",
+      "width": 1023,
+      "height": 766,
+      "mobileWidth": 1023,
+      "mobileHeight": 766
     },
     {
       "image": "assets/images/yusuke.gallery_06.jpg",
       "mobileImage": "assets/images/yusuke.gallery_06.jpg",
       "alt": "xxx",
-      "caption": "xxx"
+      "caption": "xxx",
+      "width": 1108,
+      "height": 1477,
+      "mobileWidth": 1108,
+      "mobileHeight": 1477
     },
     {
-      "image": "assets/images/yusuke.gallery_0.jpg",
-      "mobileImage": "assets/images/yusuke.gallery_0.jpg",
+      "image": "assets/images/yusuke.gallery_07.jpg",
+      "mobileImage": "assets/images/yusuke.gallery_07.jpg",
       "alt": "xxx",
-      "caption": "xxx"
+      "caption": "xxx",
+      "width": 1108,
+      "height": 1477,
+      "mobileWidth": 1108,
+      "mobileHeight": 1477
     },
     {
       "image": "assets/images/xxx-gallery-08.webp",
@@ -58,7 +86,11 @@
       "image": "assets/images/yusuke.gallery_10.jpg",
       "mobileImage": "assets/images/yusuke.gallery_10.jpg",
       "alt": "xxx",
-      "caption": "xxx"
+      "caption": "xxx",
+      "width": 1566,
+      "height": 1044,
+      "mobileWidth": 1566,
+      "mobileHeight": 1044
     },
     {
       "image": "assets/images/xxx-gallery-11.webp",

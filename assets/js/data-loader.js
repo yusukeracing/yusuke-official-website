@@ -116,14 +116,26 @@
     if (image.src !== actual) image.src = actual;
     markLoaded();
   };
-  const photoNode = (source, alt = "xxx", mobileSource) => {
+  const photoNode = (source, alt = "xxx", mobileSource, dimensions = {}) => {
     const figure = node("figure", "photo-slot");
     const picture = node("picture");
     const image = node("img");
     image.src = placeholderImage;
     image.alt = String(alt || "xxx");
-    image.width = 1600;
-    image.height = 1067;
+    const validSize = (width, height) =>
+      Number.isInteger(Number(width)) &&
+      Number.isInteger(Number(height)) &&
+      Number(width) > 0 &&
+      Number(height) > 0 &&
+      Number(width) <= 30000 &&
+      Number(height) <= 30000;
+    if (validSize(dimensions.width, dimensions.height)) {
+      image.width = Number(dimensions.width);
+      image.height = Number(dimensions.height);
+    } else {
+      image.width = 1600;
+      image.height = 1067;
+    }
     image.loading = "lazy";
     image.decoding = "async";
     image.dataset.photoImage = "";
@@ -142,6 +154,12 @@
     );
     figure.append(picture, mark, label);
     loadPhoto(figure, source, mobileSource);
+    if (validSize(dimensions.mobileWidth, dimensions.mobileHeight)) {
+      picture.querySelectorAll("source").forEach((entry) => {
+        entry.width = Number(dimensions.mobileWidth);
+        entry.height = Number(dimensions.mobileHeight);
+      });
+    }
     return figure;
   };
   const bindText = () => {
@@ -351,10 +369,17 @@
           const arrow = node("span", "", "↗");
           arrow.setAttribute("aria-hidden", "true");
           marker.append(arrow);
-          button.append(
-            photoNode(item.image, item.alt, item.mobileImage),
-            marker,
-          );
+          const photo = photoNode(item.image, item.alt, item.mobileImage, item);
+          const image = photo.querySelector("img");
+          // Uploaded photos also fit without manually entered dimensions.
+          const fitPhoto = () => {
+            if (!imageSource(image.currentSrc) || !image.naturalWidth) return;
+            image.width = image.naturalWidth;
+            image.height = image.naturalHeight;
+          };
+          image.addEventListener("load", fitPhoto);
+          if (image.complete) fitPhoto();
+          button.append(photo, marker);
           return button;
         }),
       );

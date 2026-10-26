@@ -337,6 +337,22 @@ content:
       label: スマートフォン用写真
       type: image
       description: 実際の写真を選択してください。未設定は xxx のままにします。
+    - name: width
+      label: PC用写真の幅（px・任意）
+      type: number
+      description: 画像ファイルの実際のピクセル幅。読み込み前の表示領域を確保します。未確認の場合は空欄にしてください。
+    - name: height
+      label: PC用写真の高さ（px・任意）
+      type: number
+      description: 画像ファイルの実際のピクセル高さ。幅とセットで入力してください。
+    - name: mobileWidth
+      label: スマートフォン用写真の幅（px・任意）
+      type: number
+      description: モバイル用画像の実際のピクセル幅。PCと同じ画像なら同じ値です。
+    - name: mobileHeight
+      label: スマートフォン用写真の高さ（px・任意）
+      type: number
+      description: モバイル用画像の実際のピクセル高さ。モバイル用の幅とセットで入力してください。
     - name: alt
       label: 写真の説明（読み上げ用）
       type: string
