@@ -15,8 +15,8 @@
   "career": [
     {
       "year": "2021",
-      "title": "xxx",
-      "description": "xxx"
+      "title": "xxxSUGOロードレース選手権 ST150参戦",
+      "description": "ST150年間クラスチャンピオン"
     },
     {
       "year": "2022",
@@ -55,13 +55,13 @@
       "number": "02",
       "title": "ともに走る、チームとマシン。",
       "body": "GarageL8 Racing Team。YAMAHA YZF-R6。2026年シーズンをともに戦う。",
-      "image": "assets/images/xxx-story-02.webp"
+      "image": "assets/images/yusuke.hero_05.jpg"
     },
     {
       "number": "03",
       "title": "サーキットの、そのそばで。",
-      "body": "xxx",
-      "image": "assets/images/xxx-story-03.webp"
+      "body": "応援してくれる人との出会いを大切にし、サーキットの外でもファンとの交流を大事にする。",
+      "image": "assets/images/yusuke.hero_06.png"
     }
   ]
 }
