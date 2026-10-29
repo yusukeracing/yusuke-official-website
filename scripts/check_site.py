@@ -103,6 +103,8 @@ def validate(root: Path):
         csp = meta.get("content-security-policy", "")
         require("object-src 'none'" in csp and "script-src" in csp, f"{name}: missing restrictive CSP")
         for tag, attrs in page.tags:
+            require(not any(re.search(r"[<>\"']", key) for key in attrs),
+                    f"{name}: malformed HTML attributes on {tag}")
             require(not any(key.lower().startswith("on") for key in attrs), f"{name}: inline event handler on {tag}")
             if tag == "script" and attrs.get("src"):
                 require("defer" in attrs or attrs.get("type") == "module", f"{name}: blocking script {attrs['src']}")

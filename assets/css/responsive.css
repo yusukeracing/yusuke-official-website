@@ -750,9 +750,10 @@
     font-size: 13px;
   }
   .profile-details-grid > .portrait {
-    width: 75%;
-    justify-self: end;
-    aspect-ratio: 0.9;
+    width: 100%;
+    max-width: 540px;
+    justify-self: center;
+    aspect-ratio: auto;
   }
   .editorial-split {
     grid-template-columns: 1fr;

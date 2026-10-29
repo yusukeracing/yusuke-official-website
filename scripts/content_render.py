@@ -8,7 +8,7 @@ from __future__ import annotations
 from html import escape
 from html.parser import HTMLParser
 import re
-from urllib.parse import urlsplit
+from urllib.parse import unquote, urlsplit
 
 CATEGORIES = {"ACTIVITY": "活動報告", "RACE": "レース", "INFORMATION": "お知らせ", "MEDIA": "メディア"}
 EMPTY_NEWS = ('<div class="empty-state"><span class="tiny-caps">LATEST UPDATES</span>'
@@ -160,3 +160,75 @@ def update_content_html(text, news, profile, base=""):
         return _opening(tag, attrs) + body + closing
 
     return _rewrite(text, lambda _tag, attrs: "data-profile-message" in attrs, message_section)
+
+
+def _gallery_image(value, base):
+    """Only relative uploaded images may be delivered by the gallery."""
+    if not isinstance(value, str) or not value.startswith("assets/images/"):
+        return None
+    if re.search(r"xxx|^TBA$", value, re.I) or not _safe_url(value, base):
+        return None
+    decoded = unquote(urlsplit(value).path)
+    if any(part in {".", ".."} for part in decoded.split("/")) or re.search(r"[\x00-\x1f\x7f\\]", decoded):
+        return None
+    return escape(value, quote=True)
+
+
+def _gallery_size(width, height):
+    try:
+        numbers = tuple(float(value) for value in (width, height))
+    except (TypeError, ValueError, OverflowError):
+        return None
+    if any(isinstance(value, bool) for value in (width, height)):
+        return None
+    return tuple(int(value) for value in numbers) if all(value.is_integer() and 0 < value <= 30000 for value in numbers) else None
+
+
+def update_gallery_html(text, gallery, base=""):
+    """Publish the same uploaded gallery before JavaScript initializes it."""
+    items = gallery.get("items", []) if isinstance(gallery, dict) else []
+    rendered = []
+    for index, item in enumerate(items if isinstance(items, list) else [], 1):
+        if not isinstance(item, dict):
+            continue
+        image = _gallery_image(item.get("image"), base)
+        if not image:
+            continue
+        caption = escape(str(item.get("caption") or f"フォトギャラリー {index:02d}"), quote=True)
+        alt = escape(str(item.get("alt") or f"池田優介 フォトギャラリー {index:02d}"), quote=True)
+        width, height = _gallery_size(item.get("width"), item.get("height")) or (1600, 1067)
+        mobile = _gallery_image(item.get("mobileImage"), base)
+        source = ""
+        if mobile:
+            dimensions = _gallery_size(item.get("mobileWidth"), item.get("mobileHeight"))
+            size_attrs = f' width="{dimensions[0]}" height="{dimensions[1]}"' if dimensions else ""
+            source = f'<source media="(max-width: 767px)" srcset="{mobile}" data-photo-source{size_attrs}>'
+        rendered.append(
+            f'<button type="button" class="gallery-item reveal-image" data-lightbox data-src="{image}" '
+            f'data-caption="{caption}" aria-label="ギャラリー {index} を拡大：{alt}">'
+            f'<figure class="photo-slot" data-photo="{image}"><picture>{source}'
+            f'<img src="{image}" alt="{alt}" width="{width}" height="{height}" '
+            'loading="lazy" decoding="async" data-photo-image></picture></figure>'
+            f'<span class="gallery-index">{index:02d}<span aria-hidden="true">↗</span></span></button>'
+        )
+    body = "".join(rendered) or '<p class="quiet-empty">写真は、準備が整い次第掲載します。</p>'
+    return _rewrite(text, lambda _tag, attrs: "data-gallery" in attrs,
+                    lambda _tag, _attrs, opening, _body, closing: opening + body + closing)
+
+
+def update_utility_contact_html(text, settings):
+    """Error notices remain useful even when the content loader is omitted."""
+    email = settings.get("email") if isinstance(settings, dict) else None
+    valid = (isinstance(email, str)
+             and re.fullmatch(r"[^\s@<>\"'?#]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,63}", email)
+             and not re.search(r"%(?:0a|0d)", email, re.I))
+
+    def contact(_tag, _attrs, opening, body, closing):
+        if not re.search(r'\bdata-contact\s*=\s*["\']email["\']', body):
+            return opening + body + closing
+        if not valid:
+            return ""
+        safe_email = escape(email, quote=True)
+        return opening + f'お急ぎの場合：<span data-contact="email"><a href="mailto:{safe_email}">{safe_email}</a></span>' + closing
+
+    return _rewrite(text, lambda tag, attrs: tag == "p" and "fine-print" in attrs.get("class", "").split(), contact)
