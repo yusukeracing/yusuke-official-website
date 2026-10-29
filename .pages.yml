@@ -92,12 +92,15 @@ content:
     - name: label
       label: 表示名
       type: string
+      description: SNSのサービス名です。表示はSNSの種類から自動設定するため、通常は編集不要です。
     - name: handle
       label: アカウント名
       type: string
+      description: プロフィールURLが未入力の場合のみ使用する任意項目です。Instagram・XはURLを入力すると @表示もURLから自動更新します。
     - name: url
       label: プロフィールURL
       type: string
+      description: 本人のプロフィールURLを入力してください。Instagram・Xの表示名とリンクを同時に更新します。投稿URLは指定しないでください。
     list: true
   - name: heroAlt
     label: HERO写真の説明（読み上げ用）

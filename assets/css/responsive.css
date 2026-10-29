@@ -238,7 +238,7 @@
     right: 0;
     font-size: 7px;
     letter-spacing: 0.12em;
-    font-weight: 700;
+    font-weight: 600;
   }
   .menu-toggle[aria-expanded="true"] > span:first-child {
     transform: rotate(45deg);

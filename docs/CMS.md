@@ -92,7 +92,11 @@ GitHub Ruleset では PR 必須、必要なチェック、force push とブラ�
 
 ### SNS
 
-`socials` の各 `url` と `handle` を、本人の公開アカウントへ変更します。初期値 `https://instagram.com/xxx`、`https://x.com/xxx`、`https://facebook.com/xxx` は未設定を示します。実在の本人アカウントだと解釈しないでください。
+`socials` で種類を選び、本人の**プロフィールURL（`url`）**を入力してください。InstagramとXはURLを基準に `@アカウント名` とリンク先を自動更新するので、HTMLや表示名を別々に直す必要はありません。投稿・リール・共有画面のURLではなく、プロフィール画面のURLを使います。
+
+`handle` はURLが未入力の場合に使う任意の補助項目です。URLとアカウント名が食い違うときは、プロフィールURLが優先されます。サービス名の `label` は編集不要です。仮値の `xxx`、未設定のURL、不正な接続先は公開リンクとして表示しません。初期値 `https://instagram.com/xxx` などは未設定を示すもので、実在の本人アカウントではありません。
+
+ヘッダー・フッター・SNS欄は同じ設定を使います。ビルド時にもリンクをHTMLへ反映し、JavaScriptの読み込み待ちや無効時にも古い `@xxx` が残らないようにしています。編集後は `main` への反映とGitHub Actionsの公開完了を確認してください。
 
 ### Google Forms
 
