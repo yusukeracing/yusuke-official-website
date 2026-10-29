@@ -441,8 +441,9 @@
     gap: 40px;
   }
   .who-grid > .portrait {
-    width: 80%;
-    aspect-ratio: 4/4.7;
+    width: 100%;
+    max-width: 300px;
+    aspect-ratio: 2/3;
   }
   .who-copy {
     padding-left: 5%;
@@ -484,9 +485,10 @@
   .story-row:nth-child(2) > .photo-slot {
     grid-column: 1;
     grid-row: 1;
-    aspect-ratio: 1.3;
-    width: 85%;
-    justify-self: end;
+    aspect-ratio: auto;
+    width: 100%;
+    max-width: 345px;
+    justify-self: center;
   }
   .story-row:nth-child(2) > .story-copy {
     grid-column: 1;
@@ -494,7 +496,10 @@
     padding-left: 0;
   }
   .story-row:nth-child(3) > .photo-slot {
-    aspect-ratio: 1.5;
+    aspect-ratio: auto;
+  }
+  .story-row > .photo-slot img {
+    max-height: min(460px, 70svh);
   }
   .story-copy {
     padding-inline: 16px;

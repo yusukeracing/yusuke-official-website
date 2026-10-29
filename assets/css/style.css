@@ -644,7 +644,13 @@ body[data-page="index"] .site-header,
   aspect-ratio: 4/5;
 }
 .who-grid > .portrait {
-  width: 90%;
+  aspect-ratio: 2/3;
+  width: 100%;
+  max-width: 360px;
+  justify-self: center;
+}
+.who-grid > .portrait img {
+  object-fit: contain;
 }
 .who-copy h2,
 .editorial-copy h2,
@@ -741,7 +747,8 @@ body[data-page="index"] .site-header,
 .story-row:nth-child(2) > .photo-slot {
   grid-column: 2;
   grid-row: 1;
-  aspect-ratio: 4/4.4;
+  max-width: 390px;
+  justify-self: center;
 }
 .story-row:nth-child(2) > .story-copy {
   grid-column: 1;
@@ -752,8 +759,19 @@ body[data-page="index"] .site-header,
   grid-template-columns: 1.7fr 1fr;
   gap: 8%;
 }
-.story-row:nth-child(3) > .photo-slot {
-  aspect-ratio: 1.8;
+/* Editorial photographs retain the original framing instead of filling a crop. */
+.story-row > .photo-slot {
+  width: 100%;
+  aspect-ratio: auto;
+}
+.story-row > .photo-slot picture {
+  position: static;
+}
+.story-row > .photo-slot img {
+  width: 100%;
+  height: auto;
+  max-height: 520px;
+  object-fit: contain;
 }
 .story-number {
   display: block;
@@ -977,6 +995,7 @@ body[data-page="index"] .site-header,
 .gallery-item .photo-slot img {
   width: 100%;
   height: auto;
+  max-height: min(520px, 70svh);
   object-fit: contain;
 }
 .gallery-item:hover .gallery-index {

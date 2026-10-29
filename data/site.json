@@ -31,8 +31,8 @@
     {
       "platform": "facebook",
       "label": "Facebook",
-      "handle": "xxx",
-      "url": "https://facebook.com/xxx"
+      "handle": "",
+      "url": ""
     }
   ],
   "heroAlt": "コーナーを走行する池田優介とゼッケン29のマシン",
@@ -42,5 +42,7 @@
     "pit": "assets/images/xxx-pit-01.webp",
     "race": "assets/images/xxx-race-01.webp"
   },
-  "googleFormHeight": 2081
+  "googleFormHeight": 2081,
+  "maintenanceEnabled": false,
+  "maintenanceMessage": "現在、Webサイトのメンテナンスを行っています。\nご不便をおかけしますが、公開再開までしばらくお待ちください。"
 }

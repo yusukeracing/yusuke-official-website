@@ -69,6 +69,10 @@ def normalize_social_links(items: object) -> list[dict[str, str]]:
             continue
         raw = item.get("url")
         if placeholder(raw) or official_placeholder_url(platform, raw):
+            if platform == "facebook" and (placeholder(item.get("handle")) or item.get("handle") == "アカウント準備中"):
+                result.append({"platform": platform, "label": LABELS[platform], "handle": "アカウント準備中", "url": "https://www.facebook.com/"})
+                seen.add(platform)
+                continue
             handle = item.get("handle", "")
             if not isinstance(handle, str):
                 continue
@@ -92,6 +96,10 @@ def normalize_social_links(items: object) -> list[dict[str, str]]:
         except ValueError:
             continue
         path = url.path.strip("/")
+        if platform == "facebook" and path == "":
+            result.append({"platform": platform, "label": LABELS[platform], "handle": "アカウント準備中", "url": "https://www.facebook.com/"})
+            seen.add(platform)
+            continue
         if platform == "facebook" and path == "profile.php":
             values = parse_qs(url.query, keep_blank_values=True).get("id", [])
             if len(values) != 1 or not re.fullmatch(r"[0-9]+", values[0]):
@@ -125,7 +133,9 @@ def render_social_links(items: list[dict[str, str]], mode: str) -> str:
         content = icon
         if mode == "full":
             content += f'<span>{label} <small>{handle}</small></span><span aria-hidden="true">↗</span>'
-        rendered.append(f'<a href="{url}" target="_blank" rel="noopener noreferrer" data-track="social_click" aria-label="{label} {handle}（新しいタブで開く）">{content}</a>')
+        destination = "Facebookトップ・" if item["platform"] == "facebook" and item["url"] == "https://www.facebook.com/" else ""
+        accessible_label = f"{label} {handle}（{destination}新しいタブで開く）"
+        rendered.append(f'<a href="{url}" target="_blank" rel="noopener noreferrer" data-track="social_click" data-social-platform="{platform}" title="{accessible_label}" aria-label="{accessible_label}">{content}</a>')
     return "".join(rendered)
 
 

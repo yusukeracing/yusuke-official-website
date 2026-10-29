@@ -1,0 +1,70 @@
+/* Activity reports and a personal message, editable through Pages CMS. */
+.news-item .news-description {
+  white-space: pre-line;
+  line-height: 2;
+  overflow-wrap: anywhere;
+}
+.news-item .news-sample-note,
+.news-item .news-read-more {
+  grid-column: 3;
+}
+.sample-note,
+.news-sample-note {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--muted);
+}
+.news-sample-note {
+  margin-top: -12px;
+}
+.news-read-more {
+  color: var(--blue);
+  font-size: 12px;
+  text-decoration: underline;
+  text-underline-offset: 5px;
+  justify-self: start;
+}
+.rider-message {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: clamp(28px, 6vw, 100px);
+  border-bottom: 1px solid var(--line);
+}
+.rider-message-heading h2 {
+  font-size: clamp(21px, 2.2vw, 30px);
+  font-weight: 600;
+  line-height: 1.6;
+}
+.rider-message-heading .sample-note {
+  margin-top: 14px;
+}
+.rider-message-copy > [data-bind="profile.message"] {
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+  line-height: 2.1;
+  color: var(--muted);
+}
+.rider-message-sign {
+  margin-top: 28px;
+  font-size: 17px;
+  font-weight: 500;
+}
+.rider-message-sign > span {
+  display: block;
+  margin-top: 3px;
+  font-size: 10px;
+  letter-spacing: .1em;
+  color: var(--muted);
+}
+@media (max-width: 767px) {
+  .rider-message {
+    grid-template-columns: 1fr;
+  }
+  .rider-message-copy > [data-bind="profile.message"] {
+    font-size: 14px;
+  }
+  .news-item .news-sample-note,
+  .news-item .news-read-more {
+    grid-column: 1 / 3;
+  }
+}

@@ -4,6 +4,16 @@
 
 HTML / CSS / Vanilla JavaScript の静的サイトです。Node.js、PHP、データベース、フロントエンドフレームワークは不要です。
 
+## 日常の更新はコード不要
+
+[Pages CMS](https://app.pagescms.org/)にGitHubでサインインし、このリポジトリの `main` を選びます。「活動報告・ニュース」で日付・カテゴリ・タイトル・本文・写真を入力して保存すると、検証後に自動公開されます。初回のGitHub App接続だけはアカウント所有者の操作が必要です。[接続・投稿の手順](docs/CMS.md)を参照してください。
+
+「プロフィール・ストーリー」ではTOPとプロフィール下の「池田優介からのヒトコト」も変更できます。今回の活動報告とヒトコトは依頼に基づく仮原稿で、正式な文章に更新後に仮原稿表示をOFFにします。仮原稿も公開されるため、非公開の下書きは登録しません。
+
+メンテナンス中は「サイト設定・SNS」→「メンテナンス画面を表示する」をONにして保存します。公開完了後、サーバーを止めずに全ページへ案内を表示します。再開はOFFにして保存します。設定ファイルでは `data/site.json` の `maintenanceEnabled` です。通常はOFFにしています。[切り替えと復旧](docs/CMS.md#メンテナンス画面に切り替える)も参照してください。
+
+開発用の切り替え・復旧確認は `python3 scripts/test_maintenance.py` で実行できます。一時コピー内で検証するため、公開設定や作業中の `dist/` は変更しません。
+
 ## ローカルで確認する
 
 Python 3 が必要です。リポジトリのルートで実行します。
@@ -31,7 +41,7 @@ python3 -m http.server 8000 --bind 127.0.0.1 --directory dist
 | トップ | `index.html` |
 | プロフィール | `profile.html` / `data/profile.json` |
 | レース・予定・戦績 | `race.html` / `data/races.json` |
-| ニュース | `news.html` / `data/news.json` |
+| 活動報告・ニュース | `news.html` / `data/news.json` |
 | 法人パートナー | `sponsor.html` / `data/sponsors.json` |
 | スポンサー企業一覧 | `partners.html` / `data/sponsors.json` |
 | 個人サポート | `support.html` |
@@ -43,7 +53,7 @@ python3 -m http.server 8000 --bind 127.0.0.1 --directory dist
 | CMS 設定 | `.pages.yml` |
 | スタイル / 挙動 | `assets/css/` / `assets/js/` |
 
-Pages CMS ではニュース・戦績・予定・プロフィール・スポンサー・公開用の応援メッセージ・写真・サイト設定を編集できます。接続と日常の更新は [CMS の使い方](docs/CMS.md)、公開・セキュリティ・障害対応は [運用手順](docs/OPERATIONS.md) を参照してください。
+Pages CMS では活動報告・ニュース・戦績・予定・プロフィール・本人のヒトコト・スポンサー・公開用の応援メッセージ・写真・メンテナンス切り替え・サイト設定を編集できます。接続と日常の更新は [CMS の使い方](docs/CMS.md)、公開・セキュリティ・障害対応は [運用手順](docs/OPERATIONS.md) を参照してください。
 
 スポンサー企業とメッセージのデータは未提供のため、掲載リストは空です。企業名・ロゴの掲載許可、メッセージと公開表示名の掲載同意を確認してからCMSに登録してください。問い合わせの原文・メール・電話・未承認投稿・下書きは公開JSONやGitに保存しません。Google Formsの回答を自動公開する機能はありません。
 
@@ -51,7 +61,7 @@ Pages CMS ではニュース・戦績・予定・プロフィール・スポン�
 
 ## 写真と未確定情報
 
-提供された `yusuke.hero_01.jpg`〜`yusuke.hero_04.jpg` を、TOP・CURRENT SEASON・プロフィール・PHOTO STORYに登録しています。未提供の写真枠は `xxx` と `<!-- PHOTO SLOT : xxx-… -->` コメントで示しています。人物やレースの仮写真は生成・流用していません。戦績・スポンサー・ニュース・レース予定も未確認の内容を補完していません。
+提供された写真を、TOP・CURRENT SEASON・プロフィール・PHOTO STORY・ギャラリーに登録しています。未提供の写真枠は `xxx` と `<!-- PHOTO SLOT : xxx-… -->` コメントで示しています。人物やレースの仮写真は生成・流用していません。戦績・スポンサー・レース予定の未確認情報は補完していません。活動報告と本人のヒトコトには、依頼内容に基づく仮原稿を明示して掲載しています。
 
 写真は HTML の `src` だけでなく、対応する JSON / Pages CMS の画像設定を更新してください。特に PHOTO STORY は JSON から再描画します。登録場所は [写真の差し替え](docs/CMS.md#写真の差し替え) の対応表を参照してください。
 
@@ -63,7 +73,7 @@ Pages CMS ではニュース・戦績・予定・プロフィール・スポン�
 
 - 本人の写真、過去の戦績、2026 年の日程・結果、ニュース、スポンサーを、確認できた情報で登録する。
 - `data/site.json` の `url` を公開 URL に合わせる。初期値は `https://yusukeracing.github.io/yusuke-official-website/`。
-- SNS の `xxx` を実際のアカウントに変更する。
+- Instagram・Xは本人のプロフィールURLを登録済み。Facebookはアカウント準備中としてサービスのTOPへリンクし、本人のURLが用意できたらCMSから変更する。
 - Google Forms の公開範囲・回答受付を確認する。必要に応じて公開可能なメール・電話番号、スポンサー資料 URL を設定する。
 - GA4 を使う場合は `ga4Id` を実際の測定 ID に変更し、プライバシー告知・必要な同意対応を確認する。
 - GitHub Pages と Pages CMS を接続し、編集権限、main の保護、HTTPS を設定する。

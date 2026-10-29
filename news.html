@@ -8,7 +8,7 @@
       content="default-src 'self'; script-src 'self' https://www.googletagmanager.com 'sha256-vFQVl+MAL6ysAkpPp2+XtzfbIoEyRq8qyvK6hTO3eoA='; style-src 'self'; img-src 'self' data: https://www.google-analytics.com https://region1.google-analytics.com; connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com; frame-src https://docs.google.com; object-src 'none'; base-uri 'none'; form-action https://docs.google.com"
     />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
-    <title>NEWS | 池田優介 Official Website</title>
+    <title>活動報告・ニュース | 池田優介 Official Website</title>
     <meta
       name="description"
       content="宮城県角田市出身、全日本ロードレース選手権ST600に参戦する池田優介の公式Webサイト。プロフィール、レース情報、戦績、ニュース、スポンサー・支援情報を掲載。"
@@ -21,7 +21,7 @@
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="ja_JP" />
     <meta property="og:site_name" content="YUSUKE IKEDA" />
-    <meta property="og:title" content="NEWS | 池田優介 Official Website" />
+    <meta property="og:title" content="活動報告・ニュース | 池田優介 Official Website" />
     <meta
       property="og:description"
       content="宮城県角田市出身、全日本ロードレース選手権ST600に参戦する池田優介の公式Webサイト。プロフィール、レース情報、戦績、ニュース、スポンサー・支援情報を掲載。"
@@ -37,8 +37,10 @@
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml" />
     <meta name="theme-color" content="#0068FF" />
-    <link rel="stylesheet" href="assets/css/style.css?v=20261029-social-type-1" />
-    <link rel="stylesheet" href="assets/css/responsive.css?v=20261029-social-type-1" />
+    <link rel="stylesheet" href="assets/css/style.css?v=20261029-activity-1" />
+    <link rel="stylesheet" href="assets/css/responsive.css?v=20261029-activity-1" />
+    <link rel="stylesheet" href="assets/css/activity.css?v=20261029-activity-1" />
+    <link rel="stylesheet" href="assets/css/social.css?v=20261029-activity-1" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -62,10 +64,10 @@
         ]
       }
     </script>
-    <script src="assets/js/main.js?v=20261029-social-type-1" defer></script>
-    <script src="assets/js/animation.js?v=20261029-social-type-1" defer></script>
-    <script src="assets/js/social-links.js?v=20261029-social-type-1" defer></script>
-    <script src="assets/js/data-loader.js?v=20261029-social-type-1" defer></script>
+    <script src="assets/js/main.js?v=20261029-activity-1" defer></script>
+    <script src="assets/js/animation.js?v=20261029-activity-1" defer></script>
+    <script src="assets/js/social-links.js?v=20261029-activity-1" defer></script>
+    <script src="assets/js/data-loader.js?v=20261029-activity-1" defer></script>
   </head>
   <body id="top" data-page="news">
     <a class="skip-link" href="#main">本文へスキップ</a>
@@ -88,7 +90,7 @@
         >
           <a href="index.html">HOME</a><a href="profile.html">PROFILE</a
           ><a href="race.html">RACE</a
-          ><a href="news.html" aria-current="page">NEWS</a
+          ><a href="news.html" aria-current="page">活動報告</a
           ><a href="sponsor.html">SPONSOR</a><a href="support.html">SUPPORT</a
           ><a href="contact.html">CONTACT</a>
         </nav>
@@ -106,16 +108,16 @@
     </header>
     <main id="main">
       <section class="page-title wrap">
-        <p class="eyebrow"><span>YUSUKE IKEDA</span> / NEWS</p>
-        <h1>THE LATEST.</h1>
-        <p>レースと活動のニュースを、ここから。</p>
+        <p class="eyebrow"><span>YUSUKE IKEDA</span> / ACTIVITY &amp; NEWS</p>
+        <h1>ACTIVITY &amp; NEWS.</h1>
+        <p>活動報告とレースのニュースを、ここから。</p>
         <span class="page-number" aria-hidden="true">29</span>
       </section>
       <section class="section-space wrap news-page">
         <div
           class="news-filters"
           role="group"
-          aria-label="ニュースのカテゴリー"
+          aria-label="活動報告・ニュースのカテゴリー"
         >
           <button
             type="button"
@@ -123,17 +125,19 @@
             aria-pressed="true"
             data-news-filter="all"
           >
-            ALL</button
+            すべて</button
+          ><button type="button" aria-pressed="false" data-news-filter="ACTIVITY">
+            活動報告</button
           ><button type="button" aria-pressed="false" data-news-filter="RACE">
-            RACE</button
+            レース</button
           ><button
             type="button"
             aria-pressed="false"
             data-news-filter="INFORMATION"
           >
-            INFORMATION</button
+            お知らせ</button
           ><button type="button" aria-pressed="false" data-news-filter="MEDIA">
-            MEDIA
+            メディア
           </button>
         </div>
         <p class="sr-only" data-news-status role="status"></p>
@@ -175,7 +179,7 @@
           <nav aria-label="フッターナビゲーション">
             <a href="index.html">HOME</a><a href="profile.html">PROFILE</a
             ><a href="race.html">RACE</a
-            ><a href="news.html" aria-current="page">NEWS</a
+            ><a href="news.html" aria-current="page">活動報告</a
             ><a href="sponsor.html">SPONSOR</a><a href="support.html">SUPPORT</a
             ><a href="contact.html">CONTACT</a>
           </nav>
@@ -220,7 +224,7 @@
     <noscript
       ><nav class="nojs-nav wrap" aria-label="ページ一覧">
         <a href="index.html">HOME</a><a href="profile.html">PROFILE</a
-        ><a href="race.html">RACE</a><a href="news.html">NEWS</a
+        ><a href="race.html">RACE</a><a href="news.html">活動報告</a
         ><a href="sponsor.html">SPONSOR</a><a href="support.html">SUPPORT</a
         ><a href="contact.html">CONTACT</a>
       </nav>
