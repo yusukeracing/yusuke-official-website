@@ -23,6 +23,9 @@ def normalized(platform, name, url, handle=None):
             "handle": handle or "@" + name, "url": url}
 
 
+FACEBOOK_PENDING = normalized("facebook", "", "https://www.facebook.com/", "アカウント準備中")
+
+
 CASES = [
     ([entry(url="https://instagram.com/Example_42/?igsh=tracking#bio", handle="@stale")], [normalized("instagram", "Example_42", "https://www.instagram.com/Example_42/")]),
     ([entry(url="https://m.instagram.com/example.name")], [normalized("instagram", "example.name", "https://www.instagram.com/example.name/")]),
@@ -44,7 +47,18 @@ CASES = [
     ([entry("x", "https://x.com/abcxxx")], [normalized("x", "abcxxx", "https://x.com/abcxxx")]),
     ([entry(url="https://www.instagram.com/Example_42:443")], []),
     ([entry(url="https://www.instagram.com:443/Example_42")], [normalized("instagram", "Example_42", "https://www.instagram.com/Example_42/")]),
-    ([entry(url="https://instagram.com/xxx"), entry("x", "https://x.com/xxx"), entry("facebook", "https://facebook.com/xxx")], []),
+    ([entry(url="https://instagram.com/xxx"), entry("x", "https://x.com/xxx"), entry("facebook", "https://facebook.com/xxx")], [FACEBOOK_PENDING]),
+    ([entry("facebook", "", "")], [FACEBOOK_PENDING]),
+    ([entry("facebook", "xxx", "@xxx")], [FACEBOOK_PENDING]),
+    ([entry("facebook", "https://www.facebook.com/", "アカウント準備中")], [FACEBOOK_PENDING]),
+    ([entry("facebook", "https://m.facebook.com/?ref=old", "@old")], [FACEBOOK_PENDING]),
+    ([entry("facebook", "https://facebook.com/xxx?ref=old", "TBA")], [FACEBOOK_PENDING]),
+    ([entry("facebook", "https://facebook.com.evil.example/", "xxx")], []),
+    ([entry("facebook", "https://user:password@facebook.com/", "xxx")], []),
+    ([entry("facebook", "https://@facebook.com/", "xxx")], []),
+    ([entry("facebook", "https://facebook.com:444/", "xxx")], []),
+    ([entry("facebook", "javascript:alert(1)", "xxx")], []),
+    ([entry("facebook", "xxx", "<script>")], []),
     ([entry(handle="@xxx"), entry("x", "TBA", "TBA")], []),
     ([entry(url="javascript:alert(1)", handle="@Example_42")], []),
     ([entry(url="https://evil.example/Example_42", handle="@Example_42")], []),
@@ -116,6 +130,21 @@ process.stdout.write(JSON.stringify(inputs.map(input=>context.window.RacingSocia
         self.assertNotIn("@wrong", rendered)
         self.assertNotIn("xxx", rendered)
         self.assertNotIn("<a", update_page(template, "https://example.test/", {"socials": []}))
+
+    def test_pending_facebook_is_labelled_and_later_profile_replaces_it(self):
+        template = '<div data-socials="icons"></div><div data-socials="full"></div>'
+        pending = normalize_social_links([entry("facebook", "xxx", "xxx")])
+        rendered = update_social_html(template, pending)
+        self.assertEqual(rendered.count('href="https://www.facebook.com/"'), 2)
+        self.assertIn("アカウント準備中", rendered)
+        self.assertIn("Facebookトップ", rendered)
+        self.assertIn('data-social-platform="facebook"', rendered)
+        self.assertNotIn("xxx", rendered)
+        self.assertEqual(normalize_social_links(pending), pending)
+        configured = normalize_social_links([entry("facebook", "https://facebook.com/Example.Name", "xxx")])
+        rendered = update_social_html(template, configured)
+        self.assertNotIn("アカウント準備中", rendered)
+        self.assertIn('href="https://www.facebook.com/Example.Name/"', rendered)
 
 
 if __name__ == "__main__":

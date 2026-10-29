@@ -45,6 +45,15 @@ content:
   - name: tagline
     label: キャッチコピー
     type: string
+  - name: maintenanceEnabled
+    label: メンテナンス画面を表示する
+    type: boolean
+    default: false
+    description: ONで保存し公開処理が完了すると、全ページがメンテナンス案内に切り替わります。再開はOFFにして保存します。通常はOFFです。
+  - name: maintenanceMessage
+    label: メンテナンス中の案内文
+    type: text
+    description: メンテナンス画面に掲載する文章です。空欄は標準の案内文になります。
   - name: heroImage
     label: HERO・PC用写真
     type: image
@@ -100,7 +109,7 @@ content:
     - name: url
       label: プロフィールURL
       type: string
-      description: 本人のプロフィールURLを入力してください。Instagram・Xの表示名とリンクを同時に更新します。投稿URLは指定しないでください。
+      description: 本人のプロフィールURLを入力してください。Instagram・Xの表示名とリンクを同時に更新します。Facebook未設定時は「アカウント準備中」としてFacebookのトップページへリンクします。投稿URLは指定しないでください。
     list: true
   - name: heroAlt
     label: HERO写真の説明（読み上げ用）
@@ -162,6 +171,15 @@ content:
   - name: intro
     label: 紹介文
     type: text
+  - name: message
+    label: 池田優介からのヒトコト
+    type: text
+    description: 本人からのメッセージ。空行で段落を分けられます。TOPとプロフィールに同じ文章が表示されます。
+  - name: messageIsSample
+    label: ヒトコトを仮原稿として表示する
+    type: boolean
+    default: false
+    description: ONの間は仮原稿であることをサイトにも表示します。内容を確認して正式掲載する際にOFFにします。非公開の下書き機能ではありません。
   - name: portraitImage
     label: プロフィール写真
     type: image
@@ -264,13 +282,13 @@ content:
     description: 公式に確認できた開催日程のみ追加してください。
     list: true
 - name: news
-  label: ニュース
+  label: 活動報告・ニュース
   type: file
   path: data/news.json
   format: json
   fields:
   - name: items
-    label: ニュース
+    label: 記事
     type: object
     fields:
     - name: date
@@ -280,13 +298,24 @@ content:
         format: yyyy-MM-dd
     - name: category
       label: カテゴリ
-      type: string
+      type: select
+      options:
+        values:
+        - label: 活動報告
+          value: ACTIVITY
+        - label: レース
+          value: RACE
+        - label: お知らせ
+          value: INFORMATION
+        - label: メディア
+          value: MEDIA
     - name: title
       label: タイトル
       type: string
     - name: description
-      label: 本文・概要
+      label: 本文
       type: text
+      description: 普通の文章を入力します。空行で段落を分けられます。HTMLやコードは不要です。
     - name: image
       label: 写真
       type: image
@@ -299,7 +328,12 @@ content:
       label: 注目記事
       type: boolean
       default: false
-    description: 実際のお知らせを追加。トップページには日付が新しい3件を表示します。
+    - name: isSample
+      label: 仮原稿として表示する
+      type: boolean
+      default: false
+      description: ONの間は仮原稿の表示が付きます。正式掲載する際にOFFにします。ONでも記事とデータは公開されます。
+    description: 活動報告・お知らせを追加します。トップページには日付が新しい3件を表示します。保存すると選択ブランチに記録され、mainで保存した内容は自動公開されます。
     list: true
 - name: sponsors
   label: スポンサー

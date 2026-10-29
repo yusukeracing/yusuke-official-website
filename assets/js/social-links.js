@@ -1,4 +1,4 @@
-/* Social profile URLs are authoritative; placeholder accounts never become links. */
+/* Profile URLs are authoritative; unconfigured Facebook uses its clearly labelled service home. */
 (() => {
   "use strict";
   const labels = { instagram: "Instagram", x: "X", facebook: "Facebook" };
@@ -41,6 +41,11 @@
       if (!Object.hasOwn(labels, platform) || seen.has(platform)) continue;
       let raw = item.url;
       if (placeholder(raw) || officialPlaceholderURL(platform, raw)) {
+        if (platform === "facebook" && (placeholder(item.handle) || item.handle === "アカウント準備中")) {
+          result.push({ platform, label: labels[platform], handle: "アカウント準備中", url: "https://www.facebook.com/" });
+          seen.add(platform);
+          continue;
+        }
         if (typeof item.handle !== "string") continue;
         const name = item.handle.trim().replace(/^@/, "");
         if (!username(platform, name)) continue;
@@ -54,6 +59,11 @@
       try { url = new URL(raw); } catch { continue; }
       if (url.protocol !== "https:" || !hosts[platform].includes(url.hostname) || url.username || url.password || url.port) continue;
       const path = url.pathname.replace(/^\/+|\/+$/g, "");
+      if (platform === "facebook" && path === "") {
+        result.push({ platform, label: labels[platform], handle: "アカウント準備中", url: "https://www.facebook.com/" });
+        seen.add(platform);
+        continue;
+      }
       let name, canonical;
       if (platform === "facebook" && path === "profile.php") {
         const values = url.searchParams.getAll("id");

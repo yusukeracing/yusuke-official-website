@@ -13,6 +13,7 @@ from pathlib import Path
 from urllib.parse import urljoin, urlsplit
 from xml.etree import ElementTree as ET
 
+from content_render import update_content_html
 from social_links import normalize_social_links, update_social_html
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -31,6 +32,78 @@ PUBLIC_ASSET_EXTENSIONS = {
 }
 SCRIPT = re.compile(r"<script\b([^>]*)>(.*?)</script\s*>", re.I | re.S)
 CANONICAL = re.compile(r'(<link\b[^>]*\brel=["\']canonical["\'][^>]*\bhref=["\'])([^"\']+)', re.I)
+DEFAULT_MAINTENANCE_MESSAGE = "現在、Webサイトのメンテナンスを行っています。\nご不便をおかけしますが、公開再開までしばらくお待ちください。"
+CONFLICT_MARKER = re.compile(r"^(?:<<<<<<< |=======\s*$|>>>>>>> )", re.M)
+
+
+def maintenance_enabled(settings: dict) -> bool:
+    value = settings.get("maintenanceEnabled", False)
+    if type(value) is not bool:
+        raise ValueError("data/site.json: maintenanceEnabled must be true or false")
+    return value
+
+
+def update_maintenance_message(text: str, settings: dict) -> str:
+    value = settings.get("maintenanceMessage", DEFAULT_MAINTENANCE_MESSAGE)
+    if not isinstance(value, str) or len(value) > 4000:
+        raise ValueError("data/site.json: maintenanceMessage must be text up to 4000 characters")
+    value = value.strip() or DEFAULT_MAINTENANCE_MESSAGE
+    content = "<br />".join(escape(line) for line in value.splitlines())
+    return re.sub(r'(<p\b[^>]*\bdata-maintenance-message\b[^>]*>).*?(</p\s*>)',
+                  lambda match: match[1] + content + match[2], text, flags=re.I | re.S)
+
+
+def maintenance_page(template: str, page: str, base: str) -> str:
+    """Serve the notice at every existing URL without relying on JavaScript."""
+    text = template
+    canonical = urljoin(base, "" if page == "index.html" else page)
+    text = CANONICAL.sub(lambda match: match[1] + escape(canonical, quote=True), text)
+    text = re.sub(r'(<meta\b[^>]*\bproperty=["\']og:url["\'][^>]*\bcontent=["\'])[^"\']+',
+                  lambda match: match[1] + escape(canonical, quote=True), text, flags=re.I)
+    text = re.sub(r'(<body\b[^>]*)(>)', r'\1 data-maintenance-mode="true"\2', text, count=1, flags=re.I)
+    # Do not invite visitors to navigate between identical maintenance notices.
+    text = re.sub(r'<noscript\b[^>]*>.*?</noscript\s*>', "", text, flags=re.I | re.S)
+    text = re.sub(r'<nav\b[^>]*>.*?</nav\s*>', "", text, flags=re.I | re.S)
+    text = re.sub(r'<button\b[^>]*\bclass=["\']menu-toggle["\'][^>]*>.*?</button\s*>', "", text, flags=re.I | re.S)
+    text = re.sub(r'<div\b[^>]*\bclass=["\']footer-directory["\'][^>]*>.*?</div\s*>', "", text, flags=re.I | re.S)
+    text = re.sub(r'(<a\b[^>]*\bhref=["\'])index\.html(["\'][^>]*\bclass=["\']brand["\'])',
+                  r'\1#main\2', text, flags=re.I)
+    # Email information is configured separately; omit the unconfigured prompt.
+    text = re.sub(r'<p\b[^>]*\bclass=["\']fine-print["\'][^>]*>\s*お急ぎの場合：.*?</p\s*>', "", text, flags=re.I | re.S)
+    return text
+
+
+def without_content_loader(text: str) -> str:
+    """The compiled error/maintenance page has no runtime CMS data to fetch."""
+    def keep_script(match):
+        src = re.search(r'\bsrc\s*=\s*["\']([^"\']+)["\']', match[1], re.I)
+        if src and urlsplit(unescape(src[1])).path.rsplit("/", 1)[-1] in {"data-loader.js", "social-links.js"}:
+            return ""
+        return match.group(0)
+    return SCRIPT.sub(keep_script, text)
+
+
+def absolute_error_references(text: str, base: str) -> str:
+    """An error served at /unknown/nested/ must load the site's real assets."""
+    def absolute(value):
+        value = unescape(value)
+        parsed = urlsplit(value)
+        if not value or value.startswith("#") or parsed.scheme or parsed.netloc:
+            return escape(value, quote=True)
+        return escape(urljoin(base, value), quote=True)
+
+    text = re.sub(r'(\b(?:src|href|poster)\s*=\s*)(["\'])(.*?)\2',
+                  lambda match: match[1] + match[2] + absolute(match[3]) + match[2], text, flags=re.I | re.S)
+
+    def sources(match):
+        values = []
+        for source in unescape(match[3]).split(","):
+            parts = source.strip().split()
+            if parts:
+                values.append(" ".join([absolute(parts[0]), *parts[1:]]))
+        return match[1] + match[2] + ", ".join(values) + match[2]
+
+    return re.sub(r'(\bsrcset\s*=\s*)(["\'])(.*?)\2', sources, text, flags=re.I | re.S)
 
 
 def public_message_errors(value: object) -> list[str]:
@@ -196,25 +269,29 @@ def update_page(text: str, base: str, settings: dict | None = None, profile: dic
     return text
 
 
-def write_discovery(destination: Path, base: str) -> None:
+def write_discovery(destination: Path, base: str, maintenance: bool = False) -> None:
     namespace = "http://www.sitemaps.org/schemas/sitemap/0.9"
     ET.register_namespace("", namespace)
     root = ET.Element(f"{{{namespace}}}urlset")
-    for page in PUBLIC_PAGES:
+    for page in (() if maintenance else PUBLIC_PAGES):
         item = ET.SubElement(root, f"{{{namespace}}}url")
         ET.SubElement(item, f"{{{namespace}}}loc").text = urljoin(base, "" if page == "index.html" else page)
     ET.indent(root)
     ET.ElementTree(root).write(destination / "sitemap.xml", encoding="utf-8", xml_declaration=True)
     path = urlsplit(base).path
     robots = "User-agent: *\nAllow: /\n"
-    robots += f"Disallow: {path}maintenance.html\nDisallow: {path}404.html\n\nSitemap: {base}sitemap.xml\n"
+    if not maintenance:
+        robots += f"Disallow: {path}maintenance.html\nDisallow: {path}404.html\n"
+    robots += f"\nSitemap: {base}sitemap.xml\n"
     (destination / "robots.txt").write_text(robots, encoding="utf-8")
 
 
 def main() -> None:
     base = site_url()
     settings = json.loads((ROOT / "data/site.json").read_text(encoding="utf-8"))
+    maintenance = maintenance_enabled(settings)
     profile = json.loads((ROOT / "data/profile.json").read_text(encoding="utf-8"))
+    news = json.loads((ROOT / "data/news.json").read_text(encoding="utf-8"))
     messages = json.loads((ROOT / "data/messages.json").read_text(encoding="utf-8"))
     message_errors = public_message_errors(messages)
     if message_errors:
@@ -223,17 +300,34 @@ def main() -> None:
         path = ROOT / "data" / filename
         if not path.is_file() or path.is_symlink():
             raise ValueError(f"Missing regular public data file: data/{filename}")
+    source_pages = {}
     for page in PAGES:
         if not (ROOT / page).is_file() or (ROOT / page).is_symlink():
             raise FileNotFoundError(f"Missing required page: {page}")
+        text = (ROOT / page).read_text(encoding="utf-8")
+        if CONFLICT_MARKER.search(text):
+            raise ValueError(f"{page}: unresolved merge conflict markers must be removed before publishing")
+        source_pages[page] = text
     if OUTPUT.is_symlink():
         raise ValueError("Refusing to replace a symlink at dist/")
     if OUTPUT.exists():
         shutil.rmtree(OUTPUT)
     OUTPUT.mkdir()
     for page in PAGES:
-        text = (ROOT / page).read_text(encoding="utf-8")
-        (OUTPUT / page).write_text(update_page(text, base, settings, profile), encoding="utf-8")
+        text = update_page(source_pages[page], base, settings, profile)
+        text = update_content_html(text, news, profile, base)
+        if page == "maintenance.html":
+            text = update_maintenance_message(text, settings)
+        (OUTPUT / page).write_text(text, encoding="utf-8")
+    if maintenance:
+        template = (OUTPUT / "maintenance.html").read_text(encoding="utf-8")
+        for page in PAGES:
+            text = without_content_loader(maintenance_page(template, page, base))
+            (OUTPUT / page).write_text(text, encoding="utf-8")
+    # GitHub Pages can serve this document from an arbitrarily nested URL.
+    error_page = OUTPUT / "404.html"
+    error_page.write_text(absolute_error_references(without_content_loader(
+        error_page.read_text(encoding="utf-8")), base), encoding="utf-8")
     copy_public_assets(ROOT / "assets", OUTPUT / "assets")
     (OUTPUT / "data").mkdir()
     for filename in PUBLIC_DATA:
@@ -243,12 +337,13 @@ def main() -> None:
     (OUTPUT / "data/site.json").write_text(
         json.dumps(published_settings, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     (OUTPUT / ".nojekyll").touch()
-    write_discovery(OUTPUT, base)
+    write_discovery(OUTPUT, base, maintenance)
     # Keep the source checkout's discovery files in sync for direct static hosting.
-    write_discovery(ROOT, base)
+    write_discovery(ROOT, base, maintenance)
     count = sum(1 for path in OUTPUT.rglob("*") if path.is_file())
     print(f"Built {len(PAGES)} pages and {count} public files in {OUTPUT}")
     print(f"Public URL: {base}")
+    print("Maintenance mode: " + ("ON (all HTML URLs show the notice)" if maintenance else "OFF"))
 
 
 if __name__ == "__main__":

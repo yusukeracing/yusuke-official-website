@@ -74,13 +74,21 @@
       "image": "assets/images/yusuke.gallery_08.jpg",
       "mobileImage": "assets/images/yusuke.gallery_08.jpg",
       "alt": "xxx",
-      "caption": "xxx"
+      "caption": "xxx",
+      "width": 1566,
+      "height": 1044,
+      "mobileWidth": 1566,
+      "mobileHeight": 1044
     },
     {
       "image": "assets/images/yusuke.gallery_09.jpg",
       "mobileImage": "assets/images/yusuke.gallery_09.jpg",
       "alt": "xxx",
-      "caption": "xxx"
+      "caption": "xxx",
+      "width": 1566,
+      "height": 1044,
+      "mobileWidth": 1566,
+      "mobileHeight": 1044
     },
     {
       "image": "assets/images/yusuke.gallery_10.jpg",
@@ -96,13 +104,21 @@
       "image": "assets/images/yusuke.gallery_11.jpg",
       "mobileImage": "assets/images/yusuke.gallery_11.jpg",
       "alt": "xxx",
-      "caption": "xxx"
+      "caption": "xxx",
+      "width": 1477,
+      "height": 1108,
+      "mobileWidth": 1477,
+      "mobileHeight": 1108
     },
     {
       "image": "assets/images/yusuke.gallery_12.jpg",
       "mobileImage": "assets/images/yusuke.gallery_12.jpg",
       "alt": "xxx",
-      "caption": "xxx"
+      "caption": "xxx",
+      "width": 828,
+      "height": 552,
+      "mobileWidth": 828,
+      "mobileHeight": 552
     }
   ]
 }

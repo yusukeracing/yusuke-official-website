@@ -67,7 +67,15 @@ def main():
                 def route_request(route):
                     url = route.request.url
                     if url.startswith(base + "/"):
-                        route.continue_()
+                        if urlsplit(url).path == "/404.html":
+                            # Published 404 assets use the canonical site root so
+                            # nested unknown URLs work. Rebase that root for this
+                            # loopback-only fixture instead of contacting Pages.
+                            text = (root / "404.html").read_text(encoding="utf-8")
+                            text = text.replace(site["url"].rstrip("/") + "/", base + "/")
+                            route.fulfill(status=200, content_type="text/html; charset=utf-8", body=text)
+                        else:
+                            route.continue_()
                     elif url.startswith("https://docs.google.com/forms/"):
                         requests["google_fixtures"].append(url)
                         route.fulfill(status=200, content_type="text/html; charset=utf-8", body=FORM_FIXTURE)

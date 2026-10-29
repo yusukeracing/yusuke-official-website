@@ -204,6 +204,16 @@
       );
     });
   };
+  const renderRiderMessage = () => {
+    if (!content.profile) return;
+    const message = content.profile.message;
+    document.querySelectorAll("[data-profile-message]").forEach((section) => {
+      section.hidden = typeof message !== "string" || !message.trim();
+      section.querySelectorAll("[data-profile-message-note]").forEach((note) => {
+        note.hidden = content.profile.messageIsSample !== true;
+      });
+    });
+  };
   const renderStories = () => {
     if (!Array.isArray(content.profile?.stories)) return;
     document.querySelectorAll("[data-stories]").forEach((list) => {
@@ -263,6 +273,7 @@
     });
   };
   let newsFilter = "all";
+  const newsCategories = { ACTIVITY: "活動報告", RACE: "レース", INFORMATION: "お知らせ", MEDIA: "メディア" };
   const renderNews = () => {
     const items = content.news?.items;
     if (!Array.isArray(items)) return;
@@ -309,7 +320,7 @@
             }
             article.append(
               time,
-              node("span", "news-category", item.category || "INFORMATION"),
+              node("span", "news-category", newsCategories[String(item.category).toUpperCase()] || item.category || "お知らせ"),
               heading,
             );
             if (!isPlaceholder(item.url) && safeUrl(item.url)) {
@@ -321,8 +332,17 @@
               );
               article.append(anchor);
             }
-            if (item.description)
-              article.append(node("p", "news-description", item.description));
+            if (item.isSample === true)
+              article.append(node("p", "news-sample-note", "仮原稿"));
+            if (typeof item.description === "string" && item.description) {
+              const paragraphs = item.description.split(/\n\s*\n/);
+              article.append(node("p", "news-description", limit ? paragraphs[0] : item.description));
+              if (limit && paragraphs.length > 1) {
+                const readMore = node("a", "news-read-more", "活動報告・ニュースを読む →");
+                readMore.href = "news.html";
+                article.append(readMore);
+              }
+            }
             if (!isPlaceholder(item.image)) {
               const photo = photoNode(item.image, item.title);
               photo.classList.add("news-image");
@@ -434,9 +454,13 @@
             if (!valid) anchor.removeAttribute("href");
             anchor.target = "_blank";
             anchor.rel = "noopener noreferrer";
+            anchor.dataset.socialPlatform = item.platform;
+            const pending = item.platform === "facebook" && item.url === "https://www.facebook.com/";
+            const destination = `${item.label} ${item.handle}（${pending ? "Facebookトップ・" : ""}新しいタブで開く）`;
+            anchor.title = destination;
             anchor.setAttribute(
               "aria-label",
-              `${item.label} ${item.handle}（新しいタブで開く）`,
+              destination,
             );
             const svg = document.createElementNS(
               "http://www.w3.org/2000/svg",
@@ -570,6 +594,7 @@
   )
     .then((results) => {
       bindText();
+      renderRiderMessage();
       renderCareer();
       renderStories();
       renderRaces();

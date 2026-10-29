@@ -1,0 +1,45 @@
+/* Brand colours remain legible on white sections and the dark footer. */
+[data-social-platform="instagram"] {
+  --social-icon-color: #b12886;
+}
+[data-social-platform="x"] {
+  --social-icon-color: #111111;
+}
+[data-social-platform="facebook"] {
+  --social-icon-color: #0866de;
+}
+[data-social-platform] > svg {
+  color: var(--social-icon-color);
+  fill: currentColor;
+  background: #ffffff;
+  border-radius: 6px;
+  padding: 4px;
+  box-sizing: border-box;
+  transition: transform 0.2s ease;
+}
+.header-socials [data-social-platform] > svg {
+  width: 24px;
+  height: 24px;
+}
+.social-list [data-social-platform] > svg {
+  width: 32px;
+  height: 32px;
+}
+[data-social-platform]:hover > svg {
+  transform: translateY(-2px);
+}
+[data-social-platform]:focus-visible {
+  outline: 2px solid #0056d6;
+  outline-offset: 5px;
+}
+.site-footer [data-social-platform]:focus-visible {
+  outline-color: #8fbaff;
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-social-platform] > svg {
+    transition: none;
+  }
+  [data-social-platform]:hover > svg {
+    transform: none;
+  }
+}

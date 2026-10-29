@@ -72,6 +72,10 @@ def validate(root: Path):
     errors = []
     warnings = []
     pages = {}
+    try:
+        public_url = urlsplit(json.loads((root / "data/site.json").read_text(encoding="utf-8")).get("url", ""))
+    except (OSError, ValueError, AttributeError):
+        public_url = urlsplit("")
 
     def require(condition, message):
         if not condition:
@@ -82,6 +86,8 @@ def validate(root: Path):
         if not path.is_file():
             errors.append(f"Missing required page: {name}")
             continue
+        require(not re.search(r"^(?:<<<<<<< |=======$|>>>>>>> )", path.read_text(encoding="utf-8"), re.M),
+                f"{name}: unresolved merge conflict markers")
         page = pages[name] = Page(path)
         meta = {a.get("name", a.get("property", a.get("http-equiv", ""))).lower(): a.get("content", "")
                 for tag, a in page.tags if tag == "meta"}
@@ -101,7 +107,9 @@ def validate(root: Path):
             if tag == "script" and attrs.get("src"):
                 require("defer" in attrs or attrs.get("type") == "module", f"{name}: blocking script {attrs['src']}")
                 src = urlsplit(attrs["src"])
-                require(not src.netloc or src.netloc == "www.googletagmanager.com", f"{name}: unexpected external JavaScript {attrs['src']}")
+                public_asset = (src.scheme == "https" and src.netloc == public_url.netloc
+                                and src.path.startswith(public_url.path.rstrip("/") + "/assets/js/"))
+                require(not src.netloc or public_asset or src.netloc == "www.googletagmanager.com", f"{name}: unexpected external JavaScript {attrs['src']}")
             if tag == "img":
                 require("alt" in attrs, f"{name}: image lacks alt")
                 require(bool(attrs.get("width")) and bool(attrs.get("height")), f"{name}: image lacks dimensions")
@@ -163,6 +171,20 @@ def validate(root: Path):
                     f"data/{name}.json: each item must be an object")
     if "messages" in data:
         errors.extend(public_message_errors(data["messages"]))
+    site = data.get("site")
+    maintenance = isinstance(site, dict) and site.get("maintenanceEnabled") is True
+    if isinstance(site, dict) and "maintenanceEnabled" in site:
+        require(isinstance(site["maintenanceEnabled"], bool), "data/site.json: maintenanceEnabled must be a boolean")
+    if maintenance:
+        for name, page in pages.items():
+            require(any(tag == "body" and a.get("data-maintenance-mode") == "true" for tag, a in page.tags),
+                    f"{name}: maintenance mode is not rendered")
+            require(any(tag == "meta" and a.get("name") == "robots" and "noindex" in a.get("content", "") for tag, a in page.tags),
+                    f"{name}: maintenance page must be noindex")
+    else:
+        for name, page in pages.items():
+            require(not any(tag == "body" and a.get("data-maintenance-mode") == "true" for tag, a in page.tags),
+                    f"{name}: maintenance mode remains enabled in normal publication")
     # Each file in data/ is public after deployment, even when the UI hides it.
     data_directory = root / "data"
     if data_directory.is_dir():
@@ -189,13 +211,14 @@ def validate(root: Path):
         try:
             tree = ET.parse(root / "sitemap.xml")
             locations = tree.findall(".//{http://www.sitemaps.org/schemas/sitemap/0.9}loc")
-            require(len(locations) == len(PUBLIC_PAGES),
-                    f"sitemap.xml must include the {len(PUBLIC_PAGES)} public content pages")
+            indexed_pages = () if maintenance else PUBLIC_PAGES
+            require(len(locations) == len(indexed_pages),
+                    f"sitemap.xml must include {len(indexed_pages)} pages in the current publication mode")
             site = data.get("site")
             url = site.get("url", "") if isinstance(site, dict) else ""
             base = url.rstrip("/") + "/" if isinstance(url, str) else ""
             require(all((item.text or "").startswith(base) for item in locations), "sitemap.xml URLs differ from data/site.json")
-            expected = {base + ("" if page == "index.html" else page) for page in PUBLIC_PAGES}
+            expected = {base + ("" if page == "index.html" else page) for page in indexed_pages}
             require({item.text for item in locations} == expected,
                     "sitemap.xml does not match the public content page list")
         except ET.ParseError as exc:

@@ -46,3 +46,16 @@ python3 scripts/check_site.py dist
 - 公開ファイルの許可リストとメッセージ用JSONの公開フィールド制限を検証。
 - [同時接続の測定結果](CAPACITY.md) は最大100並列のローカル試験。GitHub Pages本番の上限人数を保証するものではありません。
 - 外部のGoogleフォーム本体への読み取りはクラウド環境の通信制限（プロキシの403）で確認できていません。Googleフォーム自身がアクセスを拒否したとの判定はしていません。
+
+## 2026-10-29 の活動報告・CMS・メンテナンス確認
+
+- 全11ページ×320/390/768/1440/1920pxの55表示で横はみ出し・JavaScript例外なし。SNS3種のリンク先と色、Facebook準備中表示を確認。
+- 活動報告の全文・段落・カテゴリ絞り込み、TOPの抜粋と続きを読む、TOP/プロフィールの本人ヒトコトを確認。JavaScript無効でも公開HTMLから記事とヒトコトを表示。
+- 編集データの代替応答で記事・ヒトコト・Facebook URLを差し替え、画面の同期と仮原稿表示の解除を確認。Pages CMSへの実アカウント接続・保存は未実施で、初回の本人操作が必要。
+- `python3 scripts/test_social_links.py`：5テスト・60入力例のPython/JavaScript整合、安全なURL、準備中Facebookから本人URLへの切り替えが成功。
+- `python3 scripts/test_maintenance.py`：一時コピーで通常→メンテナンスON→OFF、全11HTML、noindex、サイトマップ9→0→9、案内文のエスケープ、不正設定・競合マーカーの拒否を確認。
+- ブラウザーでも390/1440px・JavaScript有効/無効で、TOP・プロフィール・活動報告・存在しない深いURLの案内を確認。メンテナンス中のJSON取得なし、SNSの利用、通常表示への復帰、通常404の資産読み込みも確認。
+- 404は公開URLからの絶対参照を使うため、上記ブラウザー確認では本番と同じURL・オリジンをローカルファイル応答で再現。GitHub PagesやSNSへ実アクセスせずに検証。
+- 既存の `python3 scripts/test_public_pages.py --directory dist` の7項目も成功。404の公開URLはループバックのテスト用URLへ置き換え、実フォームへの問い合わせは送信していない。
+
+通常公開は `maintenanceEnabled: false`。実際のメンテナンス画面への切り替えは行っていません。今回の確認で本番の同時接続数やLighthouseは再測定していません。
