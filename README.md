@@ -33,7 +33,9 @@ python3 -m http.server 8000 --bind 127.0.0.1 --directory dist
 | レース・予定・戦績 | `race.html` / `data/races.json` |
 | ニュース | `news.html` / `data/news.json` |
 | 法人パートナー | `sponsor.html` / `data/sponsors.json` |
+| スポンサー企業一覧 | `partners.html` / `data/sponsors.json` |
 | 個人サポート | `support.html` |
+| 応援メッセージ一覧 | `messages.html` / `data/messages.json` |
 | お問い合わせ | `contact.html` |
 | 404 / 計画メンテナンス | `404.html` / `maintenance.html` |
 | サイト設定・SNS・GA4・Google Forms | `data/site.json` |
@@ -41,7 +43,11 @@ python3 -m http.server 8000 --bind 127.0.0.1 --directory dist
 | CMS 設定 | `.pages.yml` |
 | スタイル / 挙動 | `assets/css/` / `assets/js/` |
 
-Pages CMS ではニュース・戦績・予定・プロフィール・スポンサー・写真・サイト設定を編集できます。接続と日常の更新は [CMS の使い方](docs/CMS.md)、公開・セキュリティ・障害対応は [運用手順](docs/OPERATIONS.md) を参照してください。
+Pages CMS ではニュース・戦績・予定・プロフィール・スポンサー・公開用の応援メッセージ・写真・サイト設定を編集できます。接続と日常の更新は [CMS の使い方](docs/CMS.md)、公開・セキュリティ・障害対応は [運用手順](docs/OPERATIONS.md) を参照してください。
+
+スポンサー企業とメッセージのデータは未提供のため、掲載リストは空です。企業名・ロゴの掲載許可、メッセージと公開表示名の掲載同意を確認してからCMSに登録してください。問い合わせの原文・メール・電話・未承認投稿・下書きは公開JSONやGitに保存しません。Google Formsの回答を自動公開する機能はありません。
+
+お問い合わせには提供されたGoogle FormsのURLを設定済みです。`googleFormUrl` と `googleFormHeight` でURLと高さを変更できます。JavaScriptなしでも埋め込みを表示でき、別画面で開くリンクも用意しています。フォーム実体への接続はこのクラウド環境の通信制限で確認できていないため、Google側で公開範囲・回答受付が有効であることも確認してください。
 
 ## 写真と未確定情報
 
@@ -58,7 +64,7 @@ Pages CMS ではニュース・戦績・予定・プロフィール・スポン�
 - 本人の写真、過去の戦績、2026 年の日程・結果、ニュース、スポンサーを、確認できた情報で登録する。
 - `data/site.json` の `url` を公開 URL に合わせる。初期値は `https://yusukeracing.github.io/yusuke-official-website/`。
 - SNS の `xxx` を実際のアカウントに変更する。
-- Google Forms を作成し、`googleFormUrl` に埋め込み用 URL を設定する。必要に応じて公開可能なメール・電話番号、スポンサー資料 URL を設定する。
+- Google Forms の公開範囲・回答受付を確認する。必要に応じて公開可能なメール・電話番号、スポンサー資料 URL を設定する。
 - GA4 を使う場合は `ga4Id` を実際の測定 ID に変更し、プライバシー告知・必要な同意対応を確認する。
 - GitHub Pages と Pages CMS を接続し、編集権限、main の保護、HTTPS を設定する。
 - 写真・フォーム・計測設定後に実機と Lighthouse / PageSpeed Insights で再検証する。
@@ -76,3 +82,17 @@ python3 scripts/test_photo_loading.py
 ```
 
 システムに Chromium がある場合はそれを使用します。公開用ファイルを確認するときは `python3 scripts/test_photo_loading.py --directory dist` を実行します。
+
+## 公開ページの安全性と同時接続の確認
+
+[セキュリティ調査](docs/SECURITY.md) に、実装済みの保護とGitHub・Google・Cloudflare等で別途設定する項目をまとめています。ブラウザーに配信するHTML・CSS・JavaScriptは完全には非公開にできません。
+
+[ローカル同時接続テスト](docs/CAPACITY.md) は最大100並列クライアントで実施しました。GitHub Pages本番の上限人数を示す試験ではありません。公開サイトやGoogle Formsへの負荷を発生させず、Python標準ライブラリだけで再実行できます。
+
+```bash
+python3 scripts/build.py
+python3 scripts/check_site.py dist
+python3 scripts/load_check.py --directory dist --max-concurrency 100 --journeys-per-client 2 --output docs/load-results.json
+```
+
+Playwrightを使うフォーム・公開一覧の回帰確認は `python3 scripts/test_public_pages.py --directory dist` で実行します。Google Formsはテスト用の応答に置き換えるため、実フォームへの送信は行いません。

@@ -499,14 +499,27 @@
         /^\/forms\/(?:d\/e\/|d\/)[\w-]+\/viewform$/.test(url.pathname)
       ) {
         url.searchParams.set("embedded", "true");
-        const iframe = node("iframe", "contact-frame");
-        iframe.src = url.href;
+        const iframe = formContainer.querySelector("iframe.contact-frame") || node("iframe", "contact-frame");
+        if (iframe.src !== url.href) iframe.src = url.href;
+        const formHeight = Number(site.googleFormHeight);
+        iframe.height = String(Number.isInteger(formHeight) && formHeight >= 500 && formHeight <= 6000 ? formHeight : 2081);
+        iframe.width = "640";
         iframe.title = "池田優介 お問い合わせフォーム（Google Forms）";
         iframe.loading = "lazy";
         iframe.referrerPolicy = "strict-origin-when-cross-origin";
-        formContainer.replaceChildren(iframe);
+        if (!iframe.isConnected) formContainer.replaceChildren(iframe);
+        document.querySelectorAll("[data-form-link]").forEach((anchor) => {
+          const external = new URL(url);
+          external.searchParams.delete("embedded");
+          anchor.href = external.href;
+          anchor.hidden = false;
+        });
         hasForm = true;
       }
+    }
+    if (formContainer && !hasForm) {
+      formContainer.replaceChildren(node("p", "form-placeholder", "お問い合わせフォームは現在準備中です。公開中の連絡先がある場合は、そちらからお問い合わせください。"));
+      document.querySelectorAll("[data-form-link]").forEach((anchor) => { anchor.hidden = true; });
     }
     const contactNotice = document.querySelector("[data-contact-notice]");
     if (contactNotice && hasForm) contactNotice.hidden = true;
@@ -518,6 +531,9 @@
         if (!element.querySelector("a")) element.closest("div").hidden = true;
       });
     }
+    document.querySelectorAll(".contact-direct").forEach((list) => {
+      list.hidden = !list.querySelector("a");
+    });
     document.querySelectorAll("[data-sponsor-pdf]").forEach((element) => {
       if (isPlaceholder(site.sponsorPdf)) return;
       const anchor = node("a", "text-link", "スポンサー資料を見る ↗");

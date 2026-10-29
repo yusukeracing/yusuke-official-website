@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self' https://www.googletagmanager.com 'sha256-vFQVl+MAL6ysAkpPp2+XtzfbIoEyRq8qyvK6hTO3eoA='; style-src 'self'; img-src 'self' https: data:; connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com; frame-src https://docs.google.com; object-src 'none'; base-uri 'self'; form-action https://docs.google.com"
+      content="default-src 'self'; script-src 'self' https://www.googletagmanager.com 'sha256-vFQVl+MAL6ysAkpPp2+XtzfbIoEyRq8qyvK6hTO3eoA='; style-src 'self'; img-src 'self' data: https://www.google-analytics.com https://region1.google-analytics.com; connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com https://analytics.google.com; frame-src https://docs.google.com; object-src 'none'; base-uri 'none'; form-action https://docs.google.com"
     />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <title>CONTACT | 池田優介 Official Website</title>
@@ -37,8 +37,8 @@
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="assets/icons/favicon.svg" type="image/svg+xml" />
     <meta name="theme-color" content="#0068FF" />
-    <link rel="stylesheet" href="assets/css/style.css?v=20261026-gallery-1" />
-    <link rel="stylesheet" href="assets/css/responsive.css?v=20261026-gallery-1" />
+    <link rel="stylesheet" href="assets/css/style.css?v=20261029-contact-community-1" />
+    <link rel="stylesheet" href="assets/css/responsive.css?v=20261029-contact-community-1" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -62,9 +62,9 @@
         ]
       }
     </script>
-    <script src="assets/js/main.js?v=20261026-gallery-1" defer></script>
-    <script src="assets/js/animation.js?v=20261026-gallery-1" defer></script>
-    <script src="assets/js/data-loader.js?v=20261026-gallery-1" defer></script>
+    <script src="assets/js/main.js?v=20261029-contact-community-1" defer></script>
+    <script src="assets/js/animation.js?v=20261029-contact-community-1" defer></script>
+    <script src="assets/js/data-loader.js?v=20261029-contact-community-1" defer></script>
   </head>
   <body id="top" data-page="contact">
     <a class="skip-link" href="#main">本文へスキップ</a>
@@ -149,7 +149,7 @@
             <li>応援について</li>
             <li>その他</li>
           </ul>
-          <dl class="contact-direct">
+          <dl class="contact-direct" hidden>
             <div>
               <dt>EMAIL</dt>
               <dd data-contact="email">xxx</dd>
@@ -160,25 +160,22 @@
             </div>
           </dl>
           <p class="fine-print" data-contact-notice>
-            公開可能な連絡先を準備しています。フォームの受付開始までお待ちください。
+            応援メッセージの掲載をご希望の場合は、本文に公開してよい表示名と掲載の可否をご記入ください。
           </p>
         </div>
         <div class="contact-form-wrap">
           <div class="form-head">
-            <span class="tiny-caps">CONTACT FORM</span
-            ><span aria-hidden="true">↗</span>
+            <span class="tiny-caps">CONTACT FORM</span>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSdRqEPLFsCt1kjRyO-wNd4EpaXSpVxBO1tbpUzaIbe_33yBrw/viewform" target="_blank" rel="noopener noreferrer" data-form-link>別画面で開く ↗</a>
           </div>
           <div data-contact-form>
-            <div class="form-placeholder">
-              <span class="placeholder-cross" aria-hidden="true">+</span>
-              <p class="tiny-caps">xxx GOOGLE FORM EMBED URL</p>
-              <h3>お問い合わせフォームは<br />ただいま準備中です。</h3>
-              <p>受付開始後、こちらに表示します。</p>
-            </div>
+            <iframe class="contact-frame" src="https://docs.google.com/forms/d/e/1FAIpQLSdRqEPLFsCt1kjRyO-wNd4EpaXSpVxBO1tbpUzaIbe_33yBrw/viewform?embedded=true" width="640" height="2081"
+              title="池田優介 お問い合わせフォーム（Google Forms）" loading="lazy"
+              referrerpolicy="strict-origin-when-cross-origin">読み込み中…</iframe>
           </div>
           <p class="fine-print">
             送信内容はGoogle
-            Formsで受け付けます。サイト内に入力内容が公開されることはありません。
+            Formsで受け付けます。送信内容がそのまま公開されることはありません。応援メッセージは掲載許可を確認した内容のみをご紹介します。
           </p>
         </div>
       </section>
@@ -266,7 +263,8 @@
             ></a>
           </div>
         </div>
-        <div class="footer-bottom">
+        <div class="footer-directory"><a href="partners.html">スポンサー企業一覧 ↗</a><a href="messages.html">応援メッセージ ↗</a></div>
+          <div class="footer-bottom">
           <span>© YUSUKE IKEDA</span
           ><span>MIYAGI, JAPAN — RACING FORWARD.</span>
         </div>

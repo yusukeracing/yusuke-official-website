@@ -61,6 +61,10 @@ content:
     label: Google Forms 埋め込みURL
     type: string
     description: Google Forms の送信 → 埋め込みHTMLの src にある https://docs.google.com/forms/... のURL。未設定は xxx。
+  - name: googleFormHeight
+    label: Google Forms の表示高さ（px）
+    type: number
+    description: 埋め込みHTMLの height の値。現在2081px。フォームを変更した場合はPCとスマートフォンで確認してください。
   - name: email
     label: 公開メールアドレス
     type: string
@@ -310,6 +314,10 @@ content:
     - name: category
       label: カテゴリ
       type: string
+    - name: description
+      label: 企業・取り組みの紹介文
+      type: text
+      description: 掲載許可のある公開用文章のみ。空欄でも掲載できます。
     - name: logo
       label: ロゴ
       type: image
@@ -318,6 +326,32 @@ content:
       label: 公式URL
       type: string
     description: 掲載許可を得た実在のスポンサーのみ追加してください。
+    list: true
+- name: messages
+  label: 応援メッセージ（公開用）
+  type: file
+  path: data/messages.json
+  format: json
+  fields:
+  - name: items
+    label: 掲載するメッセージ
+    type: object
+    description: 掲載同意を確認した公開用文章だけを追加します。下書き、非公開投稿、メール、電話、問い合わせ原文は保存しないでください。
+    fields:
+    - name: name
+      label: 公開してよい表示名
+      type: string
+      required: true
+    - name: message
+      label: 掲載する応援メッセージ
+      type: text
+      required: true
+    - name: date
+      label: 掲載日（任意）
+      type: date
+      options:
+        format: yyyy-MM-dd
+      description: 掲載日のみ。未確認の日付や投稿者の個人情報は記入しません。
     list: true
 - name: gallery
   label: ギャラリー

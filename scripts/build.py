@@ -15,11 +15,73 @@ from xml.etree import ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "dist"
-PAGES = ("index.html", "profile.html", "race.html", "news.html", "sponsor.html",
-         "support.html", "contact.html", "404.html", "maintenance.html")
-PUBLIC_PAGES = PAGES[:7]
+PUBLIC_PAGES = ("index.html", "profile.html", "race.html", "news.html", "sponsor.html",
+                "support.html", "contact.html", "partners.html", "messages.html")
+PAGES = PUBLIC_PAGES + ("404.html", "maintenance.html")
+PUBLIC_DATA = ("site.json", "profile.json", "races.json", "news.json",
+               "sponsors.json", "gallery.json", "messages.json")
+PUBLIC_ASSET_EXTENSIONS = {
+    "css": {".css"},
+    "js": {".js"},
+    "icons": {".svg", ".png", ".ico", ".webp"},
+    "images": {".jpg", ".jpeg", ".png", ".webp", ".avif", ".gif", ".svg", ".ico"},
+    "documents": {".pdf"},
+}
 SCRIPT = re.compile(r"<script\b([^>]*)>(.*?)</script\s*>", re.I | re.S)
 CANONICAL = re.compile(r'(<link\b[^>]*\brel=["\']canonical["\'][^>]*\bhref=["\'])([^"\']+)', re.I)
+
+
+def public_message_errors(value: object) -> list[str]:
+    """Public JSON is downloadable: reject draft/contact-only fields, not just HTML."""
+    if not isinstance(value, dict) or set(value) != {"items"} or not isinstance(value.get("items"), list):
+        return ["data/messages.json must contain only an items array"]
+    errors = []
+    for index, item in enumerate(value["items"], 1):
+        prefix = f"data/messages.json item {index}"
+        if not isinstance(item, dict):
+            errors.append(f"{prefix}: expected an object")
+            continue
+        if set(item) - {"name", "message", "date"}:
+            errors.append(f"{prefix}: only public name, message and date fields are allowed")
+        for field in ("name", "message"):
+            if not isinstance(item.get(field), str) or not item[field].strip():
+                errors.append(f"{prefix}: {field} must be nonempty public text")
+        if "date" in item:
+            if not isinstance(item["date"], str):
+                errors.append(f"{prefix}: date must be text")
+            elif item["date"]:
+                try:
+                    date.fromisoformat(item["date"])
+                except ValueError:
+                    errors.append(f"{prefix}: date must use YYYY-MM-DD")
+    return errors
+
+
+def copy_public_assets(source: Path, destination: Path) -> int:
+    """Copy explicit asset types; hidden files, source maps and symlinks stay local.
+
+    Files deliberately stored as public images/scripts remain public. This is an
+    artifact allowlist, not a scanner capable of detecting secrets inside them.
+    """
+    count = 0
+    for folder, extensions in PUBLIC_ASSET_EXTENSIONS.items():
+        directory = source / folder
+        if not directory.is_dir() or directory.is_symlink():
+            continue
+        for path in sorted(directory.rglob("*")):
+            relative = path.relative_to(source)
+            if (path.is_symlink() or not path.is_file()
+                    or any(part.startswith(".") for part in relative.parts)
+                    or path.suffix.lower() not in extensions):
+                continue
+            # Reject files reached through a symlinked ancestor as well.
+            if any(parent.is_symlink() for parent in path.parents if parent != source.parent):
+                continue
+            target = destination / relative
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(path, target)
+            count += 1
+    return count
 
 
 def site_url() -> str:
@@ -149,8 +211,16 @@ def main() -> None:
     base = site_url()
     settings = json.loads((ROOT / "data/site.json").read_text(encoding="utf-8"))
     profile = json.loads((ROOT / "data/profile.json").read_text(encoding="utf-8"))
+    messages = json.loads((ROOT / "data/messages.json").read_text(encoding="utf-8"))
+    message_errors = public_message_errors(messages)
+    if message_errors:
+        raise ValueError("\n".join(message_errors))
+    for filename in PUBLIC_DATA:
+        path = ROOT / "data" / filename
+        if not path.is_file() or path.is_symlink():
+            raise ValueError(f"Missing regular public data file: data/{filename}")
     for page in PAGES:
-        if not (ROOT / page).is_file():
+        if not (ROOT / page).is_file() or (ROOT / page).is_symlink():
             raise FileNotFoundError(f"Missing required page: {page}")
     if OUTPUT.is_symlink():
         raise ValueError("Refusing to replace a symlink at dist/")
@@ -160,9 +230,10 @@ def main() -> None:
     for page in PAGES:
         text = (ROOT / page).read_text(encoding="utf-8")
         (OUTPUT / page).write_text(update_page(text, base, settings, profile), encoding="utf-8")
-    for folder in ("assets", "data"):
-        shutil.copytree(ROOT / folder, OUTPUT / folder,
-                        ignore=shutil.ignore_patterns(".gitkeep", "README*", ".DS_Store"))
+    copy_public_assets(ROOT / "assets", OUTPUT / "assets")
+    (OUTPUT / "data").mkdir()
+    for filename in PUBLIC_DATA:
+        shutil.copy2(ROOT / "data" / filename, OUTPUT / "data" / filename)
     (OUTPUT / ".nojekyll").touch()
     write_discovery(OUTPUT, base)
     # Keep the source checkout's discovery files in sync for direct static hosting.

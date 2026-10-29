@@ -17,9 +17,9 @@ from pathlib import Path
 from urllib.parse import unquote, urlsplit
 from xml.etree import ElementTree as ET
 
+from build import PAGES, PUBLIC_PAGES, PUBLIC_DATA, public_message_errors
+
 ROOT = Path(__file__).resolve().parents[1]
-PAGES = ("index.html", "profile.html", "race.html", "news.html", "sponsor.html",
-         "support.html", "contact.html", "404.html", "maintenance.html")
 
 
 class Page(HTMLParser):
@@ -111,7 +111,10 @@ def validate(root: Path):
                 require({"noopener", "noreferrer"}.issubset(set(attrs.get("rel", "").split())), f"{name}: unsafe external tab link")
             if tag == "iframe":
                 require(bool(attrs.get("title")), f"{name}: iframe lacks accessible title")
-                require(urlsplit(attrs.get("src", "")).netloc == "docs.google.com", f"{name}: unexpected iframe destination")
+                frame = urlsplit(attrs.get("src", ""))
+                require(frame.scheme == "https" and frame.netloc == "docs.google.com"
+                        and re.fullmatch(r"/forms/(?:d/e/|d/)[\w-]+/viewform", frame.path),
+                        f"{name}: unexpected iframe destination")
         for attrs, content in page.inline_scripts:
             require(attrs.get("type") == "application/ld+json", f"{name}: unexpected inline JavaScript")
             if attrs.get("type") == "application/ld+json":
@@ -144,7 +147,7 @@ def validate(root: Path):
             if parsed.fragment and destination.name in pages:
                 require(unquote(parsed.fragment) in pages[destination.name].ids, f"{name}: missing anchor {value}")
 
-    required_json = {"site": dict, "profile": dict, "races": dict, "news": dict, "sponsors": dict, "gallery": dict}
+    required_json = {Path(filename).stem: dict for filename in PUBLIC_DATA}
     data = {}
     for name, expected in required_json.items():
         try:
@@ -152,10 +155,28 @@ def validate(root: Path):
             require(isinstance(value, expected), f"data/{name}.json: unexpected top-level structure")
         except (OSError, json.JSONDecodeError) as exc:
             errors.append(f"data/{name}.json: {exc}")
-    for name in ("news", "sponsors", "gallery"):
-        require(isinstance(data.get(name, {}).get("items"), list), f"data/{name}.json: items must be an array")
+    for name in ("news", "sponsors", "gallery", "messages"):
+        value = data.get(name)
+        require(isinstance(value, dict) and isinstance(value.get("items"), list), f"data/{name}.json: items must be an array")
+        if isinstance(value, dict) and isinstance(value.get("items"), list):
+            require(all(isinstance(item, dict) for item in value["items"]),
+                    f"data/{name}.json: each item must be an object")
+    if "messages" in data:
+        errors.extend(public_message_errors(data["messages"]))
+    # Each file in data/ is public after deployment, even when the UI hides it.
+    data_directory = root / "data"
+    if data_directory.is_dir():
+        for path in data_directory.rglob("*"):
+            if path.is_file():
+                require(path.parent == data_directory and path.name in PUBLIC_DATA,
+                        f"Unexpected public data file: {path.relative_to(root)}")
     for field in ("results", "schedule"):
-        require(isinstance(data.get("races", {}).get(field), list), f"data/races.json: {field} must be an array")
+        races = data.get("races")
+        require(isinstance(races, dict) and isinstance(races.get(field), list),
+                f"data/races.json: {field} must be an array")
+        if isinstance(races, dict) and isinstance(races.get(field), list):
+            require(all(isinstance(item, dict) for item in races[field]),
+                    f"data/races.json: each {field} item must be an object")
     for extension, budget in (("css", 100 * 1024), ("js", 80 * 1024)):
         files = list((root / "assets" / extension).glob(f"*.{extension}"))
         require(bool(files), f"Missing {extension} assets")
@@ -168,9 +189,15 @@ def validate(root: Path):
         try:
             tree = ET.parse(root / "sitemap.xml")
             locations = tree.findall(".//{http://www.sitemaps.org/schemas/sitemap/0.9}loc")
-            require(len(locations) == 7, "sitemap.xml must include the 7 public content pages")
-            base = data.get("site", {}).get("url", "").rstrip("/") + "/"
+            require(len(locations) == len(PUBLIC_PAGES),
+                    f"sitemap.xml must include the {len(PUBLIC_PAGES)} public content pages")
+            site = data.get("site")
+            url = site.get("url", "") if isinstance(site, dict) else ""
+            base = url.rstrip("/") + "/" if isinstance(url, str) else ""
             require(all((item.text or "").startswith(base) for item in locations), "sitemap.xml URLs differ from data/site.json")
+            expected = {base + ("" if page == "index.html" else page) for page in PUBLIC_PAGES}
+            require({item.text for item in locations} == expected,
+                    "sitemap.xml does not match the public content page list")
         except ET.ParseError as exc:
             errors.append(f"sitemap.xml: {exc}")
     require(not list(root.rglob("*.php")), "PHP is not supported on GitHub Pages")
@@ -191,7 +218,7 @@ def main():
     if errors:
         print(f"{len(errors)} validation failure(s) in {root}")
         return 1
-    print(f"PASS: 9 pages, local links, JSON data, metadata, CSP, image attributes and CSS/JS budgets ({root})")
+    print(f"PASS: {len(PAGES)} pages, local links, public JSON data, metadata, CSP, image attributes and CSS/JS budgets ({root})")
     return 0
 
 

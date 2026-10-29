@@ -1314,7 +1314,7 @@ body[data-page="index"] .site-header,
 }
 .contact-frame {
   width: 100%;
-  min-height: 1150px;
+  min-height: 600px;
   border: 0;
   display: block;
   background: white;
@@ -1717,3 +1717,9 @@ main {
   );
   pointer-events: none;
 }
+
+/* Public directories and the Google Forms escape link. */
+.directory-link { margin-top: 24px; }
+.form-head > a { font-size: 11px; text-decoration: underline; text-underline-offset: 4px; }
+.footer-directory { display: flex; flex-wrap: wrap; gap: 14px 28px; padding-bottom: 24px; font-size: 11px; }
+.footer-directory a:hover { color: #8fbaff; }

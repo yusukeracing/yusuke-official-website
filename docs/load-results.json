@@ -1,0 +1,277 @@
+{
+  "measured_at_utc": "2026-10-29T04:30:38.003698+00:00",
+  "scope": "loopback-only; local Python static server; NOT GitHub Pages or Google Forms capacity",
+  "cache_model": "Every journey transfers all resources; no browser cache. OS filesystem cache is not flushed.",
+  "server_configuration": {
+    "implementation": "Python ThreadingHTTPServer",
+    "http_version": "HTTP/1.1",
+    "listen_address": "127.0.0.1 (ephemeral port)",
+    "request_queue_size": 128,
+    "tcp_nodelay": true
+  },
+  "limits": {
+    "stage_seconds": 30,
+    "planned_requests": 5580,
+    "planned_bytes": 170642352,
+    "max_requests": 10000,
+    "max_bytes": 536870912
+  },
+  "hardware": {
+    "python": "3.12.14",
+    "platform": "Linux",
+    "host_logical_cpu_count": 5,
+    "cgroup_cpu_max": "400000 100000",
+    "cgroup_memory_max_bytes": "34359738368"
+  },
+  "manifest": [
+    {
+      "path": "index.html",
+      "bytes": 41961,
+      "sha256": "f649575563ca7011ea468fdfb555ca37d8ccd3b359b870e1a64400302dbca992"
+    },
+    {
+      "path": "assets/icons/favicon.svg",
+      "bytes": 231,
+      "sha256": "df0101f7d1ca1e10b5757e28b48022f1f449684aa0d5dc27a6ff364a4a5799af"
+    },
+    {
+      "path": "assets/css/style.css",
+      "bytes": 32174,
+      "sha256": "20ebabce0b955ccae993922b62bc86034179451e027699e690f30588ca7560e5"
+    },
+    {
+      "path": "assets/css/responsive.css",
+      "bytes": 17865,
+      "sha256": "c8211d0df6b4b8c37a852f73ea983dc06c29e4951c931a74fa587d69ea7adab5"
+    },
+    {
+      "path": "assets/js/main.js",
+      "bytes": 6992,
+      "sha256": "b82c0ab60b5534a2e7988f7da4d51da1bdbeb318022204c7e81f89be97d5d267"
+    },
+    {
+      "path": "assets/js/animation.js",
+      "bytes": 3088,
+      "sha256": "c2b63645ea6f2cf4518987b0a57c26bdfe343634ab2c5401f9a6f1b90e2a5ec0"
+    },
+    {
+      "path": "assets/js/data-loader.js",
+      "bytes": 23269,
+      "sha256": "39edfecd4c5eb821aa7f1225a6bea89d264fbeeeaf9476766ef13568b699d799"
+    },
+    {
+      "path": "assets/icons/brands.svg",
+      "bytes": 2841,
+      "sha256": "d87f2429d0b64513fcaa79c953e55be68af201a5b00369292d978b53e3eaa3cc"
+    },
+    {
+      "path": "assets/images/yusuke.hero_01.jpg",
+      "bytes": 323233,
+      "sha256": "998877d078381f7ffe9a1348b85819e24cb2caf19070fb53cd492a8018c08350"
+    },
+    {
+      "path": "data/site.json",
+      "bytes": 1548,
+      "sha256": "b424cd85e55b5882cf3e69e2bdfa68403fcf16a729e1bebaea47e869875fe373"
+    },
+    {
+      "path": "data/profile.json",
+      "bytes": 2507,
+      "sha256": "db16ff9e8df2f28256407f776b4e21849bb9bc78d36fc428cb6457af1ec8caa9"
+    },
+    {
+      "path": "data/races.json",
+      "bytes": 133,
+      "sha256": "9b8b54de9328fe4f894c2cb43416b0320e6b6e938a77aa3456daf89b9a365b5c"
+    },
+    {
+      "path": "data/news.json",
+      "bytes": 18,
+      "sha256": "0343639fac1511a32a4c9a92c7655a6e9f9ad3a600fc6f30b5bdad6806160a97"
+    },
+    {
+      "path": "data/sponsors.json",
+      "bytes": 18,
+      "sha256": "0343639fac1511a32a4c9a92c7655a6e9f9ad3a600fc6f30b5bdad6806160a97"
+    },
+    {
+      "path": "data/gallery.json",
+      "bytes": 2838,
+      "sha256": "031164e2b21fa080ab4dca8851fea1186b9dd3bb483f65cd12c1b4647a41d218"
+    }
+  ],
+  "stages": [
+    {
+      "configured_parallel_clients": 1,
+      "journeys_per_client": 2,
+      "planned_journeys": 2,
+      "successful_journeys": 2,
+      "failed_journeys": 0,
+      "aborted_journeys": 0,
+      "completed_http_responses": 30,
+      "http_request_attempts": 30,
+      "bytes_received": 917432,
+      "duration_seconds": 0.018,
+      "successful_journeys_per_second": 109.054,
+      "completed_responses_per_second": 1635.809,
+      "journey_latency_ms": {
+        "p50": 8.773,
+        "p95": 11.538,
+        "max": 11.845
+      },
+      "response_transfer_latency_ms": {
+        "p50": 0.317,
+        "p95": 0.974,
+        "max": 5.195
+      },
+      "response_headers_ttfb_ms": {
+        "p50": 0.281,
+        "p95": 0.518,
+        "max": 4.879
+      },
+      "peak_open_local_connections": 1,
+      "peak_client_journeys_in_flight": 1,
+      "peak_client_http_requests_in_flight": 1,
+      "peak_server_handlers": 1,
+      "errors": []
+    },
+    {
+      "configured_parallel_clients": 10,
+      "journeys_per_client": 2,
+      "planned_journeys": 20,
+      "successful_journeys": 20,
+      "failed_journeys": 0,
+      "aborted_journeys": 0,
+      "completed_http_responses": 300,
+      "http_request_attempts": 300,
+      "bytes_received": 9174320,
+      "duration_seconds": 0.207,
+      "successful_journeys_per_second": 96.483,
+      "completed_responses_per_second": 1447.239,
+      "journey_latency_ms": {
+        "p50": 93.311,
+        "p95": 120.027,
+        "max": 139.426
+      },
+      "response_transfer_latency_ms": {
+        "p50": 5.467,
+        "p95": 11.303,
+        "max": 24.753
+      },
+      "response_headers_ttfb_ms": {
+        "p50": 3.378,
+        "p95": 8.571,
+        "max": 19.019
+      },
+      "peak_open_local_connections": 10,
+      "peak_client_journeys_in_flight": 10,
+      "peak_client_http_requests_in_flight": 10,
+      "peak_server_handlers": 10,
+      "errors": []
+    },
+    {
+      "configured_parallel_clients": 25,
+      "journeys_per_client": 2,
+      "planned_journeys": 50,
+      "successful_journeys": 50,
+      "failed_journeys": 0,
+      "aborted_journeys": 0,
+      "completed_http_responses": 750,
+      "http_request_attempts": 750,
+      "bytes_received": 22935800,
+      "duration_seconds": 0.558,
+      "successful_journeys_per_second": 89.577,
+      "completed_responses_per_second": 1343.66,
+      "journey_latency_ms": {
+        "p50": 245.882,
+        "p95": 342.735,
+        "max": 386.915
+      },
+      "response_transfer_latency_ms": {
+        "p50": 13.457,
+        "p95": 32.468,
+        "max": 128.654
+      },
+      "response_headers_ttfb_ms": {
+        "p50": 8.48,
+        "p95": 22.699,
+        "max": 122.262
+      },
+      "peak_open_local_connections": 25,
+      "peak_client_journeys_in_flight": 25,
+      "peak_client_http_requests_in_flight": 25,
+      "peak_server_handlers": 23,
+      "errors": []
+    },
+    {
+      "configured_parallel_clients": 50,
+      "journeys_per_client": 2,
+      "planned_journeys": 100,
+      "successful_journeys": 100,
+      "failed_journeys": 0,
+      "aborted_journeys": 0,
+      "completed_http_responses": 1500,
+      "http_request_attempts": 1500,
+      "bytes_received": 45871600,
+      "duration_seconds": 1.114,
+      "successful_journeys_per_second": 89.735,
+      "completed_responses_per_second": 1346.032,
+      "journey_latency_ms": {
+        "p50": 476.552,
+        "p95": 833.847,
+        "max": 899.843
+      },
+      "response_transfer_latency_ms": {
+        "p50": 24.611,
+        "p95": 65.672,
+        "max": 404.929
+      },
+      "response_headers_ttfb_ms": {
+        "p50": 16.406,
+        "p95": 42.44,
+        "max": 373.978
+      },
+      "peak_open_local_connections": 50,
+      "peak_client_journeys_in_flight": 50,
+      "peak_client_http_requests_in_flight": 50,
+      "peak_server_handlers": 42,
+      "errors": []
+    },
+    {
+      "configured_parallel_clients": 100,
+      "journeys_per_client": 2,
+      "planned_journeys": 200,
+      "successful_journeys": 200,
+      "failed_journeys": 0,
+      "aborted_journeys": 0,
+      "completed_http_responses": 3000,
+      "http_request_attempts": 3000,
+      "bytes_received": 91743200,
+      "duration_seconds": 2.2,
+      "successful_journeys_per_second": 90.925,
+      "completed_responses_per_second": 1363.87,
+      "journey_latency_ms": {
+        "p50": 721.593,
+        "p95": 1859.77,
+        "max": 1941.303
+      },
+      "response_transfer_latency_ms": {
+        "p50": 34.035,
+        "p95": 103.933,
+        "max": 1328.316
+      },
+      "response_headers_ttfb_ms": {
+        "p50": 21.233,
+        "p95": 67.08,
+        "max": 1313.742
+      },
+      "peak_open_local_connections": 82,
+      "peak_client_journeys_in_flight": 100,
+      "peak_client_http_requests_in_flight": 100,
+      "peak_server_handlers": 62,
+      "errors": []
+    }
+  ],
+  "process_peak_rss_mib": 47.95,
+  "highest_error_free_tested_parallel_clients": 100
+}

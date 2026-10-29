@@ -1,0 +1,221 @@
+/* Public partner and support-message pages: editorial, light and accessible. */
+.community-intro {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 40px;
+  padding-top: 55px;
+  padding-bottom: 45px;
+}
+.community-intro > p {
+  max-width: 680px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 2;
+}
+.community-intro > .text-link {
+  flex-shrink: 0;
+}
+.community-list-section {
+  padding-top: 0;
+}
+.community-empty {
+  width: 100%;
+  padding: 50px 0;
+  border-block: 1px solid var(--line);
+}
+.community-empty .eyebrow {
+  color: var(--blue);
+}
+.community-empty h2 {
+  font-size: clamp(20px, 2.3vw, 28px);
+  line-height: 1.7;
+  margin-bottom: 18px;
+}
+.community-empty p:last-child {
+  max-width: 660px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 2;
+}
+.partner-entry {
+  display: grid;
+  grid-template-columns: minmax(160px, .65fr) minmax(0, 1.35fr);
+  align-items: center;
+  gap: 9%;
+  padding-block: 45px;
+  border-top: 1px solid var(--line);
+}
+.partner-entry:last-child {
+  border-bottom: 1px solid var(--line);
+}
+.partner-logo-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 160px;
+  padding: 25px;
+  background: var(--paper);
+  overflow-wrap: anywhere;
+}
+.partner-logo-area img {
+  width: 100%;
+  height: 150px;
+  object-fit: contain;
+}
+.partner-logo-fallback {
+  font-size: 22px;
+  font-weight: 750;
+  line-height: 1.6;
+  text-align: center;
+}
+.partner-copy .eyebrow {
+  color: var(--blue);
+  margin-bottom: 14px;
+}
+.partner-copy h2 {
+  font-size: clamp(22px, 2.5vw, 34px);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.partner-description {
+  margin-top: 20px;
+  color: var(--muted);
+  line-height: 2;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+.partner-copy .text-link {
+  margin-top: 15px;
+}
+.message-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 48px 7%;
+}
+.message-list > .community-empty {
+  grid-column: 1 / -1;
+}
+.support-message {
+  padding-top: 27px;
+  border-top: 1px solid var(--line);
+  min-width: 0;
+}
+.message-number {
+  display: block;
+  color: var(--blue);
+  font-family: var(--display);
+  font-size: 32px;
+  line-height: 1;
+  margin-bottom: 25px;
+}
+.message-name {
+  font-size: 17px;
+  font-weight: 650;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+.message-text {
+  margin-top: 17px;
+  font-size: 18px;
+  line-height: 2;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+.message-date {
+  display: block;
+  margin-top: 25px;
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: .08em;
+}
+.community-invitation {
+  padding-block: 70px;
+  background: var(--ice);
+}
+.community-invitation .wrap {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 40px;
+}
+.community-invitation h2 {
+  font-size: clamp(24px, 3vw, 38px);
+  line-height: 1.6;
+}
+.community-invitation p:not(.eyebrow) {
+  max-width: 660px;
+  margin-top: 20px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 2;
+}
+.community-invitation .eyebrow {
+  color: #0056d6;
+}
+.community-links {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+  padding-block: 35px;
+}
+@media (max-width: 767px) {
+  .community-intro {
+    display: block;
+    padding-top: 35px;
+    padding-bottom: 35px;
+  }
+  .community-intro > p {
+    font-size: 13px;
+  }
+  .community-intro > .text-link {
+    margin-top: 20px;
+  }
+  .community-empty {
+    padding-block: 35px;
+  }
+  .community-empty p:last-child {
+    font-size: 13px;
+  }
+  .partner-entry {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 25px;
+    padding-block: 35px;
+  }
+  .partner-logo-area {
+    min-height: 130px;
+    max-width: 300px;
+    padding: 24px;
+  }
+  .partner-logo-area img {
+    height: 120px;
+  }
+  .partner-description {
+    font-size: 13px;
+  }
+  .message-list {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 35px;
+  }
+  .message-text {
+    font-size: 16px;
+  }
+  .community-invitation {
+    padding-block: 50px;
+  }
+  .community-invitation .wrap {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+  }
+  .community-invitation p:not(.eyebrow) {
+    font-size: 13px;
+  }
+  .community-invitation .button {
+    justify-self: start;
+    font-size: 10px;
+  }
+  .community-links {
+    gap: 15px 25px;
+    padding-block: 28px;
+  }
+}

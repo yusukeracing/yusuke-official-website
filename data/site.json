@@ -11,7 +11,7 @@
   "heroImage": "assets/images/yusuke.hero_01.jpg",
   "heroMobileImage": "assets/images/xxx-hero-01-mobile.webp",
   "ga4Id": "xxx",
-  "googleFormUrl": "xxx",
+  "googleFormUrl": "https://docs.google.com/forms/d/e/1FAIpQLSdRqEPLFsCt1kjRyO-wNd4EpaXSpVxBO1tbpUzaIbe_33yBrw/viewform?embedded=true",
   "email": "xxx",
   "phone": "xxx",
   "sponsorPdf": "xxx",
@@ -41,5 +41,6 @@
     "currentRace": "assets/images/yusuke.hero_02.jpg",
     "pit": "assets/images/xxx-pit-01.webp",
     "race": "assets/images/xxx-race-01.webp"
-  }
+  },
+  "googleFormHeight": 2081
 }
