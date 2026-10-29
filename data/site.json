@@ -8,10 +8,13 @@
   "team": "GarageL8 Racing Team",
   "machine": "YAMAHA YZF-R6",
   "tagline": "速さの先へ。",
+  "maintenanceEnabled": true,
+  "maintenanceMessage": "現在、Webサイトのメンテナンスを行っています。\nご不便をおかけしますが、公開再開までしばらくお待ちください。",
   "heroImage": "assets/images/yusuke.hero_01.jpg",
   "heroMobileImage": "assets/images/xxx-hero-01-mobile.webp",
   "ga4Id": "xxx",
   "googleFormUrl": "https://docs.google.com/forms/d/e/1FAIpQLSdRqEPLFsCt1kjRyO-wNd4EpaXSpVxBO1tbpUzaIbe_33yBrw/viewform?embedded=true",
+  "googleFormHeight": 2081,
   "email": "xxx",
   "phone": "xxx",
   "sponsorPdf": "xxx",
@@ -30,9 +33,7 @@
     },
     {
       "platform": "facebook",
-      "label": "Facebook",
-      "handle": "",
-      "url": ""
+      "label": "Facebook"
     }
   ],
   "heroAlt": "コーナーを走行する池田優介とゼッケン29のマシン",
@@ -41,8 +42,5 @@
     "currentRace": "assets/images/yusuke.hero_02.jpg",
     "pit": "assets/images/xxx-pit-01.webp",
     "race": "assets/images/xxx-race-01.webp"
-  },
-  "googleFormHeight": 2081,
-  "maintenanceEnabled": false,
-  "maintenanceMessage": "現在、Webサイトのメンテナンスを行っています。\nご不便をおかけしますが、公開再開までしばらくお待ちください。"
+  }
 }
