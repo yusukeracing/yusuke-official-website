@@ -13,6 +13,8 @@ from pathlib import Path
 from urllib.parse import urljoin, urlsplit
 from xml.etree import ElementTree as ET
 
+from social_links import normalize_social_links, update_social_html
+
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "dist"
 PUBLIC_PAGES = ("index.html", "profile.html", "race.html", "news.html", "sponsor.html",
@@ -189,6 +191,8 @@ def update_page(text: str, base: str, settings: dict | None = None, profile: dic
             updated_hashes.append(base64.b64encode(hashlib.sha256(script[2].encode()).digest()).decode())
     for old, new in zip(hashes, updated_hashes):
         text = text.replace("sha256-" + old, "sha256-" + new)
+    if settings is not None:
+        text = update_social_html(text, normalize_social_links(settings.get("socials")))
     return text
 
 
@@ -234,6 +238,10 @@ def main() -> None:
     (OUTPUT / "data").mkdir()
     for filename in PUBLIC_DATA:
         shutil.copy2(ROOT / "data" / filename, OUTPUT / "data" / filename)
+    # The delivered HTML and runtime JSON use the same canonical profile links.
+    published_settings = {**settings, "socials": normalize_social_links(settings.get("socials"))}
+    (OUTPUT / "data/site.json").write_text(
+        json.dumps(published_settings, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     (OUTPUT / ".nojekyll").touch()
     write_discovery(OUTPUT, base)
     # Keep the source checkout's discovery files in sync for direct static hosting.

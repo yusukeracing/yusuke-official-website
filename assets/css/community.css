@@ -65,7 +65,7 @@
 }
 .partner-logo-fallback {
   font-size: 22px;
-  font-weight: 750;
+  font-weight: 600;
   line-height: 1.6;
   text-align: center;
 }
@@ -111,7 +111,7 @@
 }
 .message-name {
   font-size: 17px;
-  font-weight: 650;
+  font-weight: 600;
   line-height: 1.8;
   overflow-wrap: anywhere;
 }

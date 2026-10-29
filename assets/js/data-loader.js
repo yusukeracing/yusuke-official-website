@@ -422,14 +422,13 @@
   };
   const renderSocials = () => {
     if (!Array.isArray(content.site?.socials)) return;
+    const normalize = window.RacingSocialLinks?.normalize;
+    if (typeof normalize !== "function") return;
+    const profiles = normalize(content.site.socials);
     document.querySelectorAll("[data-socials]").forEach((list) => {
       const full = list.dataset.socials === "full";
       list.replaceChildren(
-        ...content.site.socials
-          .filter((item) =>
-            ["instagram", "x", "facebook"].includes(item.platform),
-          )
-          .map((item) => {
+        ...profiles.map((item) => {
             const anchor = node("a");
             const valid = setLink(anchor, item.url, "social_click");
             if (!valid) anchor.removeAttribute("href");
@@ -465,8 +464,11 @@
               anchor.append(label, arrow);
             }
             return anchor;
-          }),
+        }),
       );
+      if (full && !profiles.length) {
+        list.append(node("p", "social-unavailable", "SNS情報は準備中です。"));
+      }
     });
   };
   const configureServices = () => {
