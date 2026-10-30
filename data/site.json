@@ -8,7 +8,7 @@
   "team": "GarageL8 Racing Team",
   "machine": "YAMAHA YZF-R6",
   "tagline": "速さの先へ。",
-  "maintenanceEnabled": false,
+  "maintenanceEnabled": true,
   "maintenanceMessage": "現在、Webサイトのメンテナンスを行っています。\nご不便をおかけしますが、公開再開までしばらくお待ちください。",
   "heroImage": "assets/images/yusuke.hero_01.jpg",
   "heroMobileImage": "assets/images/xxx-hero-01-mobile.webp",
