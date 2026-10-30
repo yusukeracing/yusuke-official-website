@@ -11,7 +11,7 @@
   "hobby": "音楽鑑賞",
   "intro": "宮城県角田市出身のロードレーサー。2026年、GarageL8 Racing Teamから全日本ロードレース選手権 ST600に参戦。YAMAHA YZF-R6とともに、全日本のサーキットを走る。",
   "portraitImage": "assets/images/yusuke.hero_03.jpg",
-  "detailImage": "assets/images/xxx-profile-02.webp",
+  "detailImage": "assets/images/yusuke.hero_01.jpg",
   "career": [
     {
       "year": "2021",
@@ -65,5 +65,5 @@
     }
   ],
   "message": "いつも温かい応援をありがとうございます。\n\n皆さまからの声やサーキットでの応援が、挑戦を続ける力になっています。一歩ずつ成長し、走りで感謝の気持ちを届けられるよう、全力で取り組んでいきます。\n\nこれからも一緒に、レースを楽しんでいただけたらうれしいです。応援よろしくお願いいたします！",
-  "messageIsSample": true
+  "messageIsSample": false
 }

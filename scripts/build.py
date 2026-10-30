@@ -13,7 +13,7 @@ from pathlib import Path
 from urllib.parse import urljoin, urlsplit
 from xml.etree import ElementTree as ET
 
-from content_render import update_content_html
+from content_render import update_content_html, update_gallery_html, update_utility_contact_html
 from social_links import normalize_social_links, update_social_html
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -68,8 +68,6 @@ def maintenance_page(template: str, page: str, base: str) -> str:
     text = re.sub(r'<div\b[^>]*\bclass=["\']footer-directory["\'][^>]*>.*?</div\s*>', "", text, flags=re.I | re.S)
     text = re.sub(r'(<a\b[^>]*\bhref=["\'])index\.html(["\'][^>]*\bclass=["\']brand["\'])',
                   r'\1#main\2', text, flags=re.I)
-    # Email information is configured separately; omit the unconfigured prompt.
-    text = re.sub(r'<p\b[^>]*\bclass=["\']fine-print["\'][^>]*>\s*お急ぎの場合：.*?</p\s*>', "", text, flags=re.I | re.S)
     return text
 
 
@@ -292,6 +290,7 @@ def main() -> None:
     maintenance = maintenance_enabled(settings)
     profile = json.loads((ROOT / "data/profile.json").read_text(encoding="utf-8"))
     news = json.loads((ROOT / "data/news.json").read_text(encoding="utf-8"))
+    gallery = json.loads((ROOT / "data/gallery.json").read_text(encoding="utf-8"))
     messages = json.loads((ROOT / "data/messages.json").read_text(encoding="utf-8"))
     message_errors = public_message_errors(messages)
     if message_errors:
@@ -316,6 +315,9 @@ def main() -> None:
     for page in PAGES:
         text = update_page(source_pages[page], base, settings, profile)
         text = update_content_html(text, news, profile, base)
+        text = update_gallery_html(text, gallery, base)
+        if page in {"404.html", "maintenance.html"}:
+            text = update_utility_contact_html(text, settings)
         if page == "maintenance.html":
             text = update_maintenance_message(text, settings)
         (OUTPUT / page).write_text(text, encoding="utf-8")

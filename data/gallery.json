@@ -3,8 +3,8 @@
     {
       "image": "assets/images/yusuke.gallery_01.jpg",
       "mobileImage": "assets/images/yusuke.gallery_01.jpg",
-      "alt": "xxx",
-      "caption": "xxx",
+      "alt": "コーナーを走行するゼッケン29のマシンとライダー",
+      "caption": "ゼッケン29のコーナリング",
       "width": 1566,
       "height": 1044,
       "mobileWidth": 1566,
@@ -13,8 +13,8 @@
     {
       "image": "assets/images/yusuke.gallery_02.jpg",
       "mobileImage": "assets/images/yusuke.gallery_02.jpg",
-      "alt": "xxx",
-      "caption": "xxx",
+      "alt": "ゼッケン6の青いマシンでサーキットを走るライダー",
+      "caption": "サーキットでの走行シーン",
       "width": 960,
       "height": 720,
       "mobileWidth": 960,
@@ -23,8 +23,8 @@
     {
       "image": "assets/images/yusuke.gallery_03.jpg",
       "mobileImage": "assets/images/yusuke.gallery_03.jpg",
-      "alt": "xxx",
-      "caption": "xxx",
+      "alt": "ピット内でマシンにまたがるライダーとチームスタッフ",
+      "caption": "ピットでのひとこま",
       "width": 1477,
       "height": 1108,
       "mobileWidth": 1477,
@@ -33,8 +33,8 @@
     {
       "image": "assets/images/yusuke.gallery_04.jpg",
       "mobileImage": "assets/images/yusuke.gallery_04.jpg",
-      "alt": "xxx",
-      "caption": "xxx",
+      "alt": "濡れた路面のコーナーを走行するゼッケン29のマシン",
+      "caption": "濡れた路面でのコーナリング",
       "width": 1566,
       "height": 1044,
       "mobileWidth": 1566,
@@ -43,18 +43,25 @@
     {
       "image": "assets/images/yusuke.gallery_05.jpg",
       "mobileImage": "assets/images/yusuke.gallery_05.jpg",
-      "alt": "xxx",
-      "caption": "xxx",
+      "alt": "グリッドでマシンの周りに集まるライダーとチームスタッフ",
+      "caption": "グリッドでチームとともに",
       "width": 1023,
       "height": 766,
       "mobileWidth": 1023,
       "mobileHeight": 766
     },
     {
+<<<<<<< HEAD
       "image": "assets/images/yusuke.gallery_13.jpg",
       "mobileImage": "assets/images/yusuke.gallery_13.jpg",
       "alt": "xxx",
       "caption": "xxx",
+=======
+      "image": "assets/images/yusuke.gallery_06.jpg",
+      "mobileImage": "assets/images/yusuke.gallery_06.jpg",
+      "alt": "ピット前に並ぶゼッケン29のマシンとロゴ入りのボード",
+      "caption": "ピット前のマシン展示",
+>>>>>>> f15e1037e62d3b71532c6e0092db34f1a86a7fb5
       "width": 1108,
       "height": 1477,
       "mobileWidth": 1108,
@@ -63,8 +70,8 @@
     {
       "image": "assets/images/yusuke.gallery_07.jpg",
       "mobileImage": "assets/images/yusuke.gallery_07.jpg",
-      "alt": "xxx",
-      "caption": "xxx",
+      "alt": "表彰台でトロフィーとヘルメットを持つライダー",
+      "caption": "トロフィーを手にした表彰台",
       "width": 1108,
       "height": 1477,
       "mobileWidth": 1108,
@@ -73,8 +80,8 @@
     {
       "image": "assets/images/yusuke.gallery_08.jpg",
       "mobileImage": "assets/images/yusuke.gallery_08.jpg",
-      "alt": "xxx",
-      "caption": "xxx",
+      "alt": "ゼッケン29のマシンを傾けてコーナーを走行するライダー",
+      "caption": "マシンとともにコーナーへ",
       "width": 1566,
       "height": 1044,
       "mobileWidth": 1566,
@@ -83,8 +90,8 @@
     {
       "image": "assets/images/yusuke.gallery_09.jpg",
       "mobileImage": "assets/images/yusuke.gallery_09.jpg",
-      "alt": "xxx",
-      "caption": "xxx",
+      "alt": "縁石に沿ってコーナーを走るゼッケン29のマシン",
+      "caption": "縁石に沿うコーナリング",
       "width": 1566,
       "height": 1044,
       "mobileWidth": 1566,
@@ -93,8 +100,8 @@
     {
       "image": "assets/images/yusuke.gallery_10.jpg",
       "mobileImage": "assets/images/yusuke.gallery_10.jpg",
-      "alt": "xxx",
-      "caption": "xxx",
+      "alt": "走行中に片手を上げるライダーとゼッケン29のマシン",
+      "caption": "サーキットで手を上げるひとこま",
       "width": 1566,
       "height": 1044,
       "mobileWidth": 1566,
@@ -103,8 +110,8 @@
     {
       "image": "assets/images/yusuke.gallery_11.jpg",
       "mobileImage": "assets/images/yusuke.gallery_11.jpg",
-      "alt": "xxx",
-      "caption": "xxx",
+      "alt": "ピット内で話をするライダーとチームスタッフ",
+      "caption": "チームスタッフとのひととき",
       "width": 1477,
       "height": 1108,
       "mobileWidth": 1477,
@@ -113,8 +120,8 @@
     {
       "image": "assets/images/yusuke.gallery_12.jpg",
       "mobileImage": "assets/images/yusuke.gallery_12.jpg",
-      "alt": "xxx",
-      "caption": "xxx",
+      "alt": "サーキットのコーナーを走行するゼッケン6の青いマシン",
+      "caption": "青いマシンのコーナリング",
       "width": 828,
       "height": 552,
       "mobileWidth": 828,

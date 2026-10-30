@@ -690,6 +690,18 @@ body[data-page="index"] .site-header,
   align-items: start;
   gap: 12%;
 }
+.profile-details-grid > .portrait {
+  aspect-ratio: auto;
+  align-self: center;
+}
+.profile-details-grid > .portrait picture {
+  position: static;
+}
+.profile-details-grid > .portrait img {
+  height: auto;
+  max-height: 540px;
+  object-fit: contain;
+}
 .profile-details h2 {
   font-size: 36px;
   letter-spacing: 0.08em;
