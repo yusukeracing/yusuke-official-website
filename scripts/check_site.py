@@ -14,10 +14,11 @@ import re
 import sys
 from html.parser import HTMLParser
 from pathlib import Path
-from urllib.parse import unquote, urlsplit
+from urllib.parse import parse_qs, unquote, urlsplit
 from xml.etree import ElementTree as ET
 
 from build import PAGES, PUBLIC_PAGES, PUBLIC_DATA, public_message_errors
+from news_content import article_filename, public_news
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -81,7 +82,28 @@ def validate(root: Path):
         if not condition:
             errors.append(message)
 
-    for name in PAGES:
+    publication = {}
+    try:
+        publication = json.loads((root / "data/publication.json").read_text(encoding="utf-8"))
+        require(isinstance(publication, dict), "publication.json must be an object")
+        if not isinstance(publication, dict):
+            publication = {}
+    except (OSError, ValueError) as exc:
+        errors.append(f"Publication manifest unavailable: {exc}")
+    articles = publication.get("articlePages", [])
+    require(isinstance(articles, list) and all(isinstance(name, str) and re.fullmatch(r"article-[a-z0-9-]+\.html", name) for name in articles),
+            "publication.json: unsafe article page list")
+    if not isinstance(articles, list) or not all(isinstance(name, str) and re.fullmatch(r"article-[a-z0-9-]+\.html", name) for name in articles):
+        articles = []
+    require(len(articles) == len(set(articles)), "publication.json: duplicate article filenames")
+    names = (*PAGES, *articles)
+    declared_pages = publication.get("pages", [])
+    valid_pages = isinstance(declared_pages, list) and all(isinstance(value, str) for value in declared_pages)
+    require(valid_pages and set(declared_pages) == set(names), "publication.json does not match the required pages")
+    identifier = publication.get("contentId", "")
+    require(isinstance(identifier, str) and bool(re.fullmatch(r"[a-f0-9]{20}", identifier)), "publication.json: invalid content identifier")
+
+    for name in names:
         path = root / name
         if not path.is_file():
             errors.append(f"Missing required page: {name}")
@@ -94,9 +116,13 @@ def validate(root: Path):
         require(bool(page.title.strip()), f"{name}: missing title")
         require(any(tag == "html" and a.get("lang", "").startswith("ja") for tag, a in page.tags), f"{name}: missing Japanese lang")
         require(bool(meta.get("description")), f"{name}: missing meta description")
+        require(meta.get("publication-id") == identifier, f"{name}: stale publication identifier")
         require("width=device-width" in meta.get("viewport", ""), f"{name}: missing responsive viewport")
         require(bool(meta.get("og:title")) and bool(meta.get("og:description")) and bool(meta.get("og:url")), f"{name}: incomplete OGP")
         require(any(tag == "link" and a.get("rel") == "canonical" and a.get("href", "").startswith("https://") for tag, a in page.tags), f"{name}: missing HTTPS canonical")
+        expected_canonical = public_url.geturl().rstrip("/") + "/" + ("" if name == "index.html" else name)
+        require(any(tag == "link" and a.get("rel") == "canonical" and a.get("href") == expected_canonical for tag, a in page.tags),
+                f"{name}: duplicate or incorrect canonical URL")
         require(any(tag == "h1" for tag, _ in page.tags), f"{name}: missing h1")
         require(len(page.ids) == len(set(page.ids)), f"{name}: duplicate HTML IDs")
         require(any(tag == "a" and a.get("href") == "#main" for tag, a in page.tags), f"{name}: missing skip link to #main")
@@ -117,6 +143,8 @@ def validate(root: Path):
                 require(bool(attrs.get("width")) and bool(attrs.get("height")), f"{name}: image lacks dimensions")
                 on_demand_dialog = "lightbox-image" in attrs.get("class", "").split() and "hidden" in attrs and not attrs.get("src")
                 require(on_demand_dialog or attrs.get("loading") == "lazy" or attrs.get("fetchpriority") == "high", f"{name}: non-hero image must lazy load")
+                if attrs.get("src"):
+                    require(attrs.get("alt") != "xxx", f"{name}: placeholder image description")
             if attrs.get("target") == "_blank":
                 require({"noopener", "noreferrer"}.issubset(set(attrs.get("rel", "").split())), f"{name}: unsafe external tab link")
             if tag == "iframe":
@@ -142,8 +170,13 @@ def validate(root: Path):
             parsed = urlsplit(value)
             require(parsed.scheme not in {"javascript", "vbscript"}, f"{name}: unsafe {attribute} URL")
             if parsed.scheme or parsed.netloc:
-                continue
-            target = unquote(parsed.path)
+                prefix = public_url.path.rstrip("/") + "/"
+                if parsed.scheme == "https" and parsed.netloc == public_url.netloc and parsed.path.startswith(prefix):
+                    target = unquote(parsed.path[len(prefix):]) or "index.html"
+                else:
+                    continue
+            else:
+                target = unquote(parsed.path)
             # Absolute project-root paths break under GitHub Pages repository URLs.
             require(not target.startswith("/"), f"{name}: root-absolute URL breaks project hosting: {value}")
             if not target:
@@ -154,6 +187,8 @@ def validate(root: Path):
             if not destination.is_relative_to(root.resolve()):
                 continue
             require(destination.exists(), f"{name}: missing local {attribute}: {value}")
+            if target.startswith(("assets/css/", "assets/js/")):
+                require(parse_qs(parsed.query).get("v") == [identifier], f"{name}: unversioned or stale asset {value}")
             if parsed.fragment and destination.name in pages:
                 require(unquote(parsed.fragment) in pages[destination.name].ids, f"{name}: missing anchor {value}")
 
@@ -173,8 +208,16 @@ def validate(root: Path):
                     f"data/{name}.json: each item must be an object")
     if "messages" in data:
         errors.extend(public_message_errors(data["messages"]))
+    if "news" in data:
+        try:
+            visible = public_news(data["news"])
+            require(len(visible["items"]) == len(data["news"].get("items", [])), "Unpublished articles leaked into public JSON")
+            require({article_filename(item) for item in visible["items"]} == set(articles), "Article files differ from public news JSON")
+        except (ValueError, TypeError) as exc:
+            errors.append(f"Public news validation: {exc}")
     site = data.get("site")
     maintenance = isinstance(site, dict) and site.get("maintenanceEnabled") is True
+    require(publication.get("maintenanceEnabled") is maintenance, "Publication mode differs from public site settings")
     if isinstance(site, dict) and "maintenanceEnabled" in site:
         require(isinstance(site["maintenanceEnabled"], bool), "data/site.json: maintenanceEnabled must be a boolean")
     if maintenance:
@@ -213,7 +256,7 @@ def validate(root: Path):
         try:
             tree = ET.parse(root / "sitemap.xml")
             locations = tree.findall(".//{http://www.sitemaps.org/schemas/sitemap/0.9}loc")
-            indexed_pages = () if maintenance else PUBLIC_PAGES
+            indexed_pages = () if maintenance else (*PUBLIC_PAGES, *articles)
             require(len(locations) == len(indexed_pages),
                     f"sitemap.xml must include {len(indexed_pages)} pages in the current publication mode")
             site = data.get("site")
@@ -227,6 +270,39 @@ def validate(root: Path):
             errors.append(f"sitemap.xml: {exc}")
     require(not list(root.rglob("*.php")), "PHP is not supported on GitHub Pages")
     require(not (root / "admin").exists(), "Do not expose a custom admin directory")
+    allowed_root_files = {*names, "robots.txt", "sitemap.xml", ".nojekyll"}
+    for path in root.iterdir():
+        require(path.name in ({"assets", "data"} if path.is_dir() else allowed_root_files),
+                f"Unexpected file or directory in publication: {path.name}")
+    require({path.name for path in root.glob("*.html")} == set(names), "Unexpected or missing published HTML")
+    manifest = data.get("media-manifest", {})
+    manifest_images = manifest.get("images", []) if isinstance(manifest, dict) else []
+    require(isinstance(manifest_images, list), "media-manifest.json: images must be an array")
+    for entry in manifest_images if isinstance(manifest_images, list) else []:
+        if not isinstance(entry, dict):
+            errors.append("media-manifest.json: malformed image entry")
+            continue
+        for image in entry.get("variants", []):
+            value = image.get("path", "") if isinstance(image, dict) else ""
+            safe = isinstance(value, str) and re.fullmatch(r"assets/optimized/[a-f0-9-]+(?:x[0-9]+)?\.(?:webp|svg)", value)
+            require(bool(safe), "media-manifest.json: invalid delivery path")
+            if not safe:
+                continue
+            file = root / value
+            require(file.is_file(), f"Missing delivery image: {value}")
+            if file.is_file():
+                require(file.stat().st_size == image.get("bytes"), f"Image size differs from manifest: {value}")
+                require(hashlib.sha256(file.read_bytes()).hexdigest() == image.get("sha256"), f"Image hash differs from manifest: {value}")
+    secret_pattern = re.compile(rb"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----|AKIA[A-Z0-9]{16}|github_pat_[A-Za-z0-9_]{40,}|gh[opsu]_[A-Za-z0-9]{36,}")
+    for path in root.rglob("*"):
+        require(not path.is_symlink(), f"Symlinks are not public artifacts: {path.relative_to(root)}")
+        if path.is_file():
+            require(not secret_pattern.search(path.read_bytes()), f"Possible credential in public artifact: {path.relative_to(root)}")
+            require(not any(part.startswith(".") and part != ".nojekyll" for part in path.relative_to(root).parts),
+                    f"Hidden file in public artifact: {path.relative_to(root)}")
+    originals = root / "assets/images"
+    require(not any(path.suffix.lower() in {".jpg", ".jpeg", ".png", ".webp", ".avif"} for path in originals.rglob("*")),
+            "Original source photographs must remain outside the delivery artifact")
     return errors, warnings
 
 
@@ -243,7 +319,8 @@ def main():
     if errors:
         print(f"{len(errors)} validation failure(s) in {root}")
         return 1
-    print(f"PASS: {len(PAGES)} pages, local links, public JSON data, metadata, CSP, image attributes and CSS/JS budgets ({root})")
+    count = len(list(root.glob("*.html")))
+    print(f"PASS: {count} pages, links, public JSON, metadata, CSP, image integrity, publication boundary and CSS/JS budgets ({root})")
     return 0
 
 

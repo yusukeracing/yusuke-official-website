@@ -10,14 +10,14 @@
   "tagline": "速さの先へ。",
   "maintenanceEnabled": true,
   "maintenanceMessage": "現在、Webサイトのメンテナンスを行っています。\nご不便をおかけしますが、公開再開までしばらくお待ちください。",
-  "heroImage": "assets/images/yusuke.hero_01.jpg",
-  "heroMobileImage": "assets/images/xxx-hero-01-mobile.webp",
-  "ga4Id": "xxx",
+  "heroImage": "assets/images/yusuke.gallery_09.jpg",
+  "heroMobileImage": "",
+  "ga4Id": "",
   "googleFormUrl": "https://docs.google.com/forms/d/e/1FAIpQLSdRqEPLFsCt1kjRyO-wNd4EpaXSpVxBO1tbpUzaIbe_33yBrw/viewform?embedded=true",
   "googleFormHeight": 2081,
-  "email": "xxx",
-  "phone": "xxx",
-  "sponsorPdf": "xxx",
+  "email": "",
+  "phone": "",
+  "sponsorPdf": "",
   "socials": [
     {
       "platform": "instagram",
@@ -36,11 +36,12 @@
       "label": "Facebook"
     }
   ],
-  "heroAlt": "コーナーを走行する池田優介とゼッケン29のマシン",
+  "heroAlt": "ゼッケン29のマシンでサーキットのコーナーを走行するライダー",
   "ogImage": "assets/images/yusuke.hero_01.jpg",
   "photos": {
     "currentRace": "assets/images/yusuke.hero_02.jpg",
-    "pit": "assets/images/xxx-pit-01.webp",
-    "race": "assets/images/xxx-race-01.webp"
+    "pit": "assets/images/yusuke.hero_05.jpg",
+    "race": "assets/images/yusuke.gallery_06.jpg",
+    "supportFeature": "assets/images/yusuke.hero_07.jpg"
   }
 }

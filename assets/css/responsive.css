@@ -1,29 +1,12 @@
 /* =================================
    TABLET / SMALL DESKTOP
 ================================= */
-@media (min-width: 1600px) {
-  .hero-content {
-    padding-top: 25px;
-  }
-  .hero-bottom {
-    margin-top: 45px;
-  }
-}
 @media (max-width: 1200px) {
   .header-inner {
     gap: 24px;
   }
   .header-inner > .header-socials {
     display: none;
-  }
-  .hero {
-    min-height: 800px;
-  }
-  .hero-actions {
-    gap: 18px;
-  }
-  .hero-actions .text-link {
-    gap: 15px;
   }
   .section-space {
     padding-block: 85px;
@@ -69,35 +52,6 @@
   }
   .primary-navigation a {
     font-size: 9px;
-  }
-  .hero {
-    padding-top: 140px;
-    min-height: 760px;
-  }
-  .hero h1 {
-    font-size: 13vw;
-  }
-  .hero-bottom {
-    align-items: start;
-    max-width: 100%;
-    gap: 30px;
-  }
-  .hero-actions {
-    flex-wrap: wrap;
-    max-width: 300px;
-    gap: 15px 24px;
-  }
-  .hero-actions .button {
-    flex-basis: 100%;
-  }
-  .hero-foot {
-    margin-top: 55px;
-  }
-  .hero-frame .photo-label {
-    bottom: 220px;
-  }
-  .hero-photo-note {
-    bottom: 140px;
   }
   .who-grid {
     gap: 7%;
@@ -249,92 +203,6 @@
     top: 15px;
     width: 25px;
   }
-  .hero {
-    padding-top: 125px;
-    min-height: 850px;
-    min-height: max(790px, 100svh);
-  }
-  .hero-photo {
-    width: 76%;
-    height: 58%;
-    top: 115px;
-  }
-  .hero-frame .photo-label {
-    bottom: 30px;
-    right: 24px;
-  }
-  .hero-frame .photo-mark {
-    top: 25px;
-    right: 24px;
-  }
-  .hero-watermark {
-    font-size: 63vw;
-    top: 23%;
-    right: 2%;
-  }
-  .hero-photo-note {
-    display: none;
-  }
-  .hero-kicker {
-    font-size: 8px;
-    line-height: 1.7;
-    margin-bottom: 36px;
-    max-width: 180px;
-  }
-  .hero h1 {
-    font-size: clamp(78px, 19.2vw, 145px);
-    line-height: 0.88;
-    margin-left: -2px;
-  }
-  .hero-bottom {
-    margin-top: 50px;
-    display: block;
-  }
-  .hero-tagline {
-    font-size: 24px;
-  }
-  .hero-team {
-    font-size: 10px;
-    margin-top: 17px;
-  }
-  .hero-actions {
-    margin-top: 27px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px 24px;
-    max-width: 380px;
-  }
-  .hero-actions .button {
-    grid-column: span 2;
-    min-height: 53px;
-    padding: 17px 21px;
-  }
-  .hero-actions .text-link {
-    font-size: 9px;
-    min-height: 53px;
-    padding: 16px 14px;
-    gap: 12px;
-  }
-  .hero-foot {
-    padding-block: 17px;
-    margin-top: 36px;
-    font-size: 9px;
-    gap: 10px;
-  }
-  .hero-foot > span:first-child {
-    font-size: 11px;
-  }
-  .hero-foot > span:last-child {
-    display: none;
-  }
-  .hero-foot a {
-    font-size: 7px;
-    letter-spacing: 0.08em;
-    gap: 15px;
-  }
-  .hero-foot a > span {
-    font-size: 19px;
-  }
   .eyebrow {
     font-size: 9px;
     gap: 16px;
@@ -416,7 +284,7 @@
     font-size: 11px;
   }
   .season-photo {
-    aspect-ratio: 1.5;
+    aspect-ratio: auto;
   }
   .photo-label {
     left: 18px;
@@ -432,9 +300,7 @@
     font-size: 21px;
   }
   .photo-slot figcaption {
-    left: 18px;
-    bottom: 17px;
-    font-size: 8px;
+    font-size: 9px;
   }
   .who-grid {
     grid-template-columns: 1fr;
@@ -443,7 +309,7 @@
   .who-grid > .portrait {
     width: 100%;
     max-width: 300px;
-    aspect-ratio: 2/3;
+    aspect-ratio: auto;
   }
   .who-copy {
     padding-left: 5%;
@@ -659,7 +525,7 @@
   .support-grid > .photo-slot {
     width: 86%;
     justify-self: end;
-    aspect-ratio: 1.25;
+    aspect-ratio: auto;
   }
   .sponsor-list {
     padding-block: 28px;
@@ -915,18 +781,6 @@
   :root {
     --gutter: 20px;
   }
-  .hero h1 {
-    font-size: 19vw;
-  }
-  .hero-tagline {
-    font-size: 21px;
-  }
-  .hero-actions {
-    gap: 8px 20px;
-  }
-  .hero {
-    min-height: 790px;
-  }
   .season-year {
     font-size: 61px;
   }
@@ -1022,14 +876,82 @@
     font-size: 140px;
   }
 }
-@media (max-width: 767px) {
-  .hero-frame .photo-label {
-    top: 25px;
-    bottom: auto;
-    right: 55px;
-    font-size: 10px;
+
+/* Separate the hero copy from the complete photograph on every orientation. */
+@media (max-width: 1200px) {
+  .hero {
+    gap: 32px;
   }
-  .hero-frame .photo-label > span {
-    font-size: 6px;
+  .hero-actions .button,
+  .hero-actions .text-link {
+    padding: 16px;
+    gap: 18px;
+  }
+}
+@media (max-width: 1024px) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 32px;
+    padding-top: 112px;
+  }
+  .hero-photo {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .hero-content {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .hero h1 {
+    font-size: clamp(72px, 13vw, 112px);
+  }
+  .hero-foot {
+    grid-row: 3;
+  }
+}
+@media (max-width: 767px) {
+  .hero {
+    gap: 26px;
+    padding-top: 102px;
+  }
+  .hero h1 {
+    font-size: clamp(60px, 18vw, 96px);
+    margin-left: -2px;
+  }
+  .hero-kicker {
+    font-size: 9px;
+    margin-bottom: 18px;
+  }
+  .hero-bottom {
+    margin-top: 22px;
+  }
+  .hero-tagline {
+    font-size: 22px;
+  }
+  .hero-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 24px;
+    max-width: 440px;
+  }
+  .hero-actions .button {
+    grid-column: 1 / -1;
+  }
+  .hero-foot {
+    padding-block: 17px;
+    font-size: 9px;
+    gap: 12px;
+  }
+  .hero-foot > span:first-child {
+    font-size: 11px;
+  }
+  .hero-foot > span:last-child {
+    display: none;
+  }
+  .hero-foot a {
+    font-size: 7px;
+    letter-spacing: 0.08em;
+    gap: 15px;
   }
 }

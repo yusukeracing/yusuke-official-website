@@ -2,12 +2,17 @@
 """Create the GitHub Pages artifact; no third-party build tools are required."""
 from __future__ import annotations
 
+import argparse
 import base64
+from copy import deepcopy
 from datetime import date
 import hashlib
 import json
+import os
 import re
 import shutil
+import sys
+import tempfile
 from html import escape, unescape
 from pathlib import Path
 from urllib.parse import urljoin, urlsplit
@@ -15,6 +20,8 @@ from xml.etree import ElementTree as ET
 
 from content_render import update_content_html, update_gallery_html, update_utility_contact_html
 from social_links import normalize_social_links, update_social_html
+from media_assets import MediaPipeline
+from news_content import public_news, article_filename, update_news_html, generate_article_pages
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "dist"
@@ -22,7 +29,8 @@ PUBLIC_PAGES = ("index.html", "profile.html", "race.html", "news.html", "sponsor
                 "support.html", "contact.html", "partners.html", "messages.html")
 PAGES = PUBLIC_PAGES + ("404.html", "maintenance.html")
 PUBLIC_DATA = ("site.json", "profile.json", "races.json", "news.json",
-               "sponsors.json", "gallery.json", "messages.json")
+               "sponsors.json", "gallery.json", "messages.json", "media-manifest.json", "publication.json")
+SOURCE_DATA = tuple(name for name in PUBLIC_DATA if name not in {"media-manifest.json", "publication.json"})
 PUBLIC_ASSET_EXTENSIONS = {
     "css": {".css"},
     "js": {".js"},
@@ -75,7 +83,7 @@ def without_content_loader(text: str) -> str:
     """The compiled error/maintenance page has no runtime CMS data to fetch."""
     def keep_script(match):
         src = re.search(r'\bsrc\s*=\s*["\']([^"\']+)["\']', match[1], re.I)
-        if src and urlsplit(unescape(src[1])).path.rsplit("/", 1)[-1] in {"data-loader.js", "social-links.js"}:
+        if src and urlsplit(unescape(src[1])).path.rsplit("/", 1)[-1] in {"data-loader.js", "social-links.js", "news.js", "community.js"}:
             return ""
         return match.group(0)
     return SCRIPT.sub(keep_script, text)
@@ -138,6 +146,8 @@ def copy_public_assets(source: Path, destination: Path) -> int:
     """
     count = 0
     for folder, extensions in PUBLIC_ASSET_EXTENSIONS.items():
+        if folder == "images":
+            continue  # Source photographs are retained in Git, not bulk-copied to the web artifact.
         directory = source / folder
         if not directory.is_dir() or directory.is_symlink():
             continue
@@ -157,12 +167,46 @@ def copy_public_assets(source: Path, destination: Path) -> int:
     return count
 
 
+def read_source_json(filename: str) -> dict:
+    """Read an allowed CMS source file with actionable, content-free failures."""
+    if filename not in SOURCE_DATA:
+        raise ValueError("Only declared CMS source JSON files may be read")
+    directory = ROOT / "data"
+    path = directory / filename
+    display = "data/" + filename
+    if directory.is_symlink() or path.is_symlink() or not path.is_file():
+        raise ValueError(f"Missing regular public data file: {display}")
+    try:
+        text = path.read_text(encoding="utf-8")
+    except UnicodeDecodeError as error:
+        raise ValueError(f"{display}: invalid UTF-8 at byte {error.start}") from None
+    except OSError:
+        raise ValueError(f"{display}: source file could not be read") from None
+    if CONFLICT_MARKER.search(text):
+        raise ValueError(f"{display}: unresolved merge conflict markers must be removed before publishing")
+    try:
+        value = json.loads(text)
+    except json.JSONDecodeError as error:
+        # File and position are useful to an editor. Do not echo article text,
+        # credentials or other source values into a public workflow log.
+        raise ValueError(f"{display}: invalid JSON at line {error.lineno}, column {error.colno}") from None
+    if not isinstance(value, dict):
+        raise ValueError(f"{display}: top-level JSON must be an object")
+    return value
+
+
 def site_url() -> str:
-    value = json.loads((ROOT / "data/site.json").read_text(encoding="utf-8"))["url"]
-    parsed = urlsplit(value)
+    value = read_source_json("site.json").get("url")
+    error = "data/site.json: url must be the public HTTPS site URL without credentials, query or fragment"
+    if not isinstance(value, str):
+        raise ValueError(error)
+    try:
+        parsed = urlsplit(value)
+    except ValueError:
+        raise ValueError(error) from None
     if (parsed.scheme != "https" or not parsed.netloc or parsed.username or parsed.password
             or parsed.query or parsed.fragment or "xxx" in parsed.netloc):
-        raise ValueError("data/site.json: url must be the public HTTPS site URL without credentials, query or fragment")
+        raise ValueError(error)
     return value.rstrip("/") + "/"
 
 
@@ -190,7 +234,7 @@ def update_page(text: str, base: str, settings: dict | None = None, profile: dic
                 if (parsed_image.scheme != "https" or not parsed_image.netloc
                         or parsed_image.username or parsed_image.password):
                     raise ValueError("data/site.json: ogImage external URLs must use HTTPS without credentials")
-            elif (not parsed_image.path.startswith("assets/images/")
+            elif (not parsed_image.path.startswith(("assets/images/", "assets/optimized/"))
                   or ".." in parsed_image.path.split("/") or image.startswith("/")):
                 raise ValueError("data/site.json: local ogImage must be under assets/images/")
             image_url = urljoin(base, image)
@@ -267,11 +311,11 @@ def update_page(text: str, base: str, settings: dict | None = None, profile: dic
     return text
 
 
-def write_discovery(destination: Path, base: str, maintenance: bool = False) -> None:
+def write_discovery(destination: Path, base: str, maintenance: bool = False, articles=()) -> None:
     namespace = "http://www.sitemaps.org/schemas/sitemap/0.9"
     ET.register_namespace("", namespace)
     root = ET.Element(f"{{{namespace}}}urlset")
-    for page in (() if maintenance else PUBLIC_PAGES):
+    for page in (() if maintenance else (*PUBLIC_PAGES, *articles)):
         item = ET.SubElement(root, f"{{{namespace}}}url")
         ET.SubElement(item, f"{{{namespace}}}loc").text = urljoin(base, "" if page == "index.html" else page)
     ET.indent(root)
@@ -284,69 +328,154 @@ def write_discovery(destination: Path, base: str, maintenance: bool = False) -> 
     (destination / "robots.txt").write_text(robots, encoding="utf-8")
 
 
-def main() -> None:
+def publication_id(source_pages, data, root):
+    """Content identifier stays stable across rebuilds of the same publication."""
+    fingerprint = deepcopy(data)
+    if not fingerprint.get("site", {}).get("maintenanceEnabled"):
+        fingerprint.get("site", {}).pop("maintenanceMessage", None)
+    digest = hashlib.sha256(json.dumps(fingerprint, ensure_ascii=False, sort_keys=True).encode())
+    for name, text in sorted(source_pages.items()):
+        digest.update(name.encode())
+        digest.update(text.encode())
+    for relative in ("requirements-build.txt", "scripts/build.py", "scripts/media_assets.py",
+                     "scripts/content_render.py", "scripts/news_content.py", "scripts/social_links.py"):
+        file = root / relative
+        if file.is_file() and not file.is_symlink():
+            digest.update(relative.encode())
+            digest.update(file.read_bytes())
+    for directory in ("css", "js", "icons"):
+        for file in sorted((root / "assets" / directory).glob("*")):
+            if file.is_file() and not file.is_symlink():
+                digest.update(file.name.encode())
+                digest.update(file.read_bytes())
+    return digest.hexdigest()[:20]
+
+
+def publication_markup(text, identifier):
+    tag = '<meta name="publication-id" content="' + identifier + '" />'
+    if re.search(r'<meta\b[^>]*\bname=["\']publication-id["\']', text, re.I):
+        text = re.sub(r'<meta\b[^>]*\bname=["\']publication-id["\'][^>]*>', tag, text, flags=re.I)
+    else:
+        text = text.replace('</head>', '    ' + tag + '\n  </head>', 1)
+    def version(match):
+        value = unescape(match[3])
+        parsed = urlsplit(value)
+        if parsed.path.startswith(("assets/css/", "assets/js/")) and parsed.path.endswith((".css", ".js")):
+            value = parsed.path + '?v=' + identifier
+        return match[1] + match[2] + escape(value, quote=True) + match[2]
+    return re.sub(r'(\b(?:src|href)\s*=\s*)(["\'])(.*?)\2', version, text, flags=re.I | re.S)
+
+
+def build_site(*, normal_preview=False):
+    resolved_root, resolved_output = ROOT.resolve(), OUTPUT.resolve()
+    if resolved_output == resolved_root or resolved_root.is_relative_to(resolved_output):
+        raise ValueError("Output directory must not replace the source checkout or one of its parents")
+    if OUTPUT.exists() and not OUTPUT.is_dir():
+        raise ValueError("Output path must be a directory")
     base = site_url()
-    settings = json.loads((ROOT / "data/site.json").read_text(encoding="utf-8"))
+    raw = {Path(name).stem: read_source_json(name) for name in SOURCE_DATA}
+    settings = raw["site"]
     maintenance = maintenance_enabled(settings)
-    profile = json.loads((ROOT / "data/profile.json").read_text(encoding="utf-8"))
-    news = json.loads((ROOT / "data/news.json").read_text(encoding="utf-8"))
-    gallery = json.loads((ROOT / "data/gallery.json").read_text(encoding="utf-8"))
-    messages = json.loads((ROOT / "data/messages.json").read_text(encoding="utf-8"))
-    message_errors = public_message_errors(messages)
+    if normal_preview:
+        settings = {**settings, "maintenanceEnabled": False}
+        raw["site"] = settings
+        maintenance = False
+    message_errors = public_message_errors(raw["messages"])
     if message_errors:
         raise ValueError("\n".join(message_errors))
-    for filename in PUBLIC_DATA:
-        path = ROOT / "data" / filename
-        if not path.is_file() or path.is_symlink():
-            raise ValueError(f"Missing regular public data file: data/{filename}")
+    # Validate and filter articles before media discovery: unpublished photographs
+    # and text must never enter the site artifact through the JSON copy step.
+    raw["news"] = public_news(raw["news"])
     source_pages = {}
-    for page in PAGES:
-        if not (ROOT / page).is_file() or (ROOT / page).is_symlink():
-            raise FileNotFoundError(f"Missing required page: {page}")
-        text = (ROOT / page).read_text(encoding="utf-8")
+    for page in (*PAGES, "article-template.html"):
+        path = ROOT / page
+        if not path.is_file() or path.is_symlink():
+            raise FileNotFoundError(f"Missing required page/template: {page}")
+        text = path.read_text(encoding="utf-8")
         if CONFLICT_MARKER.search(text):
             raise ValueError(f"{page}: unresolved merge conflict markers must be removed before publishing")
         source_pages[page] = text
     if OUTPUT.is_symlink():
-        raise ValueError("Refusing to replace a symlink at dist/")
-    if OUTPUT.exists():
-        shutil.rmtree(OUTPUT)
-    OUTPUT.mkdir()
-    for page in PAGES:
-        text = update_page(source_pages[page], base, settings, profile)
-        text = update_content_html(text, news, profile, base)
-        text = update_gallery_html(text, gallery, base)
-        if page in {"404.html", "maintenance.html"}:
-            text = update_utility_contact_html(text, settings)
-        if page == "maintenance.html":
-            text = update_maintenance_message(text, settings)
-        (OUTPUT / page).write_text(text, encoding="utf-8")
-    if maintenance:
-        template = (OUTPUT / "maintenance.html").read_text(encoding="utf-8")
+        raise ValueError("Refusing to replace a symlink at the output path")
+    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+    # Complete the artifact before replacing a previously valid build.
+    with tempfile.TemporaryDirectory(prefix=".site-build-", dir=OUTPUT.parent) as folder:
+        stage = Path(folder)
+        media = MediaPipeline(ROOT, stage, base)
+        published = media.rewrite_data(raw)
+        published["site"]["socials"] = normalize_social_links(settings.get("socials"))
+        identifier = publication_id(source_pages, published, ROOT)
+        pages = {}
         for page in PAGES:
-            text = without_content_loader(maintenance_page(template, page, base))
-            (OUTPUT / page).write_text(text, encoding="utf-8")
-    # GitHub Pages can serve this document from an arbitrarily nested URL.
-    error_page = OUTPUT / "404.html"
-    error_page.write_text(absolute_error_references(without_content_loader(
-        error_page.read_text(encoding="utf-8")), base), encoding="utf-8")
-    copy_public_assets(ROOT / "assets", OUTPUT / "assets")
-    (OUTPUT / "data").mkdir()
-    for filename in PUBLIC_DATA:
-        shutil.copy2(ROOT / "data" / filename, OUTPUT / "data" / filename)
-    # The delivered HTML and runtime JSON use the same canonical profile links.
-    published_settings = {**settings, "socials": normalize_social_links(settings.get("socials"))}
-    (OUTPUT / "data/site.json").write_text(
-        json.dumps(published_settings, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    (OUTPUT / ".nojekyll").touch()
-    write_discovery(OUTPUT, base, maintenance)
-    # Keep the source checkout's discovery files in sync for direct static hosting.
-    write_discovery(ROOT, base, maintenance)
+            text = update_page(source_pages[page], base, published["site"], published["profile"])
+            text = update_content_html(text, published["news"], published["profile"], base)
+            text = update_news_html(text, published["news"], base)
+            text = update_gallery_html(text, raw["gallery"], base)
+            if page in {"404.html", "maintenance.html"}:
+                text = update_utility_contact_html(text, settings)
+            if page == "maintenance.html":
+                text = update_maintenance_message(text, settings)
+            pages[page] = media.rewrite_html(text, published)
+        # Configure common SEO/CSP before the article module writes item-specific
+        # title, excerpt, canonical and OGP information.
+        template = update_page(source_pages["article-template.html"], base, published["site"], published["profile"])
+        articles = generate_article_pages(template, published["news"], base)
+        for page, text in articles.items():
+            pages[page] = media.rewrite_html(text, published)
+        if maintenance:
+            template = pages["maintenance.html"]
+            pages = {page: without_content_loader(maintenance_page(template, page, base)) for page in pages}
+        pages = {name: publication_markup(text, identifier) for name, text in pages.items()}
+        pages["404.html"] = absolute_error_references(without_content_loader(pages["404.html"]), base)
+        for page, text in pages.items():
+            (stage / page).write_text(text, encoding="utf-8")
+        copy_public_assets(ROOT / "assets", stage / "assets")
+        media.copy_runtime_fallbacks()
+        (stage / "data").mkdir(exist_ok=True)
+        for filename in SOURCE_DATA:
+            (stage / "data" / filename).write_text(json.dumps(published[Path(filename).stem], ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        media.write_manifest()
+        publication = {"version": 1, "contentId": identifier, "url": base,
+                       "maintenanceEnabled": maintenance, "pages": list(pages),
+                       "articlePages": list(articles), "sourcePhotosPublished": False}
+        (stage / "data/publication.json").write_text(json.dumps(publication, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        (stage / ".nojekyll").touch()
+        write_discovery(stage, base, maintenance, tuple(articles))
+        previous = stage.with_name(stage.name + "-previous")
+        if OUTPUT.exists():
+            os.replace(OUTPUT, previous)
+        try:
+            os.replace(stage, OUTPUT)
+        except OSError:
+            if previous.exists():
+                os.replace(previous, OUTPUT)
+            raise
+        if previous.exists():
+            shutil.rmtree(previous)
     count = sum(1 for path in OUTPUT.rglob("*") if path.is_file())
-    print(f"Built {len(PAGES)} pages and {count} public files in {OUTPUT}")
+    print(f"Built {len(pages)} pages and {count} public files in {OUTPUT}")
     print(f"Public URL: {base}")
     print("Maintenance mode: " + ("ON (all HTML URLs show the notice)" if maintenance else "OFF"))
+    print("Publication: " + identifier)
+    if normal_preview:
+        print("Normal preview only: the CMS maintenance setting was not changed.")
+    return publication
+
+
+def main(argv=None):
+    global OUTPUT
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output", type=Path, help="Output directory (default: dist)")
+    parser.add_argument("--normal-preview", action="store_true", help="Build a normal-site review artifact without changing the CMS maintenance setting")
+    args = parser.parse_args([] if argv is None else argv)
+    previous_output = OUTPUT
+    try:
+        if args.output is not None:
+            OUTPUT = args.output.resolve()
+        return build_site(normal_preview=args.normal_preview)
+    finally:
+        OUTPUT = previous_output
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1:])

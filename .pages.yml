@@ -1,8 +1,7 @@
-# Pages CMS: GitHub リポジトリの .pages.yml を読み込んで編集できます。
-# 写真の出力は相対パス。GitHub Pages のプロジェクトURLでも動作します。
+# Pages CMS: 公開リポジトリを編集します。秘密の下書き・回答データは保存しません。
 media:
-  input: assets/images/uploads
-  output: assets/images/uploads
+  input: assets/images
+  output: assets/images
   extensions:
   - webp
   - avif
@@ -57,19 +56,19 @@ content:
   - name: heroImage
     label: HERO・PC用写真
     type: image
-    description: 実際の写真を選択してください。未設定は xxx のままにします。
+    description: 実際の写真を選択してください。未設定は空欄にします。
   - name: heroMobileImage
     label: HERO・スマートフォン用写真
     type: image
-    description: 実際の写真を選択してください。未設定は xxx のままにします。
+    description: 実際の写真を選択してください。未設定は空欄にします。
   - name: ga4Id
     label: GA4 測定ID
     type: string
-    description: 公開用の測定IDのみ（G-...）。未設定は xxx。秘密鍵は入力しないでください。
+    description: 公開用の測定IDのみ（G-...）。未設定は空欄にします。秘密鍵は入力しないでください。
   - name: googleFormUrl
     label: Google Forms 埋め込みURL
     type: string
-    description: Google Forms の送信 → 埋め込みHTMLの src にある https://docs.google.com/forms/... のURL。未設定は xxx。
+    description: Google Forms の送信 → 埋め込みHTMLの src にある https://docs.google.com/forms/... のURL。未設定は空欄にします。
   - name: googleFormHeight
     label: Google Forms の表示高さ（px）
     type: number
@@ -77,15 +76,15 @@ content:
   - name: email
     label: 公開メールアドレス
     type: string
-    description: 公開してよいアドレスのみ。未設定は xxx。
+    description: 公開してよいアドレスのみ。未設定は空欄にします。
   - name: phone
     label: 公開電話番号
     type: string
-    description: 公開してよい番号のみ。未設定は xxx。
+    description: 公開してよい番号のみ。未設定は空欄にします。
   - name: sponsorPdf
     label: スポンサー資料PDF URL
     type: string
-    description: 公開用PDFのHTTPS URLまたは相対パス。未設定は xxx。
+    description: 公開用PDFのHTTPS URLまたは相対パス。未設定は空欄にします。
   - name: socials
     label: SNSリンク
     type: object
@@ -114,7 +113,7 @@ content:
   - name: heroAlt
     label: HERO写真の説明（読み上げ用）
     type: string
-    description: 実際に写っている場面を記述。未設定は xxx。
+    description: 実際に写っている場面を記述。未設定は空欄にします。
   - name: ogImage
     label: SNS共有用 OGP画像
     type: image
@@ -132,6 +131,10 @@ content:
     - name: race
       label: レース写真
       type: image
+    - name: supportFeature
+      label: TOP・SUPPORTの写真
+      type: image
+      description: TOPページのSUPPORT欄に表示する写真です。支援ページのピット写真とは別に設定できます。
 - name: profile
   label: プロフィール・ストーリー
   type: file
@@ -183,11 +186,11 @@ content:
   - name: portraitImage
     label: プロフィール写真
     type: image
-    description: 実際の写真を選択してください。未設定は xxx のままにします。
+    description: 実際の写真を選択してください。未設定は空欄にします。
   - name: detailImage
     label: プロフィール・ディテール写真
     type: image
-    description: 実際の写真を選択してください。未設定は xxx のままにします。
+    description: 実際の写真を選択してください。未設定は空欄にします。
   - name: career
     label: 経歴・戦績
     type: object
@@ -201,7 +204,7 @@ content:
     - name: description
       label: 詳細
       type: text
-    description: 確認済みの情報だけを入力。不明な情報は xxx。
+    description: 確認済みの情報だけを入力。不明な情報は空欄にしてください。
     list: true
   - name: stories
     label: フォトストーリー
@@ -219,7 +222,7 @@ content:
     - name: image
       label: 写真
       type: image
-      description: 実際の写真を選択してください。未設定は xxx のままにします。
+      description: 実際の写真を選択してください。未設定は空欄にします。
     list: true
 - name: races
   label: レース予定・結果
@@ -291,11 +294,22 @@ content:
     label: 記事
     type: object
     fields:
+    - name: slug
+      label: 記事URLの名前（半角英数字・ハイフン）
+      type: string
+      required: true
+      description: 例：sugo-report-2026。記事ごとに別の名前を設定し、公開後は変更しないでください。
+    - name: published
+      label: サイトへ掲載する
+      type: boolean
+      default: true
+      description: OFFの記事は公開用サイト・JSON・サイトマップへ出力しません。ただし元データは公開GitHubと履歴から読めます。秘密の下書きは保存しないでください。
     - name: date
       label: 公開日
       type: date
       options:
         format: yyyy-MM-dd
+      required: true
     - name: category
       label: カテゴリ
       type: select
@@ -312,18 +326,26 @@ content:
     - name: title
       label: タイトル
       type: string
+      required: true
     - name: description
-      label: 本文
+      label: 冒頭の本文
       type: text
-      description: 普通の文章を入力します。空行で段落を分けられます。HTMLやコードは不要です。
+      description: 記事の冒頭に表示します。空行で段落を分けます。続きの文章や複数写真は下の「本文の文章・写真」で順番に追加します。
     - name: image
-      label: 写真
+      label: サムネイル写真（任意）
       type: image
-      description: 実際の写真を選択してください。未設定は xxx のままにします。
+      description: 記事一覧と詳細冒頭に表示。写真を選んだら代替テキストも入力してください。未設定は空欄にします。
+    - name: imageAlt
+      label: サムネイルの代替テキスト
+      type: string
+      description: 写真に実際に写る内容を短く説明します。サムネイルを指定した場合は必須です。
+    - name: imageCaption
+      label: サムネイルの説明・クレジット（任意）
+      type: string
     - name: url
       label: 関連記事URL
       type: string
-      description: 任意。空欄はニュース一覧内で本文を表示します。
+      description: 任意の関連ページ。本文や写真を掲載する記事詳細ページは自動で作成されます。
     - name: featured
       label: 注目記事
       type: boolean
@@ -333,7 +355,40 @@ content:
       type: boolean
       default: false
       description: ONの間は仮原稿の表示が付きます。正式掲載する際にOFFにします。ONでも記事とデータは公開されます。
-    description: 活動報告・お知らせを追加します。トップページには日付が新しい3件を表示します。保存すると選択ブランチに記録され、mainで保存した内容は自動公開されます。
+    - name: blocks
+      label: 本文の文章・写真（順番に追加）
+      type: object
+      list: true
+      description: 文章→写真→文章→写真など自由に並べます。写真は何枚でも追加できます。種類に合う欄へ入力してください。
+      fields:
+      - name: type
+        label: 種類
+        type: select
+        required: true
+        default: text
+        options:
+          values:
+          - label: 文章
+            value: text
+          - label: 写真
+            value: image
+      - name: text
+        label: 文章
+        type: text
+        description: 種類が「文章」のときに使用。HTMLタグは不要です。空行で段落を分けます。
+      - name: image
+        label: 写真
+        type: image
+        description: 種類が「写真」のときに選択。Mediaへアップロードした写真も選べます。
+      - name: alt
+        label: 写真の代替テキスト
+        type: string
+        description: 種類が「写真」のときに必須です。写っている内容を短く説明してください。
+      - name: caption
+        label: 写真の説明・撮影者クレジット
+        type: text
+        description: 掲載許諾で指定されたクレジットや写真の説明を入力します。
+    description: 項目の追加・編集・削除で記事を管理します。保存先ブランチがmainの場合、GitHub Actionsの検証後に自動公開されます。公開処理の成功を確認してください。
     list: true
 - name: sponsors
   label: スポンサー
@@ -358,7 +413,7 @@ content:
     - name: logo
       label: ロゴ
       type: image
-      description: 実際の写真を選択してください。未設定は xxx のままにします。
+      description: 実際の写真を選択してください。未設定は空欄にします。
     - name: url
       label: 公式URL
       type: string
@@ -403,11 +458,11 @@ content:
     - name: image
       label: PC用写真
       type: image
-      description: 実際の写真を選択してください。未設定は xxx のままにします。
+      description: 実際の写真を選択してください。未設定は空欄にします。
     - name: mobileImage
       label: スマートフォン用写真
       type: image
-      description: 実際の写真を選択してください。未設定は xxx のままにします。
+      description: 実際の写真を選択してください。未設定は空欄にします。
     - name: width
       label: PC用写真の幅（px・任意）
       type: number
@@ -431,5 +486,5 @@ content:
     - name: caption
       label: キャプション
       type: string
-    description: 複数の項目に写真を選択して管理できます。未設定は xxx。
+    description: 複数の項目に写真を選択して管理できます。未設定は空欄にします。
     list: true

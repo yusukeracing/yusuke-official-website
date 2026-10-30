@@ -4,9 +4,15 @@
 ================================= */
 (() => {
   "use strict";
-  const fileNames = ["site", "profile", "races", "news", "sponsors", "gallery"];
+  const fileNames = ["site", "profile", "races", "sponsors", "gallery"];
   const content = {};
-  const placeholderImage = "assets/images/xxx-placeholder.svg";
+  const placeholderImage = "assets/images/image-unavailable.svg";
+  // Preserve dimensions already calculated from the originals during the build.
+  const authoredSizes = new Map(
+    [...document.querySelectorAll("img[src][width][height]")].map((image) => [
+      image.src, { width: Number(image.getAttribute("width")), height: Number(image.getAttribute("height")) },
+    ]),
+  );
   const isPlaceholder = (value) => !value || /xxx|^TBA$/i.test(String(value));
   const node = (tag, className, text) => {
     const element = document.createElement(tag);
@@ -46,7 +52,7 @@
     if (isPlaceholder(value)) return null;
     const url = safeUrl(value, true);
     // Images uploaded through the configured CMS media folder only.
-    return url && new URL(url).pathname.includes("/assets/images/")
+    return url && ["/assets/images/", "/assets/optimized/"].some((prefix) => new URL(url).pathname.includes(prefix))
       ? url
       : null;
   };
@@ -100,7 +106,7 @@
       image.removeAttribute("srcset");
       picture?.querySelectorAll("source").forEach((entry) => entry.remove());
       image.src = placeholderImage;
-      image.alt = "xxx";
+      image.alt = "写真を表示できませんでした";
       setLoaded(false);
     };
     picture?.querySelectorAll("source[data-photo-source]").forEach((entry) => entry.remove());
@@ -116,12 +122,12 @@
     if (image.src !== actual) image.src = actual;
     markLoaded();
   };
-  const photoNode = (source, alt = "xxx", mobileSource, dimensions = {}) => {
+  const photoNode = (source, alt = "池田優介のレース活動", mobileSource, dimensions = {}) => {
     const figure = node("figure", "photo-slot");
     const picture = node("picture");
     const image = node("img");
     image.src = placeholderImage;
-    image.alt = String(alt || "xxx");
+    image.alt = String(alt || "池田優介のレース活動");
     const validSize = (width, height) =>
       Number.isInteger(Number(width)) &&
       Number.isInteger(Number(height)) &&
@@ -129,9 +135,12 @@
       Number(height) > 0 &&
       Number(width) <= 30000 &&
       Number(height) <= 30000;
-    if (validSize(dimensions.width, dimensions.height)) {
-      image.width = Number(dimensions.width);
-      image.height = Number(dimensions.height);
+    const reserved = validSize(dimensions.width, dimensions.height)
+      ? dimensions
+      : authoredSizes.get(imageSource(source));
+    if (reserved && validSize(reserved.width, reserved.height)) {
+      image.width = Number(reserved.width);
+      image.height = Number(reserved.height);
     } else {
       image.width = 1600;
       image.height = 1067;
@@ -142,7 +151,7 @@
     picture.append(image);
     const mark = node("span", "photo-mark", "+");
     mark.setAttribute("aria-hidden", "true");
-    const label = node("span", "photo-label", "xxx");
+    const label = node("span", "photo-label", "写真を読み込み中です");
     label.append(
       node(
         "span",
@@ -272,101 +281,6 @@
       );
     });
   };
-  let newsFilter = "all";
-  const newsCategories = { ACTIVITY: "活動報告", RACE: "レース", INFORMATION: "お知らせ", MEDIA: "メディア" };
-  const renderNews = () => {
-    const items = content.news?.items;
-    if (!Array.isArray(items)) return;
-    const ordered = [...items].sort((a, b) =>
-      String(b.date || "").localeCompare(String(a.date || "")),
-    );
-    document.querySelectorAll("[data-news-list]").forEach((list) => {
-      const limit = Number(list.dataset.limit) || 0;
-      const filtered = ordered.filter(
-        (item) =>
-          newsFilter === "all" ||
-          String(item.category).toUpperCase() === newsFilter,
-      );
-      const visible = limit ? filtered.slice(0, limit) : filtered;
-      if (!visible.length) {
-        const empty = node("div", "empty-state");
-        empty.append(
-          node("span", "tiny-caps", "LATEST UPDATES"),
-          node(
-            "p",
-            "",
-            newsFilter === "all"
-              ? "新しいお知らせを準備しています。"
-              : "このカテゴリーのお知らせはまだありません。",
-          ),
-          node("span", "", "レースや活動の情報を、こちらからお届けします。"),
-        );
-        list.replaceChildren(empty);
-      } else {
-        list.replaceChildren(
-          ...visible.map((item) => {
-            const article = node("article", "news-item");
-            const time = node(
-              "time",
-              "",
-              String(item.date || "").replaceAll("-", "."),
-            );
-            if (/^\d{4}-\d{2}-\d{2}$/.test(item.date))
-              time.dateTime = item.date;
-            const heading = node("h3", "", item.title || "xxx");
-            if (!isPlaceholder(item.url)) {
-              const anchor = node("a", "", item.title || "xxx");
-              if (setLink(anchor, item.url)) heading.replaceChildren(anchor);
-            }
-            article.append(
-              time,
-              node("span", "news-category", newsCategories[String(item.category).toUpperCase()] || item.category || "お知らせ"),
-              heading,
-            );
-            if (!isPlaceholder(item.url) && safeUrl(item.url)) {
-              const anchor = node("a", "news-arrow", "↗");
-              setLink(anchor, item.url);
-              anchor.setAttribute(
-                "aria-label",
-                `${item.title || "ニュース"}の詳細`,
-              );
-              article.append(anchor);
-            }
-            if (item.isSample === true)
-              article.append(node("p", "news-sample-note", "仮原稿"));
-            if (typeof item.description === "string" && item.description) {
-              const paragraphs = item.description.split(/\n\s*\n/);
-              article.append(node("p", "news-description", limit ? paragraphs[0] : item.description));
-              if (limit && paragraphs.length > 1) {
-                const readMore = node("a", "news-read-more", "活動報告・ニュースを読む →");
-                readMore.href = "news.html";
-                article.append(readMore);
-              }
-            }
-            if (!isPlaceholder(item.image)) {
-              const photo = photoNode(item.image, item.title);
-              photo.classList.add("news-image");
-              article.append(photo);
-            }
-            return article;
-          }),
-        );
-      }
-      const status = document.querySelector("[data-news-status]");
-      if (status) status.textContent = `${filtered.length}件のお知らせ`;
-    });
-  };
-  document.querySelectorAll("[data-news-filter]").forEach((button) => {
-    button.addEventListener("click", () => {
-      newsFilter = button.dataset.newsFilter;
-      document.querySelectorAll("[data-news-filter]").forEach((other) => {
-        const selected = other === button;
-        other.classList.toggle("is-active", selected);
-        other.setAttribute("aria-pressed", String(selected));
-      });
-      renderNews();
-    });
-  });
   const renderGallery = () => {
     if (!Array.isArray(content.gallery?.items)) return;
     document.querySelectorAll("[data-gallery]").forEach((grid) => {
@@ -376,10 +290,10 @@
           button.type = "button";
           button.dataset.lightbox = "";
           button.dataset.src = imageSource(item.image) || "xxx";
-          button.dataset.caption = item.caption || "xxx";
+          button.dataset.caption = item.caption || `フォトギャラリー ${index + 1}`;
           button.setAttribute(
             "aria-label",
-            `ギャラリー ${index + 1} を拡大：${item.alt || "xxx"}`,
+            `ギャラリー ${index + 1} を拡大：${item.alt || `池田優介 フォトギャラリー ${index + 1}`}`,
           );
           const marker = node(
             "span",
@@ -418,8 +332,8 @@
             const image = node("img");
             image.src = logo;
             image.alt = item.name || "xxx";
-            image.width = 240;
-            image.height = 100;
+            image.width = Number.isInteger(item.logoWidth) && item.logoWidth > 0 ? item.logoWidth : 240;
+            image.height = Number.isInteger(item.logoHeight) && item.logoHeight > 0 ? item.logoHeight : 100;
             image.loading = "lazy";
             image.decoding = "async";
             card.append(image);
@@ -587,7 +501,9 @@
   };
   Promise.allSettled(
     fileNames.map(async (name) => {
-      const response = await fetch(`data/${name}.json`, { cache: "no-cache" });
+      const version = document.querySelector('meta[name="publication-id"]')?.content;
+      const query = version ? `?v=${encodeURIComponent(version)}` : "";
+      const response = await fetch(`data/${name}.json${query}`, { cache: "no-cache" });
       if (!response.ok) throw new Error(`Content unavailable: ${name}`);
       content[name] = await response.json();
     }),
@@ -598,7 +514,6 @@
       renderCareer();
       renderStories();
       renderRaces();
-      renderNews();
       renderGallery();
       renderSponsors();
       renderSocials();

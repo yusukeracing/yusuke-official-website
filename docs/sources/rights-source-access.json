@@ -1,0 +1,176 @@
+[
+  {
+    "id": "bunka_basics",
+    "url": "https://www.bunka.go.jp/seisaku/chosakuken/seidokaisetsu/",
+    "checked_date_jst": "2026-10-30",
+    "result": "read_failed",
+    "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+  },
+  {
+    "id": "bunka_textbook",
+    "url": "https://www.bunka.go.jp/seisaku/chosakuken/textbook/",
+    "checked_date_jst": "2026-10-30",
+    "result": "read_failed",
+    "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+  },
+  {
+    "id": "ppc_faq",
+    "url": "https://www.ppc.go.jp/personalinfo/faq/APPI_QA/",
+    "checked_date_jst": "2026-10-30",
+    "result": "read_failed",
+    "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+  },
+  {
+    "id": "mfj_results",
+    "url": "https://www.mfj.or.jp/result/",
+    "checked_date_jst": "2026-10-30",
+    "result": "read_failed",
+    "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+  },
+  {
+    "id": "mfj_home",
+    "url": "https://www.mfj.or.jp/",
+    "checked_date_jst": "2026-10-30",
+    "result": "read_failed",
+    "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+  },
+  {
+    "id": "sugo_home",
+    "url": "https://www.sportsland-sugo.co.jp/",
+    "checked_date_jst": "2026-10-30",
+    "result": "read_failed",
+    "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+  },
+  {
+    "id": "sugo_results",
+    "url": "https://www.sportsland-sugo.co.jp/result/",
+    "checked_date_jst": "2026-10-30",
+    "result": "read_failed",
+    "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+  },
+  {
+    "id": "jasc_home",
+    "url": "https://www.jasc.or.jp/",
+    "checked_date_jst": "2026-10-30",
+    "result": "read_failed",
+    "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+  },
+  {
+    "id": "tsukuba_home",
+    "url": "https://www.tsukuba-circuit.jp/",
+    "checked_date_jst": "2026-10-30",
+    "result": "read_failed",
+    "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+  },
+  {
+    "id": "yamaha_terms",
+    "url": "https://global.yamaha-motor.com/jp/terms/",
+    "checked_date_jst": "2026-10-30",
+    "result": "read_failed",
+    "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+  },
+  {
+    "id": "simpleicons_license",
+    "url": "https://github.com/simple-icons/simple-icons/blob/develop/LICENSE.md",
+    "checked_date_jst": "2026-10-30",
+    "http_status": 200,
+    "final_url": "https://github.com/simple-icons/simple-icons/blob/develop/LICENSE.md",
+    "content_type": "text/html; charset=utf-8",
+    "bytes_read": 203222,
+    "sha256": "bf5555c8534c7856503884422058c7cbac5f098269e1cceefedf6745b0dc397b",
+    "result": "read_success"
+  },
+  {
+    "id": "simpleicons_disclaimer",
+    "url": "https://github.com/simple-icons/simple-icons/blob/develop/DISCLAIMER.md",
+    "checked_date_jst": "2026-10-30",
+    "http_status": 200,
+    "final_url": "https://github.com/simple-icons/simple-icons/blob/develop/DISCLAIMER.md",
+    "content_type": "text/html; charset=utf-8",
+    "bytes_read": 210833,
+    "sha256": "8cc6f0cd3405a66abf7bc60d8371d07fc41c53b3d3eee2c2ca252631b1ab93ae",
+    "result": "read_success"
+  },
+  {
+    "id": "meta_instagram_brand",
+    "url": "https://about.meta.com/brand/resources/instagram/instagram-brand/",
+    "checked_date_jst": "2026-10-30",
+    "result": "read_failed",
+    "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+  },
+  {
+    "id": "x_brand",
+    "url": "https://about.x.com/en/who-we-are/brand-toolkit",
+    "checked_date_jst": "2026-10-30",
+    "result": "read_failed",
+    "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+  },
+  {
+    "id": "egov_copyright",
+    "url": "https://laws.e-gov.go.jp/law/345AC0000000048",
+    "checked_date_jst": "2026-10-30",
+    "result": "read_failed",
+    "error": "<urlopen error Tunnel connection failed: 403 Forbidden>"
+  },
+  {
+    "id": "simpleicons_data",
+    "url": "https://github.com/simple-icons/simple-icons/blob/develop/_data/simple-icons.json",
+    "checked_date_jst": "2026-10-30",
+    "result": "read_failed",
+    "error": "HTTP Error 404: Not Found"
+  },
+  {
+    "id": "simpleicons_instagram_old",
+    "url": "https://github.com/simple-icons/simple-icons/blob/14.15.0/icons/instagram.svg",
+    "checked_date_jst": "2026-10-30",
+    "result": "read_success",
+    "http_status": 200,
+    "bytes_read": 255355,
+    "final_url": "https://github.com/simple-icons/simple-icons/blob/14.15.0/icons/instagram.svg"
+  },
+  {
+    "id": "simpleicons_x_current",
+    "url": "https://github.com/simple-icons/simple-icons/blob/develop/icons/x.svg",
+    "checked_date_jst": "2026-10-30",
+    "result": "read_success",
+    "http_status": 200,
+    "bytes_read": 253420,
+    "final_url": "https://github.com/simple-icons/simple-icons/blob/develop/icons/x.svg"
+  },
+  {
+    "id": "simpleicons_data_current",
+    "url": "https://github.com/simple-icons/simple-icons/blob/develop/data/simple-icons.json",
+    "checked_date_jst": "2026-10-30",
+    "result": "read_success",
+    "http_status": 200,
+    "bytes_read": 1530174,
+    "final_url": "https://github.com/simple-icons/simple-icons/blob/develop/data/simple-icons.json"
+  },
+  {
+    "id": "simpleicons_data_old",
+    "url": "https://github.com/simple-icons/simple-icons/blob/14.15.0/_data/simple-icons.json",
+    "checked_date_jst": "2026-10-30",
+    "result": "read_success",
+    "http_status": 200,
+    "bytes_read": 1458301,
+    "final_url": "https://github.com/simple-icons/simple-icons/blob/14.15.0/_data/simple-icons.json"
+  },
+  {
+    "id": "simpleicons_facebook_old",
+    "url": "https://github.com/simple-icons/simple-icons/blob/14.15.0/icons/facebook.svg",
+    "checked_date_jst": "2026-10-30",
+    "result": "read_success",
+    "http_status": 200,
+    "bytes_read": 254127,
+    "final_url": "https://github.com/simple-icons/simple-icons/blob/14.15.0/icons/facebook.svg"
+  },
+  {
+    "id": "simpleicons_x_old",
+    "url": "https://github.com/simple-icons/simple-icons/blob/14.15.0/icons/x.svg",
+    "checked_date_jst": "2026-10-30",
+    "result": "read_success",
+    "http_status": 200,
+    "bytes_read": 253599,
+    "final_url": "https://github.com/simple-icons/simple-icons/blob/14.15.0/icons/x.svg"
+  }
+]

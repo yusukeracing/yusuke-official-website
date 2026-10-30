@@ -30,8 +30,8 @@
     if (!url || url.origin !== location.origin) return null;
     try {
       const path = decodeURIComponent(url.pathname);
-      const folder = new URL("assets/images/", document.baseURI).pathname;
-      if (!path.startsWith(folder) || path.split("/").includes("..")) return null;
+      const folders = ["assets/images/", "assets/optimized/"].map((folder) => new URL(folder, document.baseURI).pathname);
+      if (!folders.some((folder) => path.startsWith(folder)) || path.split("/").includes("..")) return null;
       if (!/\.(?:avif|webp|png|jpe?g|svg)$/i.test(path)) return null;
       return url.href;
     } catch { return null; }
@@ -57,8 +57,8 @@
       const image = element("img");
       image.src = logo;
       image.alt = `${name} ロゴ`;
-      image.width = 480;
-      image.height = 240;
+      image.width = Number.isInteger(item.logoWidth) && item.logoWidth > 0 ? item.logoWidth : 480;
+      image.height = Number.isInteger(item.logoHeight) && item.logoHeight > 0 ? item.logoHeight : 240;
       image.loading = "lazy";
       image.decoding = "async";
       image.addEventListener("error", () => {
@@ -109,7 +109,9 @@
   }).filter(Boolean);
 
   const file = directory ? "sponsors" : "messages";
-  fetch(`data/${file}.json`, { cache: "no-cache" })
+  const version = document.querySelector('meta[name="publication-id"]')?.content;
+  const query = version ? `?v=${encodeURIComponent(version)}` : "";
+  fetch(`data/${file}.json${query}`, { cache: "no-cache" })
     .then((response) => {
       if (!response.ok) throw new Error("Content unavailable");
       return response.json();

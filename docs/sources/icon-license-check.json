@@ -1,0 +1,73 @@
+{
+  "checked_date_jst": "2026-10-30",
+  "official_project_head_at_check": "90646e4bf7f3b89df6c37e65baf3e7bc759a517c",
+  "metadata": {
+    "current": [
+      {
+        "title": "Facebook",
+        "hex": "0866FF",
+        "source": "https://about.meta.com/brand/resources/facebook/logo",
+        "guidelines": "https://about.meta.com/brand/resources/facebook/logo"
+      },
+      {
+        "title": "Instagram",
+        "hex": "FF0069",
+        "source": "https://about.meta.com/brand/resources/instagram",
+        "guidelines": "https://about.meta.com/brand/resources/instagram"
+      },
+      {
+        "title": "X",
+        "hex": "000000",
+        "source": "https://x.com",
+        "guidelines": "https://about.x.com/en/who-we-are/brand-toolkit",
+        "aliases": {
+          "aka": [
+            "Twitter"
+          ]
+        }
+      }
+    ],
+    "v14.15.0": [
+      {
+        "title": "Facebook",
+        "hex": "0866FF",
+        "source": "https://about.meta.com/brand/resources/facebook/logo",
+        "guidelines": "https://about.meta.com/brand/resources/facebook/logo"
+      },
+      {
+        "title": "Instagram",
+        "hex": "FF0069",
+        "source": "https://about.meta.com/brand/resources/instagram",
+        "guidelines": "https://about.meta.com/brand/resources/instagram"
+      },
+      {
+        "title": "X",
+        "hex": "000000",
+        "source": "https://x.com",
+        "guidelines": "https://about.x.com/en/who-we-are/brand-toolkit",
+        "aliases": {
+          "aka": [
+            "Twitter"
+          ]
+        }
+      }
+    ]
+  },
+  "source_path_comparisons": [
+    {
+      "brand": "instagram",
+      "compared_source_tag": "14.15.0",
+      "path_identical": true
+    },
+    {
+      "brand": "facebook",
+      "compared_source_tag": "14.15.0",
+      "path_identical": true
+    },
+    {
+      "brand": "x",
+      "compared_source_tag": "14.15.0",
+      "path_identical": false
+    }
+  ]
+}

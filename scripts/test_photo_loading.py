@@ -36,11 +36,26 @@ def main():
     root = args.directory.resolve()
     site = json.loads((root / "data/site.json").read_text())
     profile = json.loads((root / "data/profile.json").read_text())
-    photo = "assets/images/yusuke.hero_01.jpg"
-    story_photo = "assets/images/yusuke.hero_04.jpg"
-    # Verify the actual published configuration, not just a routed fixture.
-    assert site["heroImage"] == photo, "The HERO must use the supplied 01 photo"
-    assert profile["stories"][0]["image"] == story_photo, "PHOTO STORY 01 must retain the supplied 04 photo"
+    source_site = json.loads((ROOT / "data/site.json").read_text())
+    source_profile = json.loads((ROOT / "data/profile.json").read_text())
+    source_photo = "assets/images/yusuke.gallery_09.jpg"
+    source_story = "assets/images/yusuke.hero_04.jpg"
+    assert source_site["heroImage"] == source_photo, "Source CMS HERO must select the supplied gallery_09 photo"
+    assert source_profile["stories"][0]["image"] == source_story, "Source PHOTO STORY 01 must retain the supplied 04 photo"
+    photo = site["heroImage"]
+    story_photo = profile["stories"][0]["image"]
+    manifest_path = root / "data/media-manifest.json"
+    manifest = json.loads(manifest_path.read_text()) if manifest_path.is_file() else {"images": []}
+    variants = {}
+    for entry in manifest["images"]:
+        for variant in entry["variants"]:
+            variants.setdefault(variant["path"], set()).add(entry["source"])
+    def matches_source(path, source):
+        return path == source or source in variants.get(path, set())
+    assert matches_source(photo, source_photo), "Delivered HERO must map to gallery_09 in the media manifest"
+    assert matches_source(story_photo, source_story), "Delivered STORY 01 must map to hero_04 in the media manifest"
+    if (root / "data/publication.json").is_file() and site.get("maintenanceEnabled"):
+        parser.error("Use a normal preview artifact: python3 scripts/build.py --normal-preview --output dist-preview")
     server = ThreadingHTTPServer(("127.0.0.1", 0), partial(QuietHandler, directory=str(root)))
     Thread(target=server.serve_forever, daemon=True).start()
     url = f"http://127.0.0.1:{server.server_port}/"
@@ -54,7 +69,7 @@ def main():
 
             def run_case(name, overrides=None, viewport=None, delayed=False):
                 context = browser.new_context(viewport=viewport or {"width": 1440, "height": 1000}, reduced_motion="reduce")
-                context.route("**/data/profile.json", lambda route: route.fulfill(json=profile))
+                context.route("**/data/profile.json*", lambda route: route.fulfill(json=profile))
                 settings = {**site, **(overrides or {})}
 
                 def site_route(route):
@@ -62,7 +77,7 @@ def main():
                         time.sleep(0.2)
                     route.fulfill(json=settings)
 
-                context.route("**/data/site.json", site_route)
+                context.route("**/data/site.json*", site_route)
                 page = context.new_page()
                 errors = []
                 requests = []
@@ -75,7 +90,12 @@ def main():
                 expect(hero.locator(".hero-watermark")).to_be_hidden()
                 assert hero.locator("img").evaluate("image => image.naturalWidth > 0")
                 hero_source = hero.locator("img").evaluate("image => image.currentSrc")
-                assert hero_source.endswith(photo), hero_source
+                selected = hero_source.removeprefix(url)
+                candidates = {path for path in (photo, site.get("heroMobileImage", "")) if path}
+                assert selected in candidates and matches_source(selected, source_photo), hero_source
+                expected = settings.get("heroMobileImage") if page.viewport_size["width"] <= 767 else settings.get("heroImage")
+                if expected in candidates:
+                    assert selected == expected, (page.viewport_size, selected, expected)
                 story = page.locator("[data-stories] .photo-slot").first
                 story.scroll_into_view_if_needed()
                 expect(story).to_have_class(re.compile(r"\bis-loaded\b"))
@@ -92,7 +112,7 @@ def main():
 
             for name, overrides, viewport, delayed in [
                 ("CMS PHOTO STORY retains yusuke.hero_04", None, None, False),
-                ("cached authored HTML photo is recognized without a second request", {"heroImage": "xxx"}, None, True),
+                ("cached authored HTML photo is recognized without a second request", {"heroImage": ""}, None, True),
                 ("missing mobile crop falls back to desktop photo", {"heroMobileImage": "assets/images/missing-mobile.jpg"}, {"width": 390, "height": 844}, False),
             ]:
                 try:
@@ -101,12 +121,12 @@ def main():
                     failures.append(f"{name}: {error}")
             context = browser.new_context(viewport={"width": 390, "height": 844}, reduced_motion="reduce")
             settings = {**site, "heroImage": "assets/images/missing-desktop.jpg", "heroMobileImage": "assets/images/missing-mobile.jpg"}
-            context.route("**/data/site.json", lambda route: route.fulfill(json=settings))
+            context.route("**/data/site.json*", lambda route: route.fulfill(json=settings))
             page = context.new_page()
             requests = []
             page.on("request", lambda request: requests.append(request.url))
             page.goto(url)
-            expect(page.locator(".hero-frame img")).to_have_attribute("src", re.compile(r"xxx-placeholder\.svg$"))
+            expect(page.locator(".hero-frame img")).to_have_attribute("src", re.compile(r"image-unavailable\.svg$"))
             expect(page.locator(".hero-photo")).not_to_have_class(re.compile(r"\bis-loaded\b"))
             expect(page.locator(".hero-frame")).not_to_have_class(re.compile(r"\bis-loaded\b"))
             assert page.locator(".hero-frame source").count() == 0
@@ -116,8 +136,8 @@ def main():
             context.close()
 
             context = browser.new_context(reduced_motion="reduce")
-            settings = {**site, "heroImage": "javascript:window.untrustedPhotoExecuted=true", "heroMobileImage": "xxx"}
-            context.route("**/data/site.json", lambda route: route.fulfill(json=settings))
+            settings = {**site, "heroImage": "javascript:window.untrustedPhotoExecuted=true", "heroMobileImage": ""}
+            context.route("**/data/site.json*", lambda route: route.fulfill(json=settings))
             page = context.new_page()
             page.goto(url)
             expect(page.locator(".hero-frame")).to_have_attribute("data-photo", settings["heroImage"])

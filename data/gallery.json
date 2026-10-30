@@ -51,21 +51,14 @@
       "mobileHeight": 766
     },
     {
-<<<<<<< HEAD
       "image": "assets/images/yusuke.gallery_13.jpg",
       "mobileImage": "assets/images/yusuke.gallery_13.jpg",
-      "alt": "xxx",
-      "caption": "xxx",
-=======
-      "image": "assets/images/yusuke.gallery_06.jpg",
-      "mobileImage": "assets/images/yusuke.gallery_06.jpg",
-      "alt": "ピット前に並ぶゼッケン29のマシンとロゴ入りのボード",
-      "caption": "ピット前のマシン展示",
->>>>>>> f15e1037e62d3b71532c6e0092db34f1a86a7fb5
-      "width": 1108,
-      "height": 1477,
-      "mobileWidth": 1108,
-      "mobileHeight": 1477
+      "alt": "グリッドでマシンにまたがるライダーと、傘を持つ人物",
+      "caption": "マシンとライダー、グリッドでのひとこま",
+      "width": 1477,
+      "height": 1108,
+      "mobileWidth": 1477,
+      "mobileHeight": 1108
     },
     {
       "image": "assets/images/yusuke.gallery_07.jpg",

@@ -1,0 +1,478 @@
+{
+  "checked_at": "2026-10-30T22:00:42.986190+09:00",
+  "artifact": "/workspace/yusuke-official-website/dist-preview",
+  "network": "all responses intercepted and supplied from local files; no real form POST",
+  "browser": {
+    "engine": "Chromium",
+    "binary": "/usr/bin/chromium",
+    "brand": "system Chromium, not Google Chrome or Edge",
+    "version": "154.0.8037.57"
+  },
+  "cases": [
+    {
+      "name": "Physical iPhone/Android/iPad/Android tablet/PC",
+      "status": "SKIP",
+      "reason": "No attached physical devices"
+    },
+    {
+      "name": "Real Safari/iOS Safari/macOS Safari/Edge/branded Chrome",
+      "status": "SKIP",
+      "reason": "Only system Chromium installed; emulation is not verification of these browsers"
+    },
+    {
+      "name": "WebKit engine",
+      "status": "SKIP",
+      "reason": "Download blocked by network proxy (403), as recorded by parent"
+    },
+    {
+      "name": "Real Pages CMS save UI/Git commit/public CDN round trip",
+      "status": "SKIP",
+      "reason": "Browser CRUD uses local JSON fixtures"
+    },
+    {
+      "name": "Real Google Forms acceptance and owner receipt",
+      "status": "SKIP",
+      "reason": "Non-submitting local display fixture only"
+    },
+    {
+      "name": "Production HTTPS certificate/HTTP security headers/external SNS availability",
+      "status": "SKIP",
+      "reason": "Local intercepted responses do not verify live services"
+    },
+    {
+      "name": "render index.html 390x844",
+      "status": "PASS",
+      "page": "index.html",
+      "width": 390,
+      "height": 844,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 19
+    },
+    {
+      "name": "render profile.html 390x844",
+      "status": "PASS",
+      "page": "profile.html",
+      "width": 390,
+      "height": 844,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 2
+    },
+    {
+      "name": "render race.html 390x844",
+      "status": "PASS",
+      "page": "race.html",
+      "width": 390,
+      "height": 844,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render news.html 390x844",
+      "status": "PASS",
+      "page": "news.html",
+      "width": 390,
+      "height": 844,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render sponsor.html 390x844",
+      "status": "PASS",
+      "page": "sponsor.html",
+      "width": 390,
+      "height": 844,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render support.html 390x844",
+      "status": "PASS",
+      "page": "support.html",
+      "width": 390,
+      "height": 844,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render contact.html 390x844",
+      "status": "PASS",
+      "page": "contact.html",
+      "width": 390,
+      "height": 844,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render partners.html 390x844",
+      "status": "PASS",
+      "page": "partners.html",
+      "width": 390,
+      "height": 844,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render messages.html 390x844",
+      "status": "PASS",
+      "page": "messages.html",
+      "width": 390,
+      "height": 844,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render 404.html 390x844",
+      "status": "PASS",
+      "page": "404.html",
+      "width": 390,
+      "height": 844,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render maintenance.html 390x844",
+      "status": "PASS",
+      "page": "maintenance.html",
+      "width": 390,
+      "height": 844,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render article-all-japan-first-season-2026.html 390x844",
+      "status": "PASS",
+      "page": "article-all-japan-first-season-2026.html",
+      "width": 390,
+      "height": 844,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render index.html 1366x768",
+      "status": "PASS",
+      "page": "index.html",
+      "width": 1366,
+      "height": 768,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 19
+    },
+    {
+      "name": "render profile.html 1366x768",
+      "status": "PASS",
+      "page": "profile.html",
+      "width": 1366,
+      "height": 768,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 2
+    },
+    {
+      "name": "render race.html 1366x768",
+      "status": "PASS",
+      "page": "race.html",
+      "width": 1366,
+      "height": 768,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render news.html 1366x768",
+      "status": "PASS",
+      "page": "news.html",
+      "width": 1366,
+      "height": 768,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render sponsor.html 1366x768",
+      "status": "PASS",
+      "page": "sponsor.html",
+      "width": 1366,
+      "height": 768,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render support.html 1366x768",
+      "status": "PASS",
+      "page": "support.html",
+      "width": 1366,
+      "height": 768,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render contact.html 1366x768",
+      "status": "PASS",
+      "page": "contact.html",
+      "width": 1366,
+      "height": 768,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render partners.html 1366x768",
+      "status": "PASS",
+      "page": "partners.html",
+      "width": 1366,
+      "height": 768,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render messages.html 1366x768",
+      "status": "PASS",
+      "page": "messages.html",
+      "width": 1366,
+      "height": 768,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render 404.html 1366x768",
+      "status": "PASS",
+      "page": "404.html",
+      "width": 1366,
+      "height": 768,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render maintenance.html 1366x768",
+      "status": "PASS",
+      "page": "maintenance.html",
+      "width": 1366,
+      "height": 768,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render article-all-japan-first-season-2026.html 1366x768",
+      "status": "PASS",
+      "page": "article-all-japan-first-season-2026.html",
+      "width": 1366,
+      "height": 768,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "device context iPhone 13 portrait",
+      "status": "PASS",
+      "width": 390,
+      "height": 664,
+      "orientation": "portrait",
+      "environment": "Chromium UA/touch emulation",
+      "scope": "Chromium device context emulation only; no physical device or WebKit",
+      "touch": true
+    },
+    {
+      "name": "device context iPhone 13 landscape",
+      "status": "PASS",
+      "width": 664,
+      "height": 390,
+      "orientation": "landscape",
+      "environment": "Chromium UA/touch emulation",
+      "scope": "Chromium device context emulation only; no physical device or WebKit",
+      "touch": true
+    },
+    {
+      "name": "device context Pixel 7 portrait",
+      "status": "PASS",
+      "width": 412,
+      "height": 839,
+      "orientation": "portrait",
+      "environment": "Chromium UA/touch emulation",
+      "scope": "Chromium device context emulation only; no physical device or WebKit",
+      "touch": true
+    },
+    {
+      "name": "device context Pixel 7 landscape",
+      "status": "PASS",
+      "width": 839,
+      "height": 412,
+      "orientation": "landscape",
+      "environment": "Chromium UA/touch emulation",
+      "scope": "Chromium device context emulation only; no physical device or WebKit",
+      "touch": true
+    },
+    {
+      "name": "device context iPad Pro 11 portrait",
+      "status": "PASS",
+      "width": 834,
+      "height": 1194,
+      "orientation": "portrait",
+      "environment": "Chromium UA/touch emulation",
+      "scope": "Chromium device context emulation only; no physical device or WebKit",
+      "touch": true
+    },
+    {
+      "name": "device context iPad Pro 11 landscape",
+      "status": "PASS",
+      "width": 1194,
+      "height": 834,
+      "orientation": "landscape",
+      "environment": "Chromium UA/touch emulation",
+      "scope": "Chromium device context emulation only; no physical device or WebKit",
+      "touch": true
+    },
+    {
+      "name": "device context Android tablet viewport/UA fixture portrait",
+      "status": "PASS",
+      "width": 800,
+      "height": 1280,
+      "orientation": "portrait",
+      "environment": "Chromium UA/touch emulation",
+      "scope": "Chromium device context emulation only; no physical device or WebKit",
+      "touch": true
+    },
+    {
+      "name": "device context Android tablet viewport/UA fixture landscape",
+      "status": "PASS",
+      "width": 1280,
+      "height": 800,
+      "orientation": "landscape",
+      "environment": "Chromium UA/touch emulation",
+      "scope": "Chromium device context emulation only; no physical device or WebKit",
+      "touch": true
+    },
+    {
+      "name": "keyboard, mobile menu, gallery and filters",
+      "status": "PASS",
+      "checks": [
+        "lightbox next/Escape/focus",
+        "menu Escape/focus/link",
+        "filter",
+        "keyboard skip link"
+      ]
+    },
+    {
+      "name": "CMS CRUD, inline photos, and unsafe text/URL (local fixtures)",
+      "status": "PASS",
+      "scope": "local JSON fixtures, not real CMS/Git/CDN",
+      "checks": [
+        "create",
+        "thumbnail",
+        "two inline photos/order",
+        "alt/caption",
+        "edit",
+        "replace photo",
+        "XSS inert",
+        "unpublish",
+        "delete"
+      ]
+    },
+    {
+      "name": "failed refresh retains static content and announces failure",
+      "status": "PASS",
+      "scope": "503 local JSON fixture",
+      "result": "static published article retained; failure announced"
+    },
+    {
+      "name": "local homepage timing and lazy gallery loading (not production performance)",
+      "status": "PASS",
+      "dom_content_loaded_ms": 378.09999999962747,
+      "load_ms": 390,
+      "local_fixture_lcp_ms": 404,
+      "local_fixture_cls": 0,
+      "scope": "local route-fulfilled response timings; not production Lighthouse/Core Web Vitals",
+      "initial_gallery_images": 1,
+      "gallery_image_paths": 12,
+      "initial_requests": 22,
+      "largest_optimized_file_bytes": 465454
+    },
+    {
+      "name": "article, gallery and main content without JavaScript",
+      "status": "PASS",
+      "pages": [
+        "index.html",
+        "news.html",
+        "profile.html",
+        "article-all-japan-first-season-2026.html"
+      ]
+    }
+  ],
+  "viewport_definition": "portrait pairs are CSS viewport width/height; landscape swaps each pair",
+  "not_executed": [
+    {
+      "item": "Physical iPhone/Android/iPad/Android tablet/PC",
+      "reason": "No attached physical devices"
+    },
+    {
+      "item": "Real Safari/iOS Safari/macOS Safari/Edge/branded Chrome",
+      "reason": "Only system Chromium installed; emulation is not verification of these browsers"
+    },
+    {
+      "item": "WebKit engine",
+      "reason": "Download blocked by network proxy (403), as recorded by parent"
+    },
+    {
+      "item": "Real Pages CMS save UI/Git commit/public CDN round trip",
+      "reason": "Browser CRUD uses local JSON fixtures"
+    },
+    {
+      "item": "Real Google Forms acceptance and owner receipt",
+      "reason": "Non-submitting local display fixture only"
+    },
+    {
+      "item": "Production HTTPS certificate/HTTP security headers/external SNS availability",
+      "reason": "Local intercepted responses do not verify live services"
+    }
+  ],
+  "pages": [
+    "index.html",
+    "profile.html",
+    "race.html",
+    "news.html",
+    "sponsor.html",
+    "support.html",
+    "contact.html",
+    "partners.html",
+    "messages.html",
+    "404.html",
+    "maintenance.html",
+    "article-all-japan-first-season-2026.html"
+  ],
+  "publication_id": "4156195e563dc7cd37af",
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844,
+      "orientation": "portrait"
+    },
+    {
+      "width": 1366,
+      "height": 768,
+      "orientation": "landscape"
+    }
+  ],
+  "elapsed_seconds": 66.81,
+  "summary": {
+    "PASS": 37,
+    "FAIL": 0,
+    "SKIP": 6
+  }
+}

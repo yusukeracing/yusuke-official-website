@@ -13,3 +13,12 @@ __pycache__/
 .DS_Store
 *.log
 .lighthouseci/
+
+# Local preview, build virtualenv and review packages.
+dist-preview/
+.build-venv/
+delivery/
+
+# Discovery files are generated only into the delivery artifact.
+/robots.txt
+/sitemap.xml

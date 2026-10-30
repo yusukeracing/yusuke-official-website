@@ -1,5 +1,7 @@
 # 実装時の検証
 
+> 最新の2026-10-30修正の結果は [RELEASE_TESTS](RELEASE_TESTS.md) と [AUDIT_REPORT](AUDIT_REPORT.md) を参照してください。以下は過去の実装時の記録で、現在版の本番性能を保証するものではありません。
+
 2026-10-26 にローカル環境の Chromium 154 / Lighthouse 13.5 で確認しました。実写真、Google Forms、GA4、SNS の本番接続および公開先の配信性能は未検証です。これらの設定後に再検証してください。
 
 ## 実行した確認

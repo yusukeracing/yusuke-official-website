@@ -1,0 +1,103 @@
+{
+  "checked_date_jst": "2026-10-30",
+  "scope": "source HTML available at audit time; generated article pages checked by release tests separately",
+  "pages": [
+    {
+      "file": "404.html",
+      "canonical": [
+        "https://yusukeracing.github.io/yusuke-official-website/404.html"
+      ],
+      "sha256": "97ebc268ec5e2726f92bf52ec9dcf3eb5061a3334722a979fcbb17c5c1dd270d",
+      "role": "page"
+    },
+    {
+      "file": "article-template.html",
+      "canonical": [
+        "https://yusukeracing.github.io/yusuke-official-website/news.html"
+      ],
+      "sha256": "b5e61a916e5d1315d7e1310675c376ef41f358f882df74ebf45d65c962668fbd",
+      "role": "template_not_directly_published"
+    },
+    {
+      "file": "contact.html",
+      "canonical": [
+        "https://yusukeracing.github.io/yusuke-official-website/contact.html"
+      ],
+      "sha256": "dafc1aa09653c9acabe8c1d79117457a624f4459dd36aedf46c4191f93465f28",
+      "role": "page"
+    },
+    {
+      "file": "index.html",
+      "canonical": [
+        "https://yusukeracing.github.io/yusuke-official-website/"
+      ],
+      "sha256": "24cdb16e5e7164e6dc988b3c71c87b5801d06e630202e1f2ef53da071059d9c5",
+      "role": "page"
+    },
+    {
+      "file": "maintenance.html",
+      "canonical": [
+        "https://yusukeracing.github.io/yusuke-official-website/maintenance.html"
+      ],
+      "sha256": "b42d78936615382c7c1a29c5fdaa9f89e7a19fd5813f1209c9527dc4269fa167",
+      "role": "page"
+    },
+    {
+      "file": "messages.html",
+      "canonical": [
+        "https://yusukeracing.github.io/yusuke-official-website/messages.html"
+      ],
+      "sha256": "c8e398830a7b36441f7f4ce4d8f5f80878f9c1aa396173a453a8d88e42ae569a",
+      "role": "page"
+    },
+    {
+      "file": "news.html",
+      "canonical": [
+        "https://yusukeracing.github.io/yusuke-official-website/news.html"
+      ],
+      "sha256": "7f7d39f85b9a6db99e7623ad3bb0ff75ab8b46bcdbf63ace40c2504072769b03",
+      "role": "page"
+    },
+    {
+      "file": "partners.html",
+      "canonical": [
+        "https://yusukeracing.github.io/yusuke-official-website/partners.html"
+      ],
+      "sha256": "f73ce148e75ac11697afe22c7685220a66ee47cc06a4a98d5c4b7221dcb69edf",
+      "role": "page"
+    },
+    {
+      "file": "profile.html",
+      "canonical": [
+        "https://yusukeracing.github.io/yusuke-official-website/profile.html"
+      ],
+      "sha256": "7d77400f0d80fbcc629ce3093e8f96e2282ca9e918a3d1a5cc6d0080e047975a",
+      "role": "page"
+    },
+    {
+      "file": "race.html",
+      "canonical": [
+        "https://yusukeracing.github.io/yusuke-official-website/race.html"
+      ],
+      "sha256": "cbb12b63215d53d383b1547c91ef44d197889f2757d1a43280378f126f428383",
+      "role": "page"
+    },
+    {
+      "file": "sponsor.html",
+      "canonical": [
+        "https://yusukeracing.github.io/yusuke-official-website/sponsor.html"
+      ],
+      "sha256": "0bb0b632f2033085f4f0c3631e1990f8f5d2747072ae04a7fb33f7d68d783ce6",
+      "role": "page"
+    },
+    {
+      "file": "support.html",
+      "canonical": [
+        "https://yusukeracing.github.io/yusuke-official-website/support.html"
+      ],
+      "sha256": "07b694c709c802f7fc5888bb91bc1d624453cdd398d0b8b775d1a42486d02e9f",
+      "role": "page"
+    }
+  ],
+  "duplicate_canonicals": {}
+}

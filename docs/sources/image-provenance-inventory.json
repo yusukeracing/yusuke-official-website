@@ -1,0 +1,211 @@
+{
+  "checked_date_jst": "2026-10-30",
+  "note": "File inventory and preservation evidence, not proof of ownership or permission; EXIF/GPS/private metadata values are not copied here.",
+  "images": [
+    {
+      "file": "assets/images/yusuke.gallery_01.jpg",
+      "sha256": "55d183183f6bad66fa764cbc2d690eebc5157bda08e4eb1341eb45fdb64499bc",
+      "bytes": 219360,
+      "width": 1566,
+      "height": 1044,
+      "embedded_artist_present": false,
+      "embedded_copyright_present": false,
+      "permission_record_provided": false
+    },
+    {
+      "file": "assets/images/yusuke.gallery_02.jpg",
+      "sha256": "e7c9e6a4fbab44b51f0f185a3068996c40150a54f54e0934b4679fd550ed6079",
+      "bytes": 85866,
+      "width": 960,
+      "height": 720,
+      "embedded_artist_present": false,
+      "embedded_copyright_present": false,
+      "permission_record_provided": false
+    },
+    {
+      "file": "assets/images/yusuke.gallery_03.jpg",
+      "sha256": "260796826ba8c5a66ad0300ebe5709ec4d6f04c83140ae8d787f03521f5e3200",
+      "bytes": 378302,
+      "width": 1477,
+      "height": 1108,
+      "embedded_artist_present": false,
+      "embedded_copyright_present": false,
+      "permission_record_provided": false
+    },
+    {
+      "file": "assets/images/yusuke.gallery_04.jpg",
+      "sha256": "6c0e6ba2e14cec71292e313bf2fde3d60afccda8564140be39908a7113c9d9e5",
+      "bytes": 249182,
+      "width": 1566,
+      "height": 1044,
+      "embedded_artist_present": false,
+      "embedded_copyright_present": false,
+      "permission_record_provided": false
+    },
+    {
+      "file": "assets/images/yusuke.gallery_05.jpg",
+      "sha256": "e52db7338c2da9bcd10a17bfc24f2e07a7982e4e4cdd2f1ef73d6ce538cbbe03",
+      "bytes": 154397,
+      "width": 1023,
+      "height": 766,
+      "embedded_artist_present": false,
+      "embedded_copyright_present": false,
+      "permission_record_provided": false
+    },
+    {
+      "file": "assets/images/yusuke.gallery_06.jpg",
+      "sha256": "df3fd50d001ee3c0b7a1101e6ee2748982277981158bb079a2d3b0a70d1bb809",
+      "bytes": 500591,
+      "width": 1108,
+      "height": 1477,
+      "embedded_artist_present": false,
+      "embedded_copyright_present": false,
+      "permission_record_provided": false
+    },
+    {
+      "file": "assets/images/yusuke.gallery_07.jpg",
+      "sha256": "9d2186b9a050a325ae3a24768d6945036c941ff57c91ced06a8bd498f6a7dec9",
+      "bytes": 220999,
+      "width": 1108,
+      "height": 1477,
+      "embedded_artist_present": false,
+      "embedded_copyright_present": false,
+      "permission_record_provided": false
+    },
+    {
+      "file": "assets/images/yusuke.gallery_08.jpg",
+      "sha256": "1820c43ad19e0566d92a150a33ccbf3602ce58f501888be2a415976cc013ebd6",
+      "bytes": 254741,
+      "width": 1566,
+      "height": 1044,
+      "embedded_artist_present": false,
+      "embedded_copyright_present": false,
+      "permission_record_provided": false
+    },
+    {
+      "file": "assets/images/yusuke.gallery_09.jpg",
+      "sha256": "90111f1594a807de4dc4bd83da75908b3edcfbc50b623892cf20d949dfa66988",
+      "bytes": 245945,
+      "width": 1566,
+      "height": 1044,
+      "embedded_artist_present": false,
+      "embedded_copyright_present": false,
+      "permission_record_provided": false
+    },
+    {
+      "file": "assets/images/yusuke.gallery_10.jpg",
+      "sha256": "740188c73f46455741987a3eb736f019ef5255b0fd15d5d0d61bf6804954e061",
+      "bytes": 248868,
+      "width": 1566,
+      "height": 1044,
+      "embedded_artist_present": false,
+      "embedded_copyright_present": false,
+      "permission_record_provided": false
+    },
+    {
+      "file": "assets/images/yusuke.gallery_11.jpg",
+      "sha256": "922bfbd1cb2c85aa1d3bc116d0bb5eb47dcb278dd686ccc842cd3e7a85036572",
+      "bytes": 474897,
+      "width": 1477,
+      "height": 1108,
+      "embedded_artist_present": false,
+      "embedded_copyright_present": false,
+      "permission_record_provided": false
+    },
+    {
+      "file": "assets/images/yusuke.gallery_12.jpg",
+      "sha256": "f5573c28e38befb58a49d66233fd8cdbe7f09b597984104ece82d061da3b5da9",
+      "bytes": 73228,
+      "width": 828,
+      "height": 552,
+      "embedded_artist_present": false,
+      "embedded_copyright_present": false,
+      "permission_record_provided": false
+    },
+    {
+      "file": "assets/images/yusuke.hero_01.jpg",
+      "sha256": "998877d078381f7ffe9a1348b85819e24cb2caf19070fb53cd492a8018c08350",
+      "bytes": 323233,
+      "width": 1566,
+      "height": 1044,
+      "embedded_artist_present": false,
+      "embedded_copyright_present": false,
+      "permission_record_provided": false
+    },
+    {
+      "file": "assets/images/yusuke.hero_02.jpg",
+      "sha256": "740188c73f46455741987a3eb736f019ef5255b0fd15d5d0d61bf6804954e061",
+      "bytes": 248868,
+      "width": 1566,
+      "height": 1044,
+      "embedded_artist_present": false,
+      "embedded_copyright_present": false,
+      "permission_record_provided": false
+    },
+    {
+      "file": "assets/images/yusuke.hero_03.jpg",
+      "sha256": "26100e3e2d884677b8e7ac94c4367c2cee595108b8d2658c7b45b0875055855a",
+      "bytes": 246360,
+      "width": 1044,
+      "height": 1566,
+      "embedded_artist_present": false,
+      "embedded_copyright_present": false,
+      "permission_record_provided": false
+    },
+    {
+      "file": "assets/images/yusuke.hero_04.jpg",
+      "sha256": "09790d004792980a35eb8b503b54ba062691a30dc95dabfa9008f513cff31849",
+      "bytes": 72138,
+      "width": 1080,
+      "height": 720,
+      "embedded_artist_present": false,
+      "embedded_copyright_present": false,
+      "permission_record_provided": false
+    },
+    {
+      "file": "assets/images/yusuke.hero_05.jpg",
+      "sha256": "383ed483c162cd091c720c5181ea6f5c595a4149def3f1ba81a64573c4b45dd1",
+      "bytes": 470763,
+      "width": 1108,
+      "height": 1477,
+      "embedded_artist_present": false,
+      "embedded_copyright_present": false,
+      "permission_record_provided": false
+    },
+    {
+      "file": "assets/images/yusuke.hero_06.png",
+      "sha256": "2798cbd61b5259fe2e03023211d4b38064790a337677b9ca9c91739e1b09cc53",
+      "bytes": 1700691,
+      "width": 1339,
+      "height": 663,
+      "embedded_artist_present": false,
+      "embedded_copyright_present": false,
+      "permission_record_provided": false
+    },
+    {
+      "file": "assets/images/yusuke.hero_07.jpg",
+      "sha256": "55d183183f6bad66fa764cbc2d690eebc5157bda08e4eb1341eb45fdb64499bc",
+      "bytes": 219360,
+      "width": 1566,
+      "height": 1044,
+      "embedded_artist_present": false,
+      "embedded_copyright_present": false,
+      "permission_record_provided": false
+    },
+    {
+      "file": "assets/images/yusuke.gallery_13.jpg",
+      "sha256": "8504e314c80d1eac285c504bc8ecdb0996437fd60b0884cea4d41d08de4dca9f",
+      "bytes": 400543,
+      "width": 1477,
+      "height": 1108,
+      "embedded_artist_present": false,
+      "embedded_copyright_present": false,
+      "permission_record_provided": false,
+      "introduced_by_owner_commit": "91b6978",
+      "matches_owner_commit_git_blob": true
+    }
+  ],
+  "baseline_original_count": 19,
+  "final_original_count": 20,
+  "baseline_note": "The initial audit contained 19 original files. All 19 records and original hashes are unchanged; the owner supplied gallery_13 in commit 91b6978 during the work."
+}

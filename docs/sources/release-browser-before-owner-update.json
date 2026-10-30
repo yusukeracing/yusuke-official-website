@@ -1,0 +1,2228 @@
+{
+  "checked_at": "2026-10-30T21:43:10.971032+09:00",
+  "artifact": "/workspace/yusuke-official-website/dist-preview",
+  "network": "all responses intercepted and supplied from local files; no real form POST",
+  "browser": {
+    "engine": "Chromium",
+    "binary": "/usr/bin/chromium",
+    "brand": "system Chromium, not Google Chrome or Edge",
+    "version": "154.0.8037.57"
+  },
+  "cases": [
+    {
+      "name": "Physical iPhone/Android/iPad/Android tablet/PC",
+      "status": "SKIP",
+      "reason": "No attached physical devices"
+    },
+    {
+      "name": "Real Safari/iOS Safari/macOS Safari/Edge/branded Chrome",
+      "status": "SKIP",
+      "reason": "Only system Chromium installed; emulation is not verification of these browsers"
+    },
+    {
+      "name": "WebKit engine",
+      "status": "SKIP",
+      "reason": "Download blocked by network proxy (403), as recorded by parent"
+    },
+    {
+      "name": "Real Pages CMS save UI/Git commit/public CDN round trip",
+      "status": "SKIP",
+      "reason": "Browser CRUD uses local JSON fixtures"
+    },
+    {
+      "name": "Real Google Forms acceptance and owner receipt",
+      "status": "SKIP",
+      "reason": "Non-submitting local display fixture only"
+    },
+    {
+      "name": "Production HTTPS certificate/HTTP security headers/external SNS availability",
+      "status": "SKIP",
+      "reason": "Local intercepted responses do not verify live services"
+    },
+    {
+      "name": "render index.html 320x568",
+      "status": "PASS",
+      "page": "index.html",
+      "width": 320,
+      "height": 568,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 19
+    },
+    {
+      "name": "render profile.html 320x568",
+      "status": "PASS",
+      "page": "profile.html",
+      "width": 320,
+      "height": 568,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 2
+    },
+    {
+      "name": "render race.html 320x568",
+      "status": "PASS",
+      "page": "race.html",
+      "width": 320,
+      "height": 568,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render news.html 320x568",
+      "status": "PASS",
+      "page": "news.html",
+      "width": 320,
+      "height": 568,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render sponsor.html 320x568",
+      "status": "PASS",
+      "page": "sponsor.html",
+      "width": 320,
+      "height": 568,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render support.html 320x568",
+      "status": "PASS",
+      "page": "support.html",
+      "width": 320,
+      "height": 568,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render contact.html 320x568",
+      "status": "PASS",
+      "page": "contact.html",
+      "width": 320,
+      "height": 568,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render partners.html 320x568",
+      "status": "PASS",
+      "page": "partners.html",
+      "width": 320,
+      "height": 568,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render messages.html 320x568",
+      "status": "PASS",
+      "page": "messages.html",
+      "width": 320,
+      "height": 568,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render 404.html 320x568",
+      "status": "PASS",
+      "page": "404.html",
+      "width": 320,
+      "height": 568,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render maintenance.html 320x568",
+      "status": "PASS",
+      "page": "maintenance.html",
+      "width": 320,
+      "height": 568,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render article-all-japan-first-season-2026.html 320x568",
+      "status": "PASS",
+      "page": "article-all-japan-first-season-2026.html",
+      "width": 320,
+      "height": 568,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render index.html 375x667",
+      "status": "PASS",
+      "page": "index.html",
+      "width": 375,
+      "height": 667,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 19
+    },
+    {
+      "name": "render profile.html 375x667",
+      "status": "PASS",
+      "page": "profile.html",
+      "width": 375,
+      "height": 667,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 2
+    },
+    {
+      "name": "render race.html 375x667",
+      "status": "PASS",
+      "page": "race.html",
+      "width": 375,
+      "height": 667,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render news.html 375x667",
+      "status": "PASS",
+      "page": "news.html",
+      "width": 375,
+      "height": 667,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render sponsor.html 375x667",
+      "status": "PASS",
+      "page": "sponsor.html",
+      "width": 375,
+      "height": 667,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render support.html 375x667",
+      "status": "PASS",
+      "page": "support.html",
+      "width": 375,
+      "height": 667,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render contact.html 375x667",
+      "status": "PASS",
+      "page": "contact.html",
+      "width": 375,
+      "height": 667,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render partners.html 375x667",
+      "status": "PASS",
+      "page": "partners.html",
+      "width": 375,
+      "height": 667,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render messages.html 375x667",
+      "status": "PASS",
+      "page": "messages.html",
+      "width": 375,
+      "height": 667,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render 404.html 375x667",
+      "status": "PASS",
+      "page": "404.html",
+      "width": 375,
+      "height": 667,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render maintenance.html 375x667",
+      "status": "PASS",
+      "page": "maintenance.html",
+      "width": 375,
+      "height": 667,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render article-all-japan-first-season-2026.html 375x667",
+      "status": "PASS",
+      "page": "article-all-japan-first-season-2026.html",
+      "width": 375,
+      "height": 667,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render index.html 390x844",
+      "status": "PASS",
+      "page": "index.html",
+      "width": 390,
+      "height": 844,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 19
+    },
+    {
+      "name": "render profile.html 390x844",
+      "status": "PASS",
+      "page": "profile.html",
+      "width": 390,
+      "height": 844,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 2
+    },
+    {
+      "name": "render race.html 390x844",
+      "status": "PASS",
+      "page": "race.html",
+      "width": 390,
+      "height": 844,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render news.html 390x844",
+      "status": "PASS",
+      "page": "news.html",
+      "width": 390,
+      "height": 844,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render sponsor.html 390x844",
+      "status": "PASS",
+      "page": "sponsor.html",
+      "width": 390,
+      "height": 844,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render support.html 390x844",
+      "status": "PASS",
+      "page": "support.html",
+      "width": 390,
+      "height": 844,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render contact.html 390x844",
+      "status": "PASS",
+      "page": "contact.html",
+      "width": 390,
+      "height": 844,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render partners.html 390x844",
+      "status": "PASS",
+      "page": "partners.html",
+      "width": 390,
+      "height": 844,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render messages.html 390x844",
+      "status": "PASS",
+      "page": "messages.html",
+      "width": 390,
+      "height": 844,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render 404.html 390x844",
+      "status": "PASS",
+      "page": "404.html",
+      "width": 390,
+      "height": 844,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render maintenance.html 390x844",
+      "status": "PASS",
+      "page": "maintenance.html",
+      "width": 390,
+      "height": 844,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render article-all-japan-first-season-2026.html 390x844",
+      "status": "PASS",
+      "page": "article-all-japan-first-season-2026.html",
+      "width": 390,
+      "height": 844,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render index.html 430x932",
+      "status": "PASS",
+      "page": "index.html",
+      "width": 430,
+      "height": 932,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 19
+    },
+    {
+      "name": "render profile.html 430x932",
+      "status": "PASS",
+      "page": "profile.html",
+      "width": 430,
+      "height": 932,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 2
+    },
+    {
+      "name": "render race.html 430x932",
+      "status": "PASS",
+      "page": "race.html",
+      "width": 430,
+      "height": 932,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render news.html 430x932",
+      "status": "PASS",
+      "page": "news.html",
+      "width": 430,
+      "height": 932,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render sponsor.html 430x932",
+      "status": "PASS",
+      "page": "sponsor.html",
+      "width": 430,
+      "height": 932,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render support.html 430x932",
+      "status": "PASS",
+      "page": "support.html",
+      "width": 430,
+      "height": 932,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render contact.html 430x932",
+      "status": "PASS",
+      "page": "contact.html",
+      "width": 430,
+      "height": 932,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render partners.html 430x932",
+      "status": "PASS",
+      "page": "partners.html",
+      "width": 430,
+      "height": 932,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render messages.html 430x932",
+      "status": "PASS",
+      "page": "messages.html",
+      "width": 430,
+      "height": 932,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render 404.html 430x932",
+      "status": "PASS",
+      "page": "404.html",
+      "width": 430,
+      "height": 932,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render maintenance.html 430x932",
+      "status": "PASS",
+      "page": "maintenance.html",
+      "width": 430,
+      "height": 932,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render article-all-japan-first-season-2026.html 430x932",
+      "status": "PASS",
+      "page": "article-all-japan-first-season-2026.html",
+      "width": 430,
+      "height": 932,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render index.html 768x1024",
+      "status": "PASS",
+      "page": "index.html",
+      "width": 768,
+      "height": 1024,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 19
+    },
+    {
+      "name": "render profile.html 768x1024",
+      "status": "PASS",
+      "page": "profile.html",
+      "width": 768,
+      "height": 1024,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 2
+    },
+    {
+      "name": "render race.html 768x1024",
+      "status": "PASS",
+      "page": "race.html",
+      "width": 768,
+      "height": 1024,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render news.html 768x1024",
+      "status": "PASS",
+      "page": "news.html",
+      "width": 768,
+      "height": 1024,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render sponsor.html 768x1024",
+      "status": "PASS",
+      "page": "sponsor.html",
+      "width": 768,
+      "height": 1024,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render support.html 768x1024",
+      "status": "PASS",
+      "page": "support.html",
+      "width": 768,
+      "height": 1024,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render contact.html 768x1024",
+      "status": "PASS",
+      "page": "contact.html",
+      "width": 768,
+      "height": 1024,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render partners.html 768x1024",
+      "status": "PASS",
+      "page": "partners.html",
+      "width": 768,
+      "height": 1024,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render messages.html 768x1024",
+      "status": "PASS",
+      "page": "messages.html",
+      "width": 768,
+      "height": 1024,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render 404.html 768x1024",
+      "status": "PASS",
+      "page": "404.html",
+      "width": 768,
+      "height": 1024,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render maintenance.html 768x1024",
+      "status": "PASS",
+      "page": "maintenance.html",
+      "width": 768,
+      "height": 1024,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render article-all-japan-first-season-2026.html 768x1024",
+      "status": "PASS",
+      "page": "article-all-japan-first-season-2026.html",
+      "width": 768,
+      "height": 1024,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render index.html 1024x1366",
+      "status": "PASS",
+      "page": "index.html",
+      "width": 1024,
+      "height": 1366,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 19
+    },
+    {
+      "name": "render profile.html 1024x1366",
+      "status": "PASS",
+      "page": "profile.html",
+      "width": 1024,
+      "height": 1366,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 2
+    },
+    {
+      "name": "render race.html 1024x1366",
+      "status": "PASS",
+      "page": "race.html",
+      "width": 1024,
+      "height": 1366,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render news.html 1024x1366",
+      "status": "PASS",
+      "page": "news.html",
+      "width": 1024,
+      "height": 1366,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render sponsor.html 1024x1366",
+      "status": "PASS",
+      "page": "sponsor.html",
+      "width": 1024,
+      "height": 1366,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render support.html 1024x1366",
+      "status": "PASS",
+      "page": "support.html",
+      "width": 1024,
+      "height": 1366,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render contact.html 1024x1366",
+      "status": "PASS",
+      "page": "contact.html",
+      "width": 1024,
+      "height": 1366,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render partners.html 1024x1366",
+      "status": "PASS",
+      "page": "partners.html",
+      "width": 1024,
+      "height": 1366,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render messages.html 1024x1366",
+      "status": "PASS",
+      "page": "messages.html",
+      "width": 1024,
+      "height": 1366,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render 404.html 1024x1366",
+      "status": "PASS",
+      "page": "404.html",
+      "width": 1024,
+      "height": 1366,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render maintenance.html 1024x1366",
+      "status": "PASS",
+      "page": "maintenance.html",
+      "width": 1024,
+      "height": 1366,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render article-all-japan-first-season-2026.html 1024x1366",
+      "status": "PASS",
+      "page": "article-all-japan-first-season-2026.html",
+      "width": 1024,
+      "height": 1366,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render index.html 1366x1920",
+      "status": "PASS",
+      "page": "index.html",
+      "width": 1366,
+      "height": 1920,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 19
+    },
+    {
+      "name": "render profile.html 1366x1920",
+      "status": "PASS",
+      "page": "profile.html",
+      "width": 1366,
+      "height": 1920,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 2
+    },
+    {
+      "name": "render race.html 1366x1920",
+      "status": "PASS",
+      "page": "race.html",
+      "width": 1366,
+      "height": 1920,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render news.html 1366x1920",
+      "status": "PASS",
+      "page": "news.html",
+      "width": 1366,
+      "height": 1920,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render sponsor.html 1366x1920",
+      "status": "PASS",
+      "page": "sponsor.html",
+      "width": 1366,
+      "height": 1920,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render support.html 1366x1920",
+      "status": "PASS",
+      "page": "support.html",
+      "width": 1366,
+      "height": 1920,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render contact.html 1366x1920",
+      "status": "PASS",
+      "page": "contact.html",
+      "width": 1366,
+      "height": 1920,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render partners.html 1366x1920",
+      "status": "PASS",
+      "page": "partners.html",
+      "width": 1366,
+      "height": 1920,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render messages.html 1366x1920",
+      "status": "PASS",
+      "page": "messages.html",
+      "width": 1366,
+      "height": 1920,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render 404.html 1366x1920",
+      "status": "PASS",
+      "page": "404.html",
+      "width": 1366,
+      "height": 1920,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render maintenance.html 1366x1920",
+      "status": "PASS",
+      "page": "maintenance.html",
+      "width": 1366,
+      "height": 1920,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render article-all-japan-first-season-2026.html 1366x1920",
+      "status": "PASS",
+      "page": "article-all-japan-first-season-2026.html",
+      "width": 1366,
+      "height": 1920,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render index.html 1920x2560",
+      "status": "PASS",
+      "page": "index.html",
+      "width": 1920,
+      "height": 2560,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 19
+    },
+    {
+      "name": "render profile.html 1920x2560",
+      "status": "PASS",
+      "page": "profile.html",
+      "width": 1920,
+      "height": 2560,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 2
+    },
+    {
+      "name": "render race.html 1920x2560",
+      "status": "PASS",
+      "page": "race.html",
+      "width": 1920,
+      "height": 2560,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render news.html 1920x2560",
+      "status": "PASS",
+      "page": "news.html",
+      "width": 1920,
+      "height": 2560,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render sponsor.html 1920x2560",
+      "status": "PASS",
+      "page": "sponsor.html",
+      "width": 1920,
+      "height": 2560,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render support.html 1920x2560",
+      "status": "PASS",
+      "page": "support.html",
+      "width": 1920,
+      "height": 2560,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render contact.html 1920x2560",
+      "status": "PASS",
+      "page": "contact.html",
+      "width": 1920,
+      "height": 2560,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render partners.html 1920x2560",
+      "status": "PASS",
+      "page": "partners.html",
+      "width": 1920,
+      "height": 2560,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render messages.html 1920x2560",
+      "status": "PASS",
+      "page": "messages.html",
+      "width": 1920,
+      "height": 2560,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render 404.html 1920x2560",
+      "status": "PASS",
+      "page": "404.html",
+      "width": 1920,
+      "height": 2560,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render maintenance.html 1920x2560",
+      "status": "PASS",
+      "page": "maintenance.html",
+      "width": 1920,
+      "height": 2560,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render article-all-japan-first-season-2026.html 1920x2560",
+      "status": "PASS",
+      "page": "article-all-japan-first-season-2026.html",
+      "width": 1920,
+      "height": 2560,
+      "orientation": "portrait",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render index.html 568x320",
+      "status": "PASS",
+      "page": "index.html",
+      "width": 568,
+      "height": 320,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 19
+    },
+    {
+      "name": "render profile.html 568x320",
+      "status": "PASS",
+      "page": "profile.html",
+      "width": 568,
+      "height": 320,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 2
+    },
+    {
+      "name": "render race.html 568x320",
+      "status": "PASS",
+      "page": "race.html",
+      "width": 568,
+      "height": 320,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render news.html 568x320",
+      "status": "PASS",
+      "page": "news.html",
+      "width": 568,
+      "height": 320,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render sponsor.html 568x320",
+      "status": "PASS",
+      "page": "sponsor.html",
+      "width": 568,
+      "height": 320,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render support.html 568x320",
+      "status": "PASS",
+      "page": "support.html",
+      "width": 568,
+      "height": 320,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render contact.html 568x320",
+      "status": "PASS",
+      "page": "contact.html",
+      "width": 568,
+      "height": 320,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render partners.html 568x320",
+      "status": "PASS",
+      "page": "partners.html",
+      "width": 568,
+      "height": 320,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render messages.html 568x320",
+      "status": "PASS",
+      "page": "messages.html",
+      "width": 568,
+      "height": 320,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render 404.html 568x320",
+      "status": "PASS",
+      "page": "404.html",
+      "width": 568,
+      "height": 320,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render maintenance.html 568x320",
+      "status": "PASS",
+      "page": "maintenance.html",
+      "width": 568,
+      "height": 320,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render article-all-japan-first-season-2026.html 568x320",
+      "status": "PASS",
+      "page": "article-all-japan-first-season-2026.html",
+      "width": 568,
+      "height": 320,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render index.html 667x375",
+      "status": "PASS",
+      "page": "index.html",
+      "width": 667,
+      "height": 375,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 19
+    },
+    {
+      "name": "render profile.html 667x375",
+      "status": "PASS",
+      "page": "profile.html",
+      "width": 667,
+      "height": 375,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 2
+    },
+    {
+      "name": "render race.html 667x375",
+      "status": "PASS",
+      "page": "race.html",
+      "width": 667,
+      "height": 375,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render news.html 667x375",
+      "status": "PASS",
+      "page": "news.html",
+      "width": 667,
+      "height": 375,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render sponsor.html 667x375",
+      "status": "PASS",
+      "page": "sponsor.html",
+      "width": 667,
+      "height": 375,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render support.html 667x375",
+      "status": "PASS",
+      "page": "support.html",
+      "width": 667,
+      "height": 375,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render contact.html 667x375",
+      "status": "PASS",
+      "page": "contact.html",
+      "width": 667,
+      "height": 375,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render partners.html 667x375",
+      "status": "PASS",
+      "page": "partners.html",
+      "width": 667,
+      "height": 375,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render messages.html 667x375",
+      "status": "PASS",
+      "page": "messages.html",
+      "width": 667,
+      "height": 375,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render 404.html 667x375",
+      "status": "PASS",
+      "page": "404.html",
+      "width": 667,
+      "height": 375,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render maintenance.html 667x375",
+      "status": "PASS",
+      "page": "maintenance.html",
+      "width": 667,
+      "height": 375,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render article-all-japan-first-season-2026.html 667x375",
+      "status": "PASS",
+      "page": "article-all-japan-first-season-2026.html",
+      "width": 667,
+      "height": 375,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render index.html 844x390",
+      "status": "PASS",
+      "page": "index.html",
+      "width": 844,
+      "height": 390,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 19
+    },
+    {
+      "name": "render profile.html 844x390",
+      "status": "PASS",
+      "page": "profile.html",
+      "width": 844,
+      "height": 390,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 2
+    },
+    {
+      "name": "render race.html 844x390",
+      "status": "PASS",
+      "page": "race.html",
+      "width": 844,
+      "height": 390,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render news.html 844x390",
+      "status": "PASS",
+      "page": "news.html",
+      "width": 844,
+      "height": 390,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render sponsor.html 844x390",
+      "status": "PASS",
+      "page": "sponsor.html",
+      "width": 844,
+      "height": 390,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render support.html 844x390",
+      "status": "PASS",
+      "page": "support.html",
+      "width": 844,
+      "height": 390,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render contact.html 844x390",
+      "status": "PASS",
+      "page": "contact.html",
+      "width": 844,
+      "height": 390,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render partners.html 844x390",
+      "status": "PASS",
+      "page": "partners.html",
+      "width": 844,
+      "height": 390,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render messages.html 844x390",
+      "status": "PASS",
+      "page": "messages.html",
+      "width": 844,
+      "height": 390,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render 404.html 844x390",
+      "status": "PASS",
+      "page": "404.html",
+      "width": 844,
+      "height": 390,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render maintenance.html 844x390",
+      "status": "PASS",
+      "page": "maintenance.html",
+      "width": 844,
+      "height": 390,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render article-all-japan-first-season-2026.html 844x390",
+      "status": "PASS",
+      "page": "article-all-japan-first-season-2026.html",
+      "width": 844,
+      "height": 390,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render index.html 932x430",
+      "status": "PASS",
+      "page": "index.html",
+      "width": 932,
+      "height": 430,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 19
+    },
+    {
+      "name": "render profile.html 932x430",
+      "status": "PASS",
+      "page": "profile.html",
+      "width": 932,
+      "height": 430,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 2
+    },
+    {
+      "name": "render race.html 932x430",
+      "status": "PASS",
+      "page": "race.html",
+      "width": 932,
+      "height": 430,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render news.html 932x430",
+      "status": "PASS",
+      "page": "news.html",
+      "width": 932,
+      "height": 430,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render sponsor.html 932x430",
+      "status": "PASS",
+      "page": "sponsor.html",
+      "width": 932,
+      "height": 430,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render support.html 932x430",
+      "status": "PASS",
+      "page": "support.html",
+      "width": 932,
+      "height": 430,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render contact.html 932x430",
+      "status": "PASS",
+      "page": "contact.html",
+      "width": 932,
+      "height": 430,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render partners.html 932x430",
+      "status": "PASS",
+      "page": "partners.html",
+      "width": 932,
+      "height": 430,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render messages.html 932x430",
+      "status": "PASS",
+      "page": "messages.html",
+      "width": 932,
+      "height": 430,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render 404.html 932x430",
+      "status": "PASS",
+      "page": "404.html",
+      "width": 932,
+      "height": 430,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render maintenance.html 932x430",
+      "status": "PASS",
+      "page": "maintenance.html",
+      "width": 932,
+      "height": 430,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render article-all-japan-first-season-2026.html 932x430",
+      "status": "PASS",
+      "page": "article-all-japan-first-season-2026.html",
+      "width": 932,
+      "height": 430,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render index.html 1024x768",
+      "status": "PASS",
+      "page": "index.html",
+      "width": 1024,
+      "height": 768,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 19
+    },
+    {
+      "name": "render profile.html 1024x768",
+      "status": "PASS",
+      "page": "profile.html",
+      "width": 1024,
+      "height": 768,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 2
+    },
+    {
+      "name": "render race.html 1024x768",
+      "status": "PASS",
+      "page": "race.html",
+      "width": 1024,
+      "height": 768,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render news.html 1024x768",
+      "status": "PASS",
+      "page": "news.html",
+      "width": 1024,
+      "height": 768,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render sponsor.html 1024x768",
+      "status": "PASS",
+      "page": "sponsor.html",
+      "width": 1024,
+      "height": 768,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render support.html 1024x768",
+      "status": "PASS",
+      "page": "support.html",
+      "width": 1024,
+      "height": 768,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render contact.html 1024x768",
+      "status": "PASS",
+      "page": "contact.html",
+      "width": 1024,
+      "height": 768,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render partners.html 1024x768",
+      "status": "PASS",
+      "page": "partners.html",
+      "width": 1024,
+      "height": 768,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render messages.html 1024x768",
+      "status": "PASS",
+      "page": "messages.html",
+      "width": 1024,
+      "height": 768,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render 404.html 1024x768",
+      "status": "PASS",
+      "page": "404.html",
+      "width": 1024,
+      "height": 768,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render maintenance.html 1024x768",
+      "status": "PASS",
+      "page": "maintenance.html",
+      "width": 1024,
+      "height": 768,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render article-all-japan-first-season-2026.html 1024x768",
+      "status": "PASS",
+      "page": "article-all-japan-first-season-2026.html",
+      "width": 1024,
+      "height": 768,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render index.html 1366x1024",
+      "status": "PASS",
+      "page": "index.html",
+      "width": 1366,
+      "height": 1024,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 19
+    },
+    {
+      "name": "render profile.html 1366x1024",
+      "status": "PASS",
+      "page": "profile.html",
+      "width": 1366,
+      "height": 1024,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 2
+    },
+    {
+      "name": "render race.html 1366x1024",
+      "status": "PASS",
+      "page": "race.html",
+      "width": 1366,
+      "height": 1024,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render news.html 1366x1024",
+      "status": "PASS",
+      "page": "news.html",
+      "width": 1366,
+      "height": 1024,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render sponsor.html 1366x1024",
+      "status": "PASS",
+      "page": "sponsor.html",
+      "width": 1366,
+      "height": 1024,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render support.html 1366x1024",
+      "status": "PASS",
+      "page": "support.html",
+      "width": 1366,
+      "height": 1024,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render contact.html 1366x1024",
+      "status": "PASS",
+      "page": "contact.html",
+      "width": 1366,
+      "height": 1024,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render partners.html 1366x1024",
+      "status": "PASS",
+      "page": "partners.html",
+      "width": 1366,
+      "height": 1024,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render messages.html 1366x1024",
+      "status": "PASS",
+      "page": "messages.html",
+      "width": 1366,
+      "height": 1024,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render 404.html 1366x1024",
+      "status": "PASS",
+      "page": "404.html",
+      "width": 1366,
+      "height": 1024,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render maintenance.html 1366x1024",
+      "status": "PASS",
+      "page": "maintenance.html",
+      "width": 1366,
+      "height": 1024,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render article-all-japan-first-season-2026.html 1366x1024",
+      "status": "PASS",
+      "page": "article-all-japan-first-season-2026.html",
+      "width": 1366,
+      "height": 1024,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render index.html 1920x1366",
+      "status": "PASS",
+      "page": "index.html",
+      "width": 1920,
+      "height": 1366,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 19
+    },
+    {
+      "name": "render profile.html 1920x1366",
+      "status": "PASS",
+      "page": "profile.html",
+      "width": 1920,
+      "height": 1366,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 2
+    },
+    {
+      "name": "render race.html 1920x1366",
+      "status": "PASS",
+      "page": "race.html",
+      "width": 1920,
+      "height": 1366,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render news.html 1920x1366",
+      "status": "PASS",
+      "page": "news.html",
+      "width": 1920,
+      "height": 1366,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render sponsor.html 1920x1366",
+      "status": "PASS",
+      "page": "sponsor.html",
+      "width": 1920,
+      "height": 1366,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render support.html 1920x1366",
+      "status": "PASS",
+      "page": "support.html",
+      "width": 1920,
+      "height": 1366,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render contact.html 1920x1366",
+      "status": "PASS",
+      "page": "contact.html",
+      "width": 1920,
+      "height": 1366,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render partners.html 1920x1366",
+      "status": "PASS",
+      "page": "partners.html",
+      "width": 1920,
+      "height": 1366,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render messages.html 1920x1366",
+      "status": "PASS",
+      "page": "messages.html",
+      "width": 1920,
+      "height": 1366,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render 404.html 1920x1366",
+      "status": "PASS",
+      "page": "404.html",
+      "width": 1920,
+      "height": 1366,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render maintenance.html 1920x1366",
+      "status": "PASS",
+      "page": "maintenance.html",
+      "width": 1920,
+      "height": 1366,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render article-all-japan-first-season-2026.html 1920x1366",
+      "status": "PASS",
+      "page": "article-all-japan-first-season-2026.html",
+      "width": 1920,
+      "height": 1366,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render index.html 2560x1920",
+      "status": "PASS",
+      "page": "index.html",
+      "width": 2560,
+      "height": 1920,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 19
+    },
+    {
+      "name": "render profile.html 2560x1920",
+      "status": "PASS",
+      "page": "profile.html",
+      "width": 2560,
+      "height": 1920,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 2
+    },
+    {
+      "name": "render race.html 2560x1920",
+      "status": "PASS",
+      "page": "race.html",
+      "width": 2560,
+      "height": 1920,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render news.html 2560x1920",
+      "status": "PASS",
+      "page": "news.html",
+      "width": 2560,
+      "height": 1920,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render sponsor.html 2560x1920",
+      "status": "PASS",
+      "page": "sponsor.html",
+      "width": 2560,
+      "height": 1920,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render support.html 2560x1920",
+      "status": "PASS",
+      "page": "support.html",
+      "width": 2560,
+      "height": 1920,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 1
+    },
+    {
+      "name": "render contact.html 2560x1920",
+      "status": "PASS",
+      "page": "contact.html",
+      "width": 2560,
+      "height": 1920,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render partners.html 2560x1920",
+      "status": "PASS",
+      "page": "partners.html",
+      "width": 2560,
+      "height": 1920,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render messages.html 2560x1920",
+      "status": "PASS",
+      "page": "messages.html",
+      "width": 2560,
+      "height": 1920,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render 404.html 2560x1920",
+      "status": "PASS",
+      "page": "404.html",
+      "width": 2560,
+      "height": 1920,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render maintenance.html 2560x1920",
+      "status": "PASS",
+      "page": "maintenance.html",
+      "width": 2560,
+      "height": 1920,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "render article-all-japan-first-season-2026.html 2560x1920",
+      "status": "PASS",
+      "page": "article-all-japan-first-season-2026.html",
+      "width": 2560,
+      "height": 1920,
+      "orientation": "landscape",
+      "environment": "Chromium viewport emulation",
+      "loaded_photos": 0
+    },
+    {
+      "name": "device context iPhone 13 portrait",
+      "status": "PASS",
+      "width": 390,
+      "height": 664,
+      "orientation": "portrait",
+      "environment": "Chromium UA/touch emulation",
+      "scope": "Chromium device context emulation only; no physical device or WebKit",
+      "touch": true
+    },
+    {
+      "name": "device context iPhone 13 landscape",
+      "status": "PASS",
+      "width": 664,
+      "height": 390,
+      "orientation": "landscape",
+      "environment": "Chromium UA/touch emulation",
+      "scope": "Chromium device context emulation only; no physical device or WebKit",
+      "touch": true
+    },
+    {
+      "name": "device context Pixel 7 portrait",
+      "status": "PASS",
+      "width": 412,
+      "height": 839,
+      "orientation": "portrait",
+      "environment": "Chromium UA/touch emulation",
+      "scope": "Chromium device context emulation only; no physical device or WebKit",
+      "touch": true
+    },
+    {
+      "name": "device context Pixel 7 landscape",
+      "status": "PASS",
+      "width": 839,
+      "height": 412,
+      "orientation": "landscape",
+      "environment": "Chromium UA/touch emulation",
+      "scope": "Chromium device context emulation only; no physical device or WebKit",
+      "touch": true
+    },
+    {
+      "name": "device context iPad Pro 11 portrait",
+      "status": "PASS",
+      "width": 834,
+      "height": 1194,
+      "orientation": "portrait",
+      "environment": "Chromium UA/touch emulation",
+      "scope": "Chromium device context emulation only; no physical device or WebKit",
+      "touch": true
+    },
+    {
+      "name": "device context iPad Pro 11 landscape",
+      "status": "PASS",
+      "width": 1194,
+      "height": 834,
+      "orientation": "landscape",
+      "environment": "Chromium UA/touch emulation",
+      "scope": "Chromium device context emulation only; no physical device or WebKit",
+      "touch": true
+    },
+    {
+      "name": "device context Android tablet viewport/UA fixture portrait",
+      "status": "PASS",
+      "width": 800,
+      "height": 1280,
+      "orientation": "portrait",
+      "environment": "Chromium UA/touch emulation",
+      "scope": "Chromium device context emulation only; no physical device or WebKit",
+      "touch": true
+    },
+    {
+      "name": "device context Android tablet viewport/UA fixture landscape",
+      "status": "PASS",
+      "width": 1280,
+      "height": 800,
+      "orientation": "landscape",
+      "environment": "Chromium UA/touch emulation",
+      "scope": "Chromium device context emulation only; no physical device or WebKit",
+      "touch": true
+    },
+    {
+      "name": "keyboard, mobile menu, gallery and filters",
+      "status": "PASS",
+      "checks": [
+        "lightbox next/Escape/focus",
+        "menu Escape/focus/link",
+        "filter",
+        "keyboard skip link"
+      ]
+    },
+    {
+      "name": "CMS CRUD, inline photos, and unsafe text/URL (local fixtures)",
+      "status": "PASS",
+      "scope": "local JSON fixtures, not real CMS/Git/CDN",
+      "checks": [
+        "create",
+        "thumbnail",
+        "two inline photos/order",
+        "alt/caption",
+        "edit",
+        "replace photo",
+        "XSS inert",
+        "unpublish",
+        "delete"
+      ]
+    },
+    {
+      "name": "failed refresh retains static content and announces failure",
+      "status": "PASS",
+      "scope": "503 local JSON fixture",
+      "result": "static published article retained; failure announced"
+    },
+    {
+      "name": "local homepage timing and lazy gallery loading (not production performance)",
+      "status": "PASS",
+      "dom_content_loaded_ms": 106.69999999925494,
+      "load_ms": 406,
+      "local_fixture_lcp_ms": 424,
+      "local_fixture_cls": 0,
+      "scope": "local route-fulfilled response timings; not production Lighthouse/Core Web Vitals",
+      "initial_gallery_images": 1,
+      "gallery_image_paths": 12,
+      "initial_requests": 22,
+      "largest_optimized_file_bytes": 465454
+    },
+    {
+      "name": "article, gallery and main content without JavaScript",
+      "status": "PASS",
+      "pages": [
+        "index.html",
+        "news.html",
+        "profile.html",
+        "article-all-japan-first-season-2026.html"
+      ]
+    }
+  ],
+  "viewport_definition": "portrait pairs are CSS viewport width/height; landscape swaps each pair",
+  "not_executed": [
+    {
+      "item": "Physical iPhone/Android/iPad/Android tablet/PC",
+      "reason": "No attached physical devices"
+    },
+    {
+      "item": "Real Safari/iOS Safari/macOS Safari/Edge/branded Chrome",
+      "reason": "Only system Chromium installed; emulation is not verification of these browsers"
+    },
+    {
+      "item": "WebKit engine",
+      "reason": "Download blocked by network proxy (403), as recorded by parent"
+    },
+    {
+      "item": "Real Pages CMS save UI/Git commit/public CDN round trip",
+      "reason": "Browser CRUD uses local JSON fixtures"
+    },
+    {
+      "item": "Real Google Forms acceptance and owner receipt",
+      "reason": "Non-submitting local display fixture only"
+    },
+    {
+      "item": "Production HTTPS certificate/HTTP security headers/external SNS availability",
+      "reason": "Local intercepted responses do not verify live services"
+    }
+  ],
+  "pages": [
+    "index.html",
+    "profile.html",
+    "race.html",
+    "news.html",
+    "sponsor.html",
+    "support.html",
+    "contact.html",
+    "partners.html",
+    "messages.html",
+    "404.html",
+    "maintenance.html",
+    "article-all-japan-first-season-2026.html"
+  ],
+  "publication_id": "ead08daa108d143dc117",
+  "viewports": [
+    {
+      "width": 320,
+      "height": 568,
+      "orientation": "portrait"
+    },
+    {
+      "width": 375,
+      "height": 667,
+      "orientation": "portrait"
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "orientation": "portrait"
+    },
+    {
+      "width": 430,
+      "height": 932,
+      "orientation": "portrait"
+    },
+    {
+      "width": 768,
+      "height": 1024,
+      "orientation": "portrait"
+    },
+    {
+      "width": 1024,
+      "height": 1366,
+      "orientation": "portrait"
+    },
+    {
+      "width": 1366,
+      "height": 1920,
+      "orientation": "portrait"
+    },
+    {
+      "width": 1920,
+      "height": 2560,
+      "orientation": "portrait"
+    },
+    {
+      "width": 568,
+      "height": 320,
+      "orientation": "landscape"
+    },
+    {
+      "width": 667,
+      "height": 375,
+      "orientation": "landscape"
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "orientation": "landscape"
+    },
+    {
+      "width": 932,
+      "height": 430,
+      "orientation": "landscape"
+    },
+    {
+      "width": 1024,
+      "height": 768,
+      "orientation": "landscape"
+    },
+    {
+      "width": 1366,
+      "height": 1024,
+      "orientation": "landscape"
+    },
+    {
+      "width": 1920,
+      "height": 1366,
+      "orientation": "landscape"
+    },
+    {
+      "width": 2560,
+      "height": 1920,
+      "orientation": "landscape"
+    }
+  ],
+  "elapsed_seconds": 210.35,
+  "summary": {
+    "PASS": 205,
+    "FAIL": 0,
+    "SKIP": 6
+  }
+}

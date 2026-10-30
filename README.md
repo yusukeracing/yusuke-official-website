@@ -1,108 +1,93 @@
-# 池田優介 Official Racing Website
+# 池田優介 Racing Website
 
-全日本ロードレース選手権 ST600・池田優介選手の公式サイトです。白とレーシングブルーを中心に、写真・タイポグラフィ・余白で構成しています。
+白とレーシングブルー、写真と余白を使った静的サイトです。公開サイトの実行にPHP・データベース・Node.jsは使いません。画像の配信用生成だけにPythonとPillowを使います。
 
-HTML / CSS / Vanilla JavaScript の静的サイトです。Node.js、PHP、データベース、フロントエンドフレームワークは不要です。
+## 現在の状態
 
-## 日常の更新はコード不要
+- CMSはPages CMS、保存先はGitHub `main` の `data/*.json` です。
+- GitHub Actionsが必要なファイルだけを `dist/` に生成し、GitHub Pagesへ公開します。`docs/` は説明資料で、サイトの公開フォルダではありません。
+- 利用者がCMSで設定した **メンテナンスONを保持**しています。解除はCMSの「サイト設定・SNS」→「メンテナンス画面を表示する」をOFFにして保存します。
+- 通常サイトは、設定を変更しない `--normal-preview` で別に確認できます。
+- トップ画像の設定は `assets/images/yusuke.gallery_09.jpg` です。公開時はその写真から作った配信用WebPを使います。
 
-[Pages CMS](https://app.pagescms.org/)にGitHubでサインインし、このリポジトリの `main` を選びます。「活動報告・ニュース」で日付・カテゴリ・タイトル・本文・写真を入力して保存すると、検証後に自動公開されます。初回のGitHub App接続だけはアカウント所有者の操作が必要です。[接続・投稿の手順](docs/CMS.md)を参照してください。
+原因・変更・テスト・未確認事項の入口は [今回の確認報告](docs/AUDIT_REPORT.md) です。
 
-「プロフィール・ストーリー」ではTOPとプロフィール下の「池田優介からのヒトコト」も変更できます。活動報告とヒトコトは依頼内容に基づく原稿を掲載し、公開用に仮原稿表示をOFFにしています。必要に応じてCMSから本文を変更できます。仮原稿表示をONにした記事も公開されるため、非公開の下書きは登録しません。
+## 日常の更新
 
-メンテナンス中は「サイト設定・SNS」→「メンテナンス画面を表示する」をONにして保存します。公開完了後、サーバーを止めずに全ページへ案内を表示します。再開はOFFにして保存します。設定ファイルでは `data/site.json` の `maintenanceEnabled` です。通常はOFFにしています。[切り替えと復旧](docs/CMS.md#メンテナンス画面に切り替える)も参照してください。
+[Pages CMS](https://app.pagescms.org/)で対象リポジトリと `main` を選びます。
 
-開発用の切り替え・復旧確認は `python3 scripts/test_maintenance.py` で実行できます。一時コピー内で検証するため、公開設定や作業中の `dist/` は変更しません。
+「活動報告・ニュース」で記事のタイトル・公開日・冒頭本文・サムネイルを入力できます。「本文の文章・写真」は項目を順に追加し、文章と複数写真を並べます。写真の説明と代替テキストも入力できます。保存後はGitHub Actionsの公開処理を確認します。
 
-## ローカルで確認する
+記事の「掲載する」をOFFにすると一覧・詳細・公開用JSON・サイトマップから外れます。ただし公開GitHubとその履歴を非公開にはしないため、個人情報・機密情報を含む下書きは保存しません。公開日は表示・並べ替え用で、予約公開の設定ではありません。
 
-Python 3 が必要です。リポジトリのルートで実行します。
+写真はCMSの `assets/images` で管理します。既存写真と `uploads/` サブフォルダを同じ画面で扱い、原本のパスはJSONへ相対パスで保存します。原本を置き換えずに配信用画像を自動生成するため、コードや配信用ファイルを手動で編集する必要はありません。
+
+詳しくは [写真付き記事の操作手順](docs/CMS.md)、保存したのに変わらない場合は [反映不具合の切り分け](docs/CMS_DIAGNOSIS.md) を参照してください。
+
+## ビルドと確認
+
+Python 3.11以上が目安です。ビルド依存は固定版のPillowです。
 
 ```bash
-python3 -m http.server 8000 --bind 127.0.0.1
+python3 -m venv .build-venv
+.build-venv/bin/python -m pip install -r requirements-build.txt
+.build-venv/bin/python scripts/build.py
+.build-venv/bin/python scripts/check_site.py dist
 ```
 
-ブラウザでローカルサーバーの `index.html` を開きます。JSON を `fetch()` するため、HTML のダブルクリックによる `file://` 表示は使用しません。
-
-検証・公開用ファイルの生成：
+メンテナンス設定を維持したまま通常表示を確認する場合：
 
 ```bash
-python3 scripts/build.py
-python3 scripts/check_site.py dist
-python3 -m http.server 8000 --bind 127.0.0.1 --directory dist
+.build-venv/bin/python scripts/build.py --normal-preview --output dist-preview
+.build-venv/bin/python scripts/check_site.py dist-preview
+.build-venv/bin/python -m http.server 8000 --bind 127.0.0.1 --directory dist-preview
 ```
 
-`dist/` が公開対象です。ソース、運用資料、設定ファイルは読みやすい状態で保持します。ビルドは `data/site.json` の公開 URL を使って検索エンジン向けの URL も生成します。公開 URL を変えた場合は必ず再ビルドしてください。
+`file://`でのダブルクリック表示ではなくHTTPサーバーを使います。公開には `dist/` だけを使います。`dist-preview/` はメンテナンスを解除して作った確認用なので、現在の公開設定を維持する場合はデプロイしません。
 
-## ページと編集するファイル
+## 元写真と配信用画像
 
-| ページ / 情報 | ファイル |
+- `assets/images/`：利用者提供の原本とCMSアップロード。元ファイルを改変せず保持します。
+- `dist/assets/optimized/`：参照中の写真だけを自然比率で縮小し、向きを補正・sRGB化した配信用WebP。色の演出や切り抜きはしません。
+- `dist/data/media-manifest.json`：原本SHA、寸法、変換条件、配信用SHA・容量。元写真との対応を確認できます。
+- `dist/data/publication.json`：公開版ID、生成ページ一覧、メンテナンス状態。HTML・CSS・JS・JSONの版をそろえます。
+
+原本の同一内容の別名は保存し、配信用画像はハッシュで共通化します。WebPは非可逆圧縮なので、原本と画素値が完全一致するという意味ではありません。
+
+## テスト
+
+Python標準ライブラリとビルド依存で実行するテスト：
+
+```bash
+.build-venv/bin/python scripts/test_news_content.py
+.build-venv/bin/python scripts/test_publication_pipeline.py
+.build-venv/bin/python scripts/test_maintenance.py
+.build-venv/bin/python scripts/test_social_links.py
+```
+
+ブラウザー確認には開発用のPython PlaywrightとChromiumが別途必要です。公開サイトには同梱しません。
+
+```bash
+python3 scripts/test_release.py --directory dist-preview --report docs/release-browser-results.json
+python3 scripts/test_photo_loading.py --directory dist-preview
+```
+
+実機、Safari、実CMSのログイン操作、Googleフォームの実受信、公開先の証明書やHTTPヘッダーは、ローカルの代替応答だけでは検証できません。[今回のテスト記録](docs/RELEASE_TESTS.md)で実施済みと未確認を区別します。
+
+## 資料
+
+| 内容 | 文書 |
 | --- | --- |
-| トップ | `index.html` |
-| プロフィール | `profile.html` / `data/profile.json` |
-| レース・予定・戦績 | `race.html` / `data/races.json` |
-| 活動報告・ニュース | `news.html` / `data/news.json` |
-| 法人パートナー | `sponsor.html` / `data/sponsors.json` |
-| スポンサー企業一覧 | `partners.html` / `data/sponsors.json` |
-| 個人サポート | `support.html` |
-| 応援メッセージ一覧 | `messages.html` / `data/messages.json` |
-| お問い合わせ | `contact.html` |
-| 404 / 計画メンテナンス | `404.html` / `maintenance.html` |
-| サイト設定・SNS・GA4・Google Forms | `data/site.json` |
-| ギャラリー | `data/gallery.json` |
-| CMS 設定 | `.pages.yml` |
-| スタイル / 挙動 | `assets/css/` / `assets/js/` |
+| 総合報告・原因・公開判定 | [AUDIT_REPORT](docs/AUDIT_REPORT.md) |
+| 写真付き記事の更新 | [CMS](docs/CMS.md) |
+| CMS保存・反映の診断 | [CMS_DIAGNOSIS](docs/CMS_DIAGNOSIS.md) |
+| 削除したファイルと保持理由 | [CLEANUP](docs/CLEANUP.md) |
+| テスト結果・未実施 | [RELEASE_TESTS](docs/RELEASE_TESTS.md) |
+| 権利・戦績・重複の確認 | [RIGHTS_REVIEW](docs/RIGHTS_REVIEW.md) |
+| Web公開と公開GitHubの区分 | [PUBLICATION_BOUNDARY](docs/PUBLICATION_BOUNDARY.md) |
+| セキュリティと依存 | [SECURITY](docs/SECURITY.md) |
+| 公開・バックアップ・復旧 | [OPERATIONS](docs/OPERATIONS.md) |
+| 改ざん発見時の記録様式 | [INCIDENT_RESPONSE](docs/INCIDENT_RESPONSE.md) |
+| 第三者ライセンス | [THIRD_PARTY_NOTICES](THIRD_PARTY_NOTICES.md) |
 
-Pages CMS では活動報告・ニュース・戦績・予定・プロフィール・本人のヒトコト・スポンサー・公開用の応援メッセージ・写真・メンテナンス切り替え・サイト設定を編集できます。接続と日常の更新は [CMS の使い方](docs/CMS.md)、公開・セキュリティ・障害対応は [運用手順](docs/OPERATIONS.md) を参照してください。
-
-スポンサー企業は未登録です。応援メッセージにはCMSから登録された公開用の文章を掲載しています。企業名・ロゴの掲載許可、メッセージと公開表示名の掲載同意を確認してからCMSに登録してください。問い合わせの原文・メール・電話・未承認投稿・下書きは公開JSONやGitに保存しません。Google Formsの回答を自動公開する機能はありません。
-
-お問い合わせには提供されたGoogle FormsのURLを設定済みです。`googleFormUrl` と `googleFormHeight` でURLと高さを変更できます。JavaScriptなしでも埋め込みを表示でき、別画面で開くリンクも用意しています。フォーム実体への接続はこのクラウド環境の通信制限で確認できていないため、Google側で公開範囲・回答受付が有効であることも確認してください。
-
-## 写真と未確定情報
-
-提供された写真を、TOP・CURRENT SEASON・プロフィール・PHOTO STORY・ギャラリーに登録しています。未提供の写真枠は `xxx` と `<!-- PHOTO SLOT : xxx-… -->` コメントで示しています。人物やレースの仮写真は生成・流用していません。戦績・スポンサー・レース予定の未確認情報は補完していません。活動報告と本人のヒトコトには、依頼内容に基づく原稿を掲載しています。
-
-写真は HTML の `src` だけでなく、対応する JSON / Pages CMS の画像設定を更新してください。特に PHOTO STORY は JSON から再描画します。登録場所は [写真の差し替え](docs/CMS.md#写真の差し替え) の対応表を参照してください。
-
-画像は Pages CMS から `assets/images/uploads/` にアップロードするか、JSON の画像パスを実際のファイル名に変更してください。ファイル名に `xxx` が含まれる画像は仮枠として扱い、読み込みません。`xxx` は本番データに置き換える目印です。写真の権利と選手・チーム・撮影者の掲載許可を確認してください。
-
-推奨サイズ：PC は横幅 1600px 程度、タブレットは 1024px 程度、スマートフォンは 640〜800px 程度。WebP / AVIF を推奨し、HERO は 150〜300KB、通常写真は 80〜200KB、サムネイルは 30〜100KB を目安にします。`mobileImage` などの対応フィールドには縮小版を指定できます。元の 4K JPEG を直接掲載しないでください。
-
-## 公開前に必要な設定
-
-- 本人の写真、過去の戦績、2026 年の日程・結果、ニュース、スポンサーを、確認できた情報で登録する。
-- `data/site.json` の `url` を公開 URL に合わせる。初期値は `https://yusukeracing.github.io/yusuke-official-website/`。
-- Instagram・Xは本人のプロフィールURLを登録済み。Facebookはアカウント準備中としてサービスのTOPへリンクし、本人のURLが用意できたらCMSから変更する。
-- Google Forms の公開範囲・回答受付を確認する。必要に応じて公開可能なメール・電話番号、スポンサー資料 URL を設定する。
-- GA4 を使う場合は `ga4Id` を実際の測定 ID に変更し、プライバシー告知・必要な同意対応を確認する。
-- GitHub Pages と Pages CMS を接続し、編集権限、main の保護、HTTPS を設定する。
-- 写真・フォーム・計測設定後に実機と Lighthouse / PageSpeed Insights で再検証する。
-
-これらの外部サービスやアカウントの設定は、リポジトリ内のファイルを追加しただけでは有効になりません。秘密鍵・トークン・パスワード・`.env` はコミットしないでください。
-
-## 写真とTOPボタンの回帰テスト（開発用・任意）
-
-Python Playwright を使い、実画像の表示、キャッシュ済み画像の判定、モバイル画像がない場合の代替表示、TOPボタンのコントラストと重なりを確認できます。サイト本体や公開ビルドには Playwright は不要です。
-
-```bash
-python3 -m pip install playwright
-python3 -m playwright install chromium
-python3 scripts/test_photo_loading.py
-```
-
-システムに Chromium がある場合はそれを使用します。公開用ファイルを確認するときは `python3 scripts/test_photo_loading.py --directory dist` を実行します。
-
-## 公開ページの安全性と同時接続の確認
-
-[セキュリティ調査](docs/SECURITY.md) に、実装済みの保護とGitHub・Google・Cloudflare等で別途設定する項目をまとめています。ブラウザーに配信するHTML・CSS・JavaScriptは完全には非公開にできません。
-
-[ローカル同時接続テスト](docs/CAPACITY.md) は最大100並列クライアントで実施しました。GitHub Pages本番の上限人数を示す試験ではありません。公開サイトやGoogle Formsへの負荷を発生させず、Python標準ライブラリだけで再実行できます。
-
-```bash
-python3 scripts/build.py
-python3 scripts/check_site.py dist
-python3 scripts/load_check.py --directory dist --max-concurrency 100 --journeys-per-client 2 --output docs/load-results.json
-```
-
-Playwrightを使うフォーム・公開一覧の回帰確認は `python3 scripts/test_public_pages.py --directory dist` で実行します。Google Formsはテスト用の応答に置き換えるため、実フォームへの送信は行いません。
+資料をWeb成果物から除外しても、公開リポジトリからは読めます。秘密鍵、トークン、フォーム回答原文、非公開の連絡先や内部調査ログをGitへ保存しません。

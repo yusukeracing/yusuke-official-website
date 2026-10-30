@@ -61,8 +61,8 @@ figure {
 img {
   display: block;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  object-fit: contain;
 }
 svg {
   width: 22px;
@@ -260,8 +260,7 @@ button {
     border-color 0.25s;
 }
 .site-header.is-scrolled {
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(14px);
+  background: var(--white);
   border-color: var(--line);
 }
 .header-inner {
@@ -356,139 +355,89 @@ button {
 ================================= */
 .hero {
   position: relative;
-  min-height: 850px;
-  min-height: min(950px, 100svh);
-  padding-top: 160px;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.25fr);
+  align-items: center;
+  gap: 42px clamp(28px, 4vw, 68px);
+  padding: 142px var(--gutter) 0;
+  max-width: 1760px;
+  margin-inline: auto;
   background: var(--paper);
-  overflow: hidden;
 }
 .hero-photo {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 64%;
-  height: 100%;
-  background: #e9eef3;
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 0;
 }
 .photo-slot {
   position: relative;
-  background: #e9eef3;
-  overflow: hidden;
   min-width: 0;
-  aspect-ratio: 3/2;
+  aspect-ratio: auto;
+  background: transparent;
 }
 .photo-slot picture {
-  position: absolute;
-  inset: 0;
+  position: static;
   display: block;
 }
 .photo-slot img {
-  transition: transform 0.8s;
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  filter: none;
+  transform: none;
+  transition: none;
 }
-.photo-slot.is-loaded .photo-label,
-.photo-slot.is-loaded .photo-mark {
-  display: none;
-}
-.photo-label {
-  position: absolute;
-  left: 24px;
-  bottom: 22px;
-  color: #647484;
+.photo-slot figcaption {
+  position: static;
+  padding-top: 10px;
+  color: var(--muted);
+  font-size: 10px;
   line-height: 1.6;
-  font-weight: 600;
-  font-size: 13px;
   letter-spacing: 0.06em;
 }
-.photo-label > span {
-  display: block;
-  font-size: 9px;
-  font-weight: 500;
-  margin-top: 5px;
-}
+.photo-label,
 .photo-mark {
-  position: absolute;
-  top: 22px;
-  right: 26px;
-  color: #708296;
-  font-size: 24px;
-  line-height: 1;
-  font-weight: 300;
+  display: none;
 }
 .hero-frame {
   width: 100%;
-  height: 100%;
+  height: auto;
   aspect-ratio: auto;
 }
-.hero-frame .photo-label {
-  left: auto;
-  right: var(--gutter);
-  bottom: 190px;
-  text-align: right;
-}
-.hero-frame .photo-mark {
-  top: 130px;
-  right: var(--gutter);
-}
-.hero-watermark {
-  position: absolute;
-  right: 3%;
-  top: 14%;
-  font-family: var(--display);
-  font-size: clamp(250px, 35vw, 590px);
-  font-style: italic;
-  line-height: 1;
-  color: transparent;
-  -webkit-text-stroke: 1px #d1dbe4;
-  pointer-events: none;
-}
-.hero-photo.is-loaded .hero-watermark,
-.hero-photo.is-loaded .hero-photo-note {
+.hero-watermark,
+.hero-photo-note {
   display: none;
 }
-.hero-photo-note {
-  position: absolute;
-  bottom: 105px;
-  right: var(--gutter);
-  font-size: 9px;
-  writing-mode: vertical-rl;
-}
 .hero-content {
-  z-index: 1;
-  position: relative;
-  pointer-events: none;
-}
-.hero-content a {
-  pointer-events: auto;
+  grid-column: 1;
+  grid-row: 1;
+  width: auto;
+  padding: 0;
+  max-width: none;
+  min-width: 0;
+  margin: 0;
 }
 .hero-kicker {
   font-size: 10px;
   line-height: 1.7;
   letter-spacing: 0.13em;
-  margin-bottom: 27px;
+  margin-bottom: 24px;
 }
 .hero h1 {
   font-family: var(--display);
-  font-size: clamp(92px, 11.5vw, 185px);
+  font-size: clamp(72px, 7.5vw, 132px);
   font-weight: 700;
-  line-height: 0.84;
+  line-height: 0.88;
   letter-spacing: -0.025em;
-  margin-left: -5px;
+  margin-left: -3px;
 }
-.hero h1 > span:not(.hero-dot) {
-  color: var(--blue);
-}
+.hero h1 > span:not(.hero-dot),
 .hero-dot {
   color: var(--blue);
 }
 .hero-bottom {
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: 32px;
-  margin-top: 34px;
-  max-width: 1000px;
+  margin-top: 30px;
 }
 .hero-tagline {
   font-size: clamp(19px, 2vw, 26px);
@@ -503,19 +452,23 @@ button {
 }
 .hero-actions {
   display: flex;
-  gap: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
   align-items: center;
-  padding-bottom: 4px;
+  margin-top: 28px;
+}
+.hero-actions .button,
+.hero-actions .text-link {
+  min-height: 54px;
+  padding: 17px 20px;
+  font-size: 10px;
+  line-height: 1.5;
+  gap: 24px;
 }
 .hero-actions .text-link {
-  min-height: 58px;
-  padding: 20px 24px;
   border: 1px solid var(--line);
   background: var(--white);
   color: var(--navy);
-  font-size: 11px;
-  line-height: 1.5;
-  gap: 24px;
 }
 .hero-actions .text-link:hover {
   background: var(--navy);
@@ -526,16 +479,15 @@ button {
   outline-color: var(--navy);
   box-shadow: 0 0 0 3px var(--white);
 }
-/* Navigation and the scroll link stay readable over every photograph. */
 body[data-page="index"] .site-header,
 .hero-foot {
   background: var(--white);
 }
 .hero-foot {
-  position: relative;
-  z-index: 1;
-  margin-top: auto;
-  border-top: 1px solid rgba(7, 26, 51, 0.13);
+  grid-column: 1 / -1;
+  grid-row: 2;
+  margin-inline: calc(-1 * var(--gutter));
+  border-top: 1px solid var(--line);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -629,7 +581,7 @@ body[data-page="index"] .site-header,
   font-weight: 600;
 }
 .season-photo {
-  aspect-ratio: 1.42;
+  aspect-ratio: auto;
 }
 .who-section {
   border-top: 1px solid var(--line);
@@ -641,10 +593,10 @@ body[data-page="index"] .site-header,
   align-items: center;
 }
 .portrait {
-  aspect-ratio: 4/5;
+  aspect-ratio: auto;
 }
 .who-grid > .portrait {
-  aspect-ratio: 2/3;
+  aspect-ratio: auto;
   width: 100%;
   max-width: 360px;
   justify-self: center;
@@ -947,7 +899,7 @@ body[data-page="index"] .site-header,
 .news-item .news-image {
   grid-column: 3;
   max-width: 440px;
-  aspect-ratio: 3/2;
+  aspect-ratio: auto;
 }
 .news-item:hover h3 {
   color: var(--blue);
@@ -1057,7 +1009,7 @@ body[data-page="index"] .site-header,
   margin-top: 32px;
 }
 .support-grid > .photo-slot {
-  aspect-ratio: 1;
+  aspect-ratio: auto;
 }
 .sponsor-list {
   border-block: 1px solid var(--line);
@@ -1166,7 +1118,7 @@ body[data-page="index"] .site-header,
   align-items: center;
 }
 .editorial-split > .photo-slot {
-  aspect-ratio: 1;
+  aspect-ratio: auto;
 }
 .editorial-copy p:not(.eyebrow) {
   margin-top: 26px;
@@ -1564,6 +1516,8 @@ body[data-page="index"] .site-header,
   background: #112740;
 }
 .lightbox-photo > img {
+  width: 100%;
+  height: 100%;
   object-fit: contain;
 }
 .lightbox-photo.is-placeholder > span {
@@ -1655,7 +1609,7 @@ body[data-page="index"] .site-header,
   transform: translateX(28px);
 }
 .motion-ready .reveal-scale {
-  transform: scale(0.97);
+  transform: none;
 }
 .motion-ready .reveal-image {
   clip-path: inset(5% 0 0 0);
@@ -1717,11 +1671,6 @@ main {
   background: var(--paper);
   font-size: 12px;
 }
-.hero-frame .photo-label {
-  top: 132px;
-  bottom: auto;
-  right: calc(var(--gutter) + 48px);
-}
 /* Small labels keep sufficient contrast on the tinted section backgrounds. */
 .next-race .eyebrow > span {
   color: #fff;
@@ -1740,19 +1689,6 @@ main {
 .lightbox-photo.is-placeholder [data-lightbox-placeholder] {
   display: block;
 }
-/* A light, local overlay keeps the title legible when a real HERO is set. */
-.hero-photo.is-loaded::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    90deg,
-    rgba(247, 249, 252, 0.92),
-    rgba(247, 249, 252, 0.3) 35%,
-    transparent 70%
-  );
-  pointer-events: none;
-}
 
 /* Public directories and the Google Forms escape link. */
 .directory-link { margin-top: 24px; }
@@ -1768,4 +1704,15 @@ main {
   font-weight: 400;
   line-height: 1.9;
   color: var(--muted);
+}
+
+/* Photography stays unaltered while surrounding text may reveal on scroll. */
+.motion-ready .reveal-image,
+.motion-ready .photo-slot,
+.motion-ready .reveal-image.is-visible,
+.motion-ready .photo-slot.is-visible {
+  opacity: 1;
+  transform: none;
+  clip-path: none;
+  transition: none;
 }

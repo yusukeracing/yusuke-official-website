@@ -24,10 +24,14 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           persist-credentials: false
+      - name: Install build dependencies
+        run: |
+          python3 -m venv .build-venv
+          .build-venv/bin/python -m pip install --disable-pip-version-check --requirement requirements-build.txt
       - name: Generate publication files
-        run: python3 scripts/build.py
+        run: .build-venv/bin/python scripts/build.py
       - name: Validate static site artifact
-        run: python3 scripts/check_site.py dist
+        run: .build-venv/bin/python scripts/check_site.py dist
       - name: Upload Pages artifact
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3

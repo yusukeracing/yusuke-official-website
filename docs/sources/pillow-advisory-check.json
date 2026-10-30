@@ -1,0 +1,35 @@
+{
+  "checkedOn": "2026-10-30",
+  "timezone": "Asia/Tokyo",
+  "method": "HTTP GET of official GitHub pages; advisory metadata read from page text",
+  "sources": [
+    {
+      "url": "https://github.com/python-pillow/Pillow/security/advisories",
+      "httpStatus": 200,
+      "observation": "GHSA-78g4-xqwv-q3g8 was listed as a published High advisory"
+    },
+    {
+      "url": "https://github.com/python-pillow/Pillow/releases",
+      "httpStatus": 200,
+      "observation": "13.0.0 was listed as the latest release"
+    },
+    {
+      "url": "https://github.com/python-pillow/Pillow/security/advisories/GHSA-78g4-xqwv-q3g8",
+      "httpStatus": 200,
+      "advisoryId": "GHSA-78g4-xqwv-q3g8",
+      "publishedOn": "2026-10-17",
+      "severity": "High",
+      "cvssScore": 8.1,
+      "affectedVersions": "11.1.0 - 12.3.0",
+      "patchedVersion": "13.0.0"
+    }
+  ],
+  "scope": "Pillow is used for build-time image processing and is not served as browser runtime code",
+  "response": "Pin Pillow 13.0.0; verify the build virtual environment; rebuild and test; restrict allowed image decoders",
+  "limitations": [
+    "Only the three official GitHub pages above were read",
+    "This is not an exhaustive CVE or dependency-database audit",
+    "No exploit payload was executed",
+    "No evidence that the supplied site photographs are malicious was found"
+  ]
+}
