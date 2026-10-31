@@ -18,7 +18,7 @@
   const facebookHandle = (value) => {
     if (typeof value !== "string") return "";
     value = value.trim();
-    return placeholder(value) || Array.from(value).length > 100 || /[\x00-\x1f\x7f<>]/.test(value) || value.includes("://") ? "" : value;
+    return placeholder(value) || value === "アカウント準備中" || Array.from(value).length > 100 || /[\x00-\x1f\x7f<>]/.test(value) || value.includes("://") ? "" : value;
   };
   const officialPlaceholderURL = (platform, value) => {
     if (typeof value !== "string") return false;
@@ -65,7 +65,11 @@
         continue;
       }
       let name, canonical;
-      if (platform === "facebook" && path === "profile.php") {
+      if (platform === "facebook" && /^share\/[A-Za-z0-9]{1,100}$/.test(path)) {
+        // The opaque share token identifies a link, not an account username.
+        name = "";
+        canonical = `https://www.facebook.com/${path}/`;
+      } else if (platform === "facebook" && path === "profile.php") {
         const values = url.searchParams.getAll("id");
         if (values.length !== 1 || !/^[0-9]+$/.test(values[0])) continue;
         name = values[0];
@@ -80,7 +84,7 @@
         canonical = platform === "instagram" ? `https://www.instagram.com/${name}/` : platform === "x" ? `https://x.com/${name}` : `https://www.facebook.com/${name}/`;
       }
       const handle = platform === "facebook" ? facebookHandle(item.handle) : "";
-      result.push({ platform, label: labels[platform], handle: handle || `@${name}`, url: canonical });
+      result.push({ platform, label: labels[platform], handle: handle || (name ? `@${name}` : "Facebookを見る"), url: canonical });
       seen.add(platform);
     }
     return result;

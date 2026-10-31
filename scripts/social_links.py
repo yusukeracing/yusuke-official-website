@@ -32,7 +32,7 @@ def facebook_handle(value: object) -> str:
     if not isinstance(value, str):
         return ""
     value = value.strip()
-    if placeholder(value) or len(value) > 100 or re.search(r"[\x00-\x1f\x7f<>]", value) or "://" in value:
+    if placeholder(value) or value == "アカウント準備中" or len(value) > 100 or re.search(r"[\x00-\x1f\x7f<>]", value) or "://" in value:
         return ""
     return value
 
@@ -100,7 +100,12 @@ def normalize_social_links(items: object) -> list[dict[str, str]]:
             result.append({"platform": platform, "label": LABELS[platform], "handle": "アカウント準備中", "url": "https://www.facebook.com/"})
             seen.add(platform)
             continue
-        if platform == "facebook" and path == "profile.php":
+        if platform == "facebook" and re.fullmatch(r"share/[A-Za-z0-9]{1,100}", path):
+            # Facebook's copied profile links use an opaque share token. It is
+            # a destination, not a username; never display it as an @handle.
+            name = ""
+            canonical = f"https://www.facebook.com/{path}/"
+        elif platform == "facebook" and path == "profile.php":
             values = parse_qs(url.query, keep_blank_values=True).get("id", [])
             if len(values) != 1 or not re.fullmatch(r"[0-9]+", values[0]):
                 continue
@@ -118,7 +123,7 @@ def normalize_social_links(items: object) -> list[dict[str, str]]:
             canonical = (f"https://www.instagram.com/{name}/" if platform == "instagram" else
                          f"https://x.com/{name}" if platform == "x" else f"https://www.facebook.com/{name}/")
         handle = facebook_handle(item.get("handle")) if platform == "facebook" else ""
-        result.append({"platform": platform, "label": LABELS[platform], "handle": handle or "@" + name, "url": canonical})
+        result.append({"platform": platform, "label": LABELS[platform], "handle": handle or ("@" + name if name else "Facebookを見る"), "url": canonical})
         seen.add(platform)
     return result
 

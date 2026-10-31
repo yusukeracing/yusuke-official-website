@@ -82,6 +82,18 @@ CASES = [
     ([entry("facebook", "https://facebook.com/people/Example-Name/123456/?ref=1")], [normalized("facebook", "Example-Name", "https://www.facebook.com/people/Example-Name/123456/")]),
     ([entry("facebook", "https://facebook.com/profile.php?id=123&id=")], []),
     ([entry("facebook", "https://facebook.com/profile.php?id=abc")], []),
+    ([entry("facebook", "https://www.facebook.com/share/19tk2xsQ2W/?mibextid=wwXIfr", "@Yusuke Ikeda")], [normalized("facebook", "", "https://www.facebook.com/share/19tk2xsQ2W/", "@Yusuke Ikeda")]),
+    ([entry("facebook", "https://m.facebook.com/share/AbC123?ref=tracking", "池田優介")], [normalized("facebook", "", "https://www.facebook.com/share/AbC123/", "池田優介")]),
+    ([entry("facebook", "https://facebook.com/share/AbC123/", "")], [normalized("facebook", "", "https://www.facebook.com/share/AbC123/", "Facebookを見る")]),
+    ([entry("facebook", "https://facebook.com/share/AbC123/", "アカウント準備中")], [normalized("facebook", "", "https://www.facebook.com/share/AbC123/", "Facebookを見る")]),
+    ([entry("facebook", "https://facebook.com/Example.Name", "アカウント準備中")], [normalized("facebook", "Example.Name", "https://www.facebook.com/Example.Name/")]),
+    ([entry("facebook", "https://facebook.com/share/p/AbC123/", "池田優介")], []),
+    ([entry("facebook", "https://facebook.com/share/v/AbC123/", "池田優介")], []),
+    ([entry("facebook", "https://facebook.com/share/", "池田優介")], []),
+    ([entry("facebook", "https://facebook.com/share/abc%2F123/", "池田優介")], []),
+    ([entry("facebook", "https://facebook.com.evil.example/share/AbC123/", "池田優介")], []),
+    ([entry("facebook", "https://user:password@facebook.com/share/AbC123/", "池田優介")], []),
+    ([entry("facebook", "javascript:alert(1)", "池田優介")], []),
     ([entry("facebook", "https://facebook.com/Example.Name", "<script>")], [normalized("facebook", "Example.Name", "https://www.facebook.com/Example.Name/")]),
     ([entry("facebook", "https://facebook.com/login")], []),
     ([entry("instagram", "https://instagram.com/First", label="wrong"), entry("instagram", "https://instagram.com/Second")], [normalized("instagram", "First", "https://www.instagram.com/First/")]),
@@ -145,6 +157,18 @@ process.stdout.write(JSON.stringify(inputs.map(input=>context.window.RacingSocia
         rendered = update_social_html(template, configured)
         self.assertNotIn("アカウント準備中", rendered)
         self.assertIn('href="https://www.facebook.com/Example.Name/"', rendered)
+
+    def test_facebook_share_link_and_name_survive_static_and_runtime_normalization(self):
+        template = '<div data-socials="icons"></div><div data-socials="full"></div>'
+        items = normalize_social_links([entry("facebook", "https://www.facebook.com/share/19tk2xsQ2W/?mibextid=wwXIfr", "@Yusuke Ikeda")])
+        self.assertEqual(normalize_social_links(items), items)
+        rendered = update_social_html(template, items)
+        self.assertEqual(rendered.count('href="https://www.facebook.com/share/19tk2xsQ2W/"'), 2)
+        self.assertEqual(rendered.count('data-social-platform="facebook"'), 2)
+        self.assertIn("@Yusuke Ikeda", rendered)
+        self.assertNotIn("アカウント準備中", rendered)
+        self.assertNotIn("mibextid", rendered)
+        self.assertIn('rel="noopener noreferrer"', rendered)
 
 
 if __name__ == "__main__":

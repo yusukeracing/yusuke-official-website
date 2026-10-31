@@ -105,11 +105,11 @@ content:
     - name: handle
       label: アカウント名
       type: string
-      description: プロフィールURLが未入力の場合のみ使用する任意項目です。Instagram・XはURLを入力すると @表示もURLから自動更新します。
+      description: Instagram・XはURLを入力すると@表示も自動更新します。Facebookは表示したい名前を入力してください。共有URLから名前は取得できません。
     - name: url
       label: プロフィールURL
       type: string
-      description: 本人のプロフィールURLを入力してください。Instagram・Xの表示名とリンクを同時に更新します。Facebook未設定時は「アカウント準備中」としてFacebookのトップページへリンクします。投稿URLは指定しないでください。
+      description: 本人のプロフィールURLを入力してください。Facebookはshare/英数字/形式の共有リンクにも対応します。未設定時は「アカウント準備中」でFacebookトップへリンクします。投稿・動画のURLは指定しないでください。
     list: true
   - name: heroAlt
     label: HERO写真の説明（読み上げ用）
