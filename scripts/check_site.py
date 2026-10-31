@@ -17,7 +17,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, unquote, urlsplit
 from xml.etree import ElementTree as ET
 
-from build import PAGES, PUBLIC_PAGES, PUBLIC_DATA, public_message_errors
+from build import PAGES, PUBLIC_PAGES, PUBLIC_DATA, public_message_errors, page_url, CLOUDFLARE_HEADERS
 from news_content import article_filename, public_news
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -102,6 +102,15 @@ def validate(root: Path):
     require(valid_pages and set(declared_pages) == set(names), "publication.json does not match the required pages")
     identifier = publication.get("contentId", "")
     require(isinstance(identifier, str) and bool(re.fullmatch(r"[a-f0-9]{20}", identifier)), "publication.json: invalid content identifier")
+    platform = publication.get("platform", "github-pages")
+    require(platform in {"github-pages", "cloudflare"}, "publication.json: invalid platform")
+    cloudflare = platform == "cloudflare"
+    require(publication.get("url") == public_url.geturl(), "Publication URL differs from public site settings")
+    if cloudflare:
+        require(public_url.path == "/", "Cloudflare publication must use the site root")
+        headers = root / "_headers"
+        require(headers.is_file() and not headers.is_symlink() and headers.read_text(encoding="utf-8") == CLOUDFLARE_HEADERS,
+                "Cloudflare header rules are missing or differ from the checked policy")
 
     for name in names:
         path = root / name
@@ -120,7 +129,7 @@ def validate(root: Path):
         require("width=device-width" in meta.get("viewport", ""), f"{name}: missing responsive viewport")
         require(bool(meta.get("og:title")) and bool(meta.get("og:description")) and bool(meta.get("og:url")), f"{name}: incomplete OGP")
         require(any(tag == "link" and a.get("rel") == "canonical" and a.get("href", "").startswith("https://") for tag, a in page.tags), f"{name}: missing HTTPS canonical")
-        expected_canonical = public_url.geturl().rstrip("/") + "/" + ("" if name == "index.html" else name)
+        expected_canonical = page_url(public_url.geturl(), name, clean_urls=cloudflare)
         require(any(tag == "link" and a.get("rel") == "canonical" and a.get("href") == expected_canonical for tag, a in page.tags),
                 f"{name}: duplicate or incorrect canonical URL")
         require(any(tag == "h1" for tag, _ in page.tags), f"{name}: missing h1")
@@ -183,6 +192,10 @@ def validate(root: Path):
                 destination = root / name
             else:
                 destination = (root / target).resolve()
+                # Cloudflare serves /profile from profile.html. Resolve only
+                # declared flat HTML pages; never accept an arbitrary fallback.
+                if cloudflare and not destination.exists() and target + ".html" in pages:
+                    destination = root / (target + ".html")
             require(destination.is_relative_to(root.resolve()), f"{name}: local URL escapes public root: {value}")
             if not destination.is_relative_to(root.resolve()):
                 continue
@@ -263,7 +276,7 @@ def validate(root: Path):
             url = site.get("url", "") if isinstance(site, dict) else ""
             base = url.rstrip("/") + "/" if isinstance(url, str) else ""
             require(all((item.text or "").startswith(base) for item in locations), "sitemap.xml URLs differ from data/site.json")
-            expected = {base + ("" if page == "index.html" else page) for page in indexed_pages}
+            expected = {page_url(base, page, clean_urls=cloudflare) for page in indexed_pages}
             require({item.text for item in locations} == expected,
                     "sitemap.xml does not match the public content page list")
         except ET.ParseError as exc:
@@ -271,6 +284,8 @@ def validate(root: Path):
     require(not list(root.rglob("*.php")), "PHP is not supported on GitHub Pages")
     require(not (root / "admin").exists(), "Do not expose a custom admin directory")
     allowed_root_files = {*names, "robots.txt", "sitemap.xml", ".nojekyll"}
+    if cloudflare:
+        allowed_root_files.add("_headers")
     for path in root.iterdir():
         require(path.name in ({"assets", "data"} if path.is_dir() else allowed_root_files),
                 f"Unexpected file or directory in publication: {path.name}")

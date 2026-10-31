@@ -1,6 +1,6 @@
 # Pages CMSで写真付きの記事を更新する
 
-確認日：2026-10-30（日本時間）。このサイトは [Pages CMS](https://app.pagescms.org/)から編集し、GitHubへJSONと画像を保存して公開する構成です。公開サイトに管理者用のパスワードやAPIトークンを置く必要はありません。
+確認日：2026-10-31（日本時間）。このサイトは [Pages CMS](https://app.pagescms.org/)から編集し、GitHubへJSONと画像を保存して公開する構成です。公開先をGitHub PagesからCloudflare Pagesへ移しても、同じGitHubリポジトリと`main`を使って編集できます。公開サイトに管理者用のパスワードやAPIトークンを置く必要はありません。[Cloudflareへの移行手順](CLOUDFLARE_PAGES.md)も参照してください。
 
 今回の変更では、サムネイルに加えて本文中へ文章と写真を好きな順で追加できるようにしています。記事一覧から記事ごとの詳細ページへ移動できます。
 
@@ -30,6 +30,8 @@
 
 上の例の記事詳細URLは、公開サイトの末尾に **`article-sugo-report-2026.html`** を付けたものです。ファイルを手作業で作成する必要はありません。TOPには日付が新しい記事を最大3件表示し、活動報告一覧からも詳細へ移動できます。「関連記事URL」は別の参考ページへ案内する任意欄で、記事詳細の生成とは別です。
 
+Cloudflare Pagesへ移行後は、`.html`付きのURLから`/article-sugo-report-2026`のような拡張子なしのURLへ転送されます。記事の名前・CMSの保存形式・写真の選び方を変更する必要はありません。
+
 ## 本文中に複数写真を入れる
 
 「本文の文章・写真（順番に追加）」へ、必要な数の項目を追加します。
@@ -43,7 +45,7 @@
 
 代替テキストは「コーナーを走るゼッケン29のマシン」など、実際に写っている内容を短く記述します。説明文には場面や撮影者クレジットを記載できます。確認できない大会名・順位・撮影者名は補完しないでください。
 
-写真を選んだ項目で代替テキストが空欄だったり、記事URLの名前が重複したりすると、公開ビルドがエラーになります。CMSで保存できた場合でも、公開成功とは別なのでActionsを確認します。
+写真を選んだ項目で代替テキストが空欄だったり、記事URLの名前が重複したりすると、公開ビルドがエラーになります。CMSで保存できた場合でも公開成功とは別です。Cloudflare Pagesへ移行後はCloudflareの「Deployments」、GitHub Pagesで公開中はGitHub Actionsで、そのコミットの公開結果を確認します。
 
 ## 写真のアップロード先と表示先
 
@@ -87,13 +89,15 @@
 
 1. **CMSで保存中**：CMSの処理が終わるまで待ちます。画面をすぐ閉じず、CMSが示す成功またはエラーを確認します。
 2. **GitHubへ保存済み**：`main`の履歴に新しいコミットがあり、対象ファイルの差分に意図した変更が含まれるか確認します。
-3. **公開処理中**：[GitHub Actions](https://github.com/yusukeracing/yusuke-official-website/actions)で、そのコミットの処理が実行待ち・実行中なら公開反映を待ちます。
+3. **公開処理中**：Cloudflare Pagesへ移行後は、Cloudflareの対象プロジェクト→**Deployments**で、そのコミットのProductionデプロイを確認します。GitHub Pagesで公開中は[GitHub Actions](https://github.com/yusukeracing/yusuke-official-website/actions)で確認します。実行待ち・実行中なら公開反映を待ちます。
 4. **公開成功**：対象処理が成功したら、一覧・詳細・画像を確認します。既に開いていたタブは再読み込みします。
 5. **公開失敗**：エラーを直して再保存します。公開が失敗した場合、公開サイトは直前の版を表示し続けます。
 
 連続して保存すると、古い公開処理が取り消されて最新の処理へまとめられる場合があります。古い処理の「Cancelled」だけを見て保存失敗と判断せず、**最新コミットの結果**を確認します。
 
-Pages CMSは外部サービスなので、このリポジトリからその保存ボタン・認証・保存中表示を変更できません。CMSの表示と、GitHubの差分・Actions・公開版を組み合わせて切り分けます。詳しくは[CMS反映の診断記録](CMS_DIAGNOSIS.md)を参照してください。
+Cloudflareへの移行後、GitHub Actionsの検証が成功しても、それだけでCloudflareへの公開成功とは判断しません。CloudflareのDeploymentsと実際の公開URLを確認します。
+
+Pages CMSは外部サービスなので、このリポジトリからその保存ボタン・認証・保存中表示を変更できません。CMSの表示と、GitHubの差分・公開先の処理結果・公開版を組み合わせて切り分けます。詳しくは[CMS反映の診断記録](CMS_DIAGNOSIS.md)を参照してください。
 
 ## トップ写真を変更する
 
@@ -122,4 +126,14 @@ Pages CMSは外部サービスなので、このリポジトリからその保�
 
 Google Formsの回答を自動でサイトへ公開する機能はありません。受信したメッセージも、公開してよい表示名・文章を確認してからCMSへ転記します。回答原文・メール・電話はGoogle側の権限を限定した場所で管理します。
 
-独自ドメインへ移行する場合も、CMSの接続先は同じGitHubリポジトリです。DNS・GitHub Pagesのドメイン設定に加え、「公開URL」を末尾`/`付きHTTPS URLへ変更して保存します。canonical・OGP・サイトマップはビルドで同期します。
+## Cloudflare Pagesへ公開先を移す
+
+CMSの接続先は **同じGitHubリポジトリと`main`のまま** です。無料の`名前.pages.dev`を使う場合は独自ドメインの購入・DNS登録は不要です。CloudflareにリポジトリをGit連携し、`dist/`を公開します。画面へ入力するビルド設定と環境変数は[Cloudflare Pagesの手順](CLOUDFLARE_PAGES.md)に記載しています。
+
+移行準備中はCMSの「公開URL」をGitHub Pagesのまま保持し、Cloudflare側の環境変数`SITE_URL`へ、末尾`/`付きの確定した`https://名前.pages.dev/`を設定します。Cloudflare用ビルドはそのURLを優先し、公開用JSON・canonical・OGP・サイトマップ・404参照先をそろえます。既存GitHub Pagesの設定を先に変更する必要はありません。
+
+Cloudflareで正常公開を確認した後、CMSの「公開URL」も確定したURLへそろえます。以後URLを変更するときは、**CMSの公開URLとCloudflareの`SITE_URL`の両方**を更新して再ビルドします。環境変数が古い場合はCMSだけを変えてもCloudflareの出力URLは変わりません。
+
+切り替え完了後は旧GitHub Pagesの公開・自動デプロイを停止します。GitHubリポジトリとCMSは残します。現在のメンテナンスONも維持して準備し、公開再開時はCMSからOFFにしてCloudflareの公開成功を確認します。
+
+将来独自ドメインを使う場合は、利用する公開先でドメインを関連付け、DNS・HTTPS・CMS公開URL・Cloudflareを使う場合の`SITE_URL`をそろえます。未取得のドメインやDNS値を推測して登録しません。

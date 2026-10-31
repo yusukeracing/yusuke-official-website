@@ -2,6 +2,8 @@
 
 更新日：2026-10-30（日本時間）。GitHub Pagesは `dist/` の成果物を配信します。`docs/` は説明資料です。[公開範囲](PUBLICATION_BOUNDARY.md)、[CMS操作](CMS.md)、[改ざん対応](INCIDENT_RESPONSE.md) も参照してください。
 
+2026-10-31追記：Cloudflare Pagesの無料URLへの移行準備を追加しました。移行前のGitHub Pagesは維持します。Cloudflareの作成画面・環境変数・CMS確認・切り替え・GitHub側の停止用変数`PAGES_HOSTING`は[専用手順](CLOUDFLARE_PAGES.md)を参照してください。移行後の公開反映はGitHub ActionsだけでなくCloudflareのDeploymentsで確認します。
+
 ## 1. 作業前とビルド
 
 1. 最新 `main` を取り込み、未コミット変更を確認する。CMSとコード編集を並行する場合は互いのコミットを取り込む。

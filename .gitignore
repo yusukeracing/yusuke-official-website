@@ -16,6 +16,8 @@ __pycache__/
 
 # Local preview, build virtualenv and review packages.
 dist-preview/
+dist-cloudflare/
+dist-cloudflare-preview/
 .build-venv/
 delivery/
 

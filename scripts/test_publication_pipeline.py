@@ -6,6 +6,7 @@ from contextlib import redirect_stdout
 from hashlib import sha256
 from io import StringIO
 import json
+import os
 from pathlib import Path
 import tempfile
 import unittest
@@ -35,6 +36,10 @@ TEMPLATE = '''<!doctype html><html lang="ja"><head><meta charset="utf-8">
 
 class PublicationPipelineTests(unittest.TestCase):
     def setUp(self):
+        environment = patch.dict(os.environ)
+        environment.start()
+        self.addCleanup(environment.stop)
+        os.environ.pop("SITE_URL", None)
         directory = tempfile.TemporaryDirectory(prefix="yusuke-pipeline-test-")
         self.addCleanup(directory.cleanup)
         self.root = Path(directory.name)
@@ -72,9 +77,99 @@ class PublicationPipelineTests(unittest.TestCase):
     def load(self, name, source=False):
         return json.loads(((self.root if source else self.output) / "data" / (name + ".json")).read_text())
 
-    def publish(self, preview=False):
+    def publish(self, preview=False, cloudflare=False):
         with patch.object(build, "ROOT", self.root), patch.object(build, "OUTPUT", self.output), redirect_stdout(StringIO()):
-            return build.build_site(normal_preview=preview)
+            return build.build_site(normal_preview=preview, cloudflare=cloudflare)
+
+    def test_cloudflare_override_aligns_public_urls_without_changing_cms_source(self):
+        original = (self.root / "data/site.json").read_bytes()
+        base = "https://racing.pages.dev/"
+        with patch.dict(os.environ, {"SITE_URL": base.rstrip("/")}):
+            info = self.publish(cloudflare=True)
+        self.assertEqual((self.root / "data/site.json").read_bytes(), original)
+        self.assertEqual(self.load("site")["url"], base)
+        self.assertEqual(info["url"], base)
+        self.assertEqual(info["platform"], "cloudflare")
+        for filename in info["pages"]:
+            with self.subTest(page=filename):
+                text = (self.output / filename).read_text()
+                canonical = base + ("" if filename == "index.html" else filename.removesuffix(".html"))
+                self.assertIn(f'rel="canonical" href="{canonical}"', text)
+                self.assertIn(f'property="og:url" content="{canonical}"', text)
+                self.assertNotIn("https://example.test/project/", text)
+        locations = ET.parse(self.output / "sitemap.xml").findall(".//{http://www.sitemaps.org/schemas/sitemap/0.9}loc")
+        self.assertEqual({item.text for item in locations}, {
+            base + ("" if filename == "index.html" else filename.removesuffix(".html"))
+            for filename in (*build.PUBLIC_PAGES, "article-season-report.html")
+        })
+        error_page = (self.output / "404.html").read_text()
+        self.assertIn(base + "assets/css/style.css?v=", error_page)
+        self.assertIn(base + "assets/js/main.js?v=", error_page)
+        self.assertTrue((self.output / "article-season-report.html").is_file())
+        headers = (self.output / "_headers").read_text()
+        self.assertIn("Content-Security-Policy: frame-ancestors 'none'", headers)
+        self.assertIn("X-Content-Type-Options: nosniff", headers)
+        self.assertIn("/assets/optimized/*", headers)
+        self.assertIn("immutable", headers)
+
+    def test_cloudflare_override_does_not_change_later_github_publications(self):
+        with patch.dict(os.environ, {"SITE_URL": "https://racing.pages.dev/"}):
+            cloudflare = self.publish(cloudflare=True)
+        # Removing the override must keep the previous host usable during the
+        # migration, and remove Cloudflare-only files from its artifact.
+        with patch.dict(os.environ):
+            os.environ.pop("SITE_URL", None)
+            github = self.publish()
+        self.assertEqual(github["platform"], "github-pages")
+        self.assertEqual(github["url"], "https://example.test/project/")
+        self.assertEqual(self.load("site")["url"], "https://example.test/project/")
+        self.assertNotEqual(github["contentId"], cloudflare["contentId"])
+        self.assertFalse((self.output / "_headers").exists())
+        self.assertIn('rel="canonical" href="https://example.test/project/index.html"',
+                      (self.output / "index.html").read_text())
+        locations = ET.parse(self.output / "sitemap.xml").findall(".//{http://www.sitemaps.org/schemas/sitemap/0.9}loc")
+        self.assertIn("https://example.test/project/article-season-report.html", {item.text for item in locations})
+
+    def test_invalid_cloudflare_url_preserves_previous_artifact_and_cms_source(self):
+        with patch.dict(os.environ, {"SITE_URL": "https://racing.pages.dev/"}):
+            self.publish(cloudflare=True)
+        previous = {filename: (self.output / filename).read_bytes()
+                    for filename in ("index.html", "_headers", "data/publication.json")}
+        original = (self.root / "data/site.json").read_bytes()
+        for value in ("", "http://racing.pages.dev/", "javascript:alert(1)",
+                      "https://user:secret@racing.pages.dev/", "https://racing.pages.dev/?secret=value",
+                      "https://racing.pages.dev/#fragment", "https://racing.pages.dev/\n",
+                      "https://racing pages.dev/", "https://racing.pages.dev:bad/",
+                      "https://racing.pages.dev/project/"):
+            with self.subTest(url=value), patch.dict(os.environ, {"SITE_URL": value}):
+                with self.assertRaises(ValueError):
+                    self.publish(cloudflare=True)
+                for filename, contents in previous.items():
+                    self.assertEqual((self.output / filename).read_bytes(), contents)
+                self.assertEqual((self.root / "data/site.json").read_bytes(), original)
+
+    def test_cloudflare_maintenance_and_normal_preview_keep_owner_setting(self):
+        settings = self.load("site", source=True)
+        settings["maintenanceEnabled"] = True
+        self.save("site", settings)
+        original = (self.root / "data/site.json").read_bytes()
+        with patch.dict(os.environ, {"SITE_URL": "https://racing.pages.dev/"}):
+            notice = self.publish(cloudflare=True)
+            self.assertTrue(notice["maintenanceEnabled"])
+            self.assertTrue(self.load("site")["maintenanceEnabled"])
+            for filename in notice["pages"]:
+                text = (self.output / filename).read_text()
+                self.assertIn('data-maintenance-mode="true"', text)
+                self.assertNotIn('src="assets/js/news.js', text)
+                expected = "https://racing.pages.dev/" + ("" if filename == "index.html" else filename.removesuffix(".html"))
+                self.assertIn(f'rel="canonical" href="{expected}"', text)
+            locations = ET.parse(self.output / "sitemap.xml").findall(".//{http://www.sitemaps.org/schemas/sitemap/0.9}loc")
+            self.assertEqual(locations, [])
+            preview = self.publish(preview=True, cloudflare=True)
+        self.assertFalse(preview["maintenanceEnabled"])
+        self.assertFalse(self.load("site")["maintenanceEnabled"])
+        self.assertIn("本文写真の説明", (self.output / "article-season-report.html").read_text())
+        self.assertEqual((self.root / "data/site.json").read_bytes(), original)
 
     def test_configured_hero_exact_path_orientation_and_originals(self):
         info = self.publish()
