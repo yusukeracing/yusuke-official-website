@@ -5,9 +5,9 @@
 ## 現在の状態
 
 - CMSはPages CMS、保存先はGitHub `main` の `data/*.json` です。
-- GitHub Actionsが必要なファイルだけを `dist/` に生成し、GitHub Pagesへ公開します。`docs/` は説明資料で、サイトの公開フォルダではありません。
-- Cloudflare Pagesの無料URLへ移行する準備も追加しています。現在の公開を維持したまま、Cloudflareでは独立した公開URL・拡張子なしのcanonical・HTTPヘッダー設定を生成できます。[作成画面の入力手順](docs/CLOUDFLARE_PAGES.md)を参照してください。Cloudflareアカウントの設定・実デプロイは別途行います。
-- 利用者がCMSで設定した **メンテナンスONを保持**しています。解除はCMSの「サイト設定・SNS」→「メンテナンス画面を表示する」をOFFにして保存します。
+- Cloudflare Pagesの固定URLは`https://yusuke-official-website.pages.dev/`です。利用者の管理画面で本番デプロイ成功を確認済みです。`dist/`だけを配信し、`docs/`は説明資料で公開用フォルダではありません。
+- GitHub Actionsの検証と旧GitHub Pages向けの公開処理もあります。旧公開を停止する設定と、Cloudflare側の入力値・更新確認は[移行手順](docs/CLOUDFLARE_PAGES.md)を参照してください。
+- 2026-10-31の最新CMS保存は **メンテナンスOFF** です。利用者が保存した通常公開の設定を保持し、必要なときだけCMSからONにします。[反映調査と追加修正](docs/UPDATE_REFLECTION_AUDIT.md)も参照してください。
 - 通常サイトは、設定を変更しない `--normal-preview` で別に確認できます。
 - トップ画像の設定は `assets/images/yusuke.gallery_09.jpg` です。公開時はその写真から作った配信用WebPを使います。
 
@@ -85,6 +85,7 @@ python3 scripts/test_photo_loading.py --directory dist-preview
 | 写真付き記事の更新 | [CMS](docs/CMS.md) |
 | Cloudflare Pages無料公開・移行 | [CLOUDFLARE_PAGES](docs/CLOUDFLARE_PAGES.md) |
 | Cloudflare移行準備の検証・未実施項目 | [CLOUDFLARE_VALIDATION](docs/CLOUDFLARE_VALIDATION.md) |
+| CMSの公開反映・メンテナンスOFFと追加修正 | [UPDATE_REFLECTION_AUDIT](docs/UPDATE_REFLECTION_AUDIT.md) |
 | CMS保存・反映の診断 | [CMS_DIAGNOSIS](docs/CMS_DIAGNOSIS.md) |
 | 削除したファイルと保持理由 | [CLEANUP](docs/CLEANUP.md) |
 | テスト結果・未実施 | [RELEASE_TESTS](docs/RELEASE_TESTS.md) |

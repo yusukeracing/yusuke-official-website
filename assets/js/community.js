@@ -47,6 +47,14 @@
     if (status) status.textContent = directory ? `${count}件のパートナー情報` : `${count}件の応援メッセージ`;
     document.dispatchEvent(new Event("content:updated"));
   };
+  const emptyState = () => {
+    const notice = element("div", "community-empty");
+    notice.append(
+      element("h2", "", directory ? "パートナー情報は準備中です。" : "応援メッセージをお待ちしています。"),
+      element("p", "", directory ? "掲載する情報が決まり次第、こちらでご紹介します。" : "掲載のご了承をいただいたメッセージを、こちらでご紹介します。"),
+    );
+    return notice;
+  };
   const renderPartners = (items) => items.map((item) => {
     const name = text(item?.name);
     if (!name || name === "xxx") return null;
@@ -119,15 +127,17 @@
     .then((data) => {
       if (!Array.isArray(data?.items)) throw new Error("Invalid public content");
       const entries = directory ? renderPartners(data.items) : renderMessages(data.items);
-      if (entries.length) container.replaceChildren(...entries);
+      // A successful empty response is a real deletion, including when the
+      // document was cached before the CMS entry was removed.
+      container.replaceChildren(...(entries.length ? entries : [emptyState()]));
       updateStatus(entries.length);
     })
     .catch(() => {
-      const notice = element("div", "community-empty");
-      notice.append(element("h2", "", "掲載情報を取得できませんでした。"),
-        element("p", "", "時間をおいて、このページを再読み込みしてください。"));
-      container.replaceChildren(notice);
+      // A failed request is not an empty list. Keep the compiled information
+      // readable and explain that its freshness could not be checked.
+      const notice = element("p", "data-notice", "最新情報を確認できませんでした。掲載済みの情報を表示しています。時間をおいて再読み込みしてください。");
+      container.before(notice);
       const status = document.querySelector("[data-community-status]");
-      if (status) status.textContent = "掲載情報の読み込みに失敗しました。";
+      if (status) status.textContent = "最新情報の確認に失敗しました。掲載済みの情報は引き続き表示しています。";
     });
 })();

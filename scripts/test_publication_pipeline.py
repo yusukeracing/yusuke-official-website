@@ -130,6 +130,33 @@ class PublicationPipelineTests(unittest.TestCase):
         locations = ET.parse(self.output / "sitemap.xml").findall(".//{http://www.sitemaps.org/schemas/sitemap/0.9}loc")
         self.assertIn("https://example.test/project/article-season-report.html", {item.text for item in locations})
 
+    def test_cloudflare_revalidates_documents_and_never_long_caches_cms_data(self):
+        with patch.dict(os.environ, {"SITE_URL": "https://racing.pages.dev/"}):
+            info = self.publish(cloudflare=True)
+        sections = (self.output / "_headers").read_text().strip().split("\n\n")
+        rules = {section.splitlines()[0]: "\n".join(section.splitlines()[1:]) for section in sections}
+        self.assertIn("Cache-Control: no-store", rules["/data/*"])
+        self.assertIn("immutable", rules["/assets/optimized/*"])
+        self.assertNotIn("Cache-Control", rules["/*"])
+        self.assertIn("must-revalidate", rules["/"])
+        for filename in info["pages"]:
+            self.assertIn("must-revalidate", rules["/" + filename])
+            if filename != "index.html":
+                self.assertIn("must-revalidate", rules["/" + filename.removesuffix(".html")])
+
+    def test_publication_exposes_only_valid_public_source_commit_identifiers(self):
+        commit = "abc1234" + "0" * 33
+        with patch.dict(os.environ, {"SITE_URL": "https://racing.pages.dev/", "CF_PAGES_COMMIT_SHA": commit}):
+            first = self.publish(cloudflare=True)
+            self.assertEqual(first["sourceCommit"], commit)
+            self.assertEqual(self.load("publication")["sourceCommit"], commit)
+            os.environ["CF_PAGES_COMMIT_SHA"] = "def5678" + "0" * 33
+            second = self.publish(cloudflare=True)
+            self.assertNotEqual(second["sourceCommit"], first["sourceCommit"])
+            self.assertEqual(second["contentId"], first["contentId"])
+            os.environ["CF_PAGES_COMMIT_SHA"] = "not a commit; never put this into a public artifact"
+            self.assertIsNone(self.publish(cloudflare=True)["sourceCommit"])
+
     def test_invalid_cloudflare_url_preserves_previous_artifact_and_cms_source(self):
         with patch.dict(os.environ, {"SITE_URL": "https://racing.pages.dev/"}):
             self.publish(cloudflare=True)

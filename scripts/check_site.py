@@ -17,7 +17,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, unquote, urlsplit
 from xml.etree import ElementTree as ET
 
-from build import PAGES, PUBLIC_PAGES, PUBLIC_DATA, public_message_errors, page_url, CLOUDFLARE_HEADERS
+from build import PAGES, PUBLIC_PAGES, PUBLIC_DATA, public_message_errors, page_url, cloudflare_headers
 from news_content import article_filename, public_news
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -106,10 +106,13 @@ def validate(root: Path):
     require(platform in {"github-pages", "cloudflare"}, "publication.json: invalid platform")
     cloudflare = platform == "cloudflare"
     require(publication.get("url") == public_url.geturl(), "Publication URL differs from public site settings")
+    commit = publication.get("sourceCommit")
+    require(commit is None or isinstance(commit, str) and bool(re.fullmatch(r"(?:[a-f0-9]{40}|[a-f0-9]{64})", commit)),
+            "Publication source commit must be a public Git identifier")
     if cloudflare:
         require(public_url.path == "/", "Cloudflare publication must use the site root")
         headers = root / "_headers"
-        require(headers.is_file() and not headers.is_symlink() and headers.read_text(encoding="utf-8") == CLOUDFLARE_HEADERS,
+        require(headers.is_file() and not headers.is_symlink() and headers.read_text(encoding="utf-8") == cloudflare_headers(names),
                 "Cloudflare header rules are missing or differ from the checked policy")
 
     for name in names:

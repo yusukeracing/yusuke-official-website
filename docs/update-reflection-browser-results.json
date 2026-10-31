@@ -1,0 +1,299 @@
+{
+  "checked_at": "2026-10-31T23:45:40.669290+09:00",
+  "artifact": "/workspace/yusuke-official-website/dist-cloudflare",
+  "scope": "System Chromium and local route fixtures; not a Cloudflare production test",
+  "network": "Local intercepted files and an ephemeral loopback redirect server; external navigation and all mutations blocked",
+  "redirect_fixture": "302 from existing .html paths to extensionless paths; real Cloudflare status unverified",
+  "browser": {
+    "engine": "Chromium",
+    "binary": "/usr/bin/chromium",
+    "version": "154.0.8037.57"
+  },
+  "cases": [
+    {
+      "name": "Actual Cloudflare build, deployment, routing and response-header application",
+      "status": "SKIP",
+      "reason": "Outside this local Chromium fixture"
+    },
+    {
+      "name": "Public DNS, TLS certificate, real device, Safari and Edge checks",
+      "status": "SKIP",
+      "reason": "Outside this local Chromium fixture"
+    },
+    {
+      "name": "Real Pages CMS UI save, Git commit and public CDN reflection",
+      "status": "SKIP",
+      "reason": "Outside this local Chromium fixture"
+    },
+    {
+      "name": "Real Google Forms submission and owner receipt",
+      "status": "SKIP",
+      "reason": "Outside this local Chromium fixture"
+    },
+    {
+      "name": "clean route index.html at 320px",
+      "status": "PASS",
+      "width": 320,
+      "height": 844,
+      "photos_loaded": 19,
+      "route": "/"
+    },
+    {
+      "name": "clean route profile.html at 320px",
+      "status": "PASS",
+      "width": 320,
+      "height": 844,
+      "photos_loaded": 2,
+      "route": "/profile"
+    },
+    {
+      "name": "clean route race.html at 320px",
+      "status": "PASS",
+      "width": 320,
+      "height": 844,
+      "photos_loaded": 1,
+      "route": "/race"
+    },
+    {
+      "name": "clean route news.html at 320px",
+      "status": "PASS",
+      "width": 320,
+      "height": 844,
+      "photos_loaded": 0,
+      "route": "/news"
+    },
+    {
+      "name": "clean route sponsor.html at 320px",
+      "status": "PASS",
+      "width": 320,
+      "height": 844,
+      "photos_loaded": 1,
+      "route": "/sponsor"
+    },
+    {
+      "name": "clean route support.html at 320px",
+      "status": "PASS",
+      "width": 320,
+      "height": 844,
+      "photos_loaded": 1,
+      "route": "/support"
+    },
+    {
+      "name": "clean route contact.html at 320px",
+      "status": "PASS",
+      "width": 320,
+      "height": 844,
+      "photos_loaded": 0,
+      "route": "/contact"
+    },
+    {
+      "name": "clean route partners.html at 320px",
+      "status": "PASS",
+      "width": 320,
+      "height": 844,
+      "photos_loaded": 0,
+      "route": "/partners"
+    },
+    {
+      "name": "clean route messages.html at 320px",
+      "status": "PASS",
+      "width": 320,
+      "height": 844,
+      "photos_loaded": 0,
+      "route": "/messages"
+    },
+    {
+      "name": "clean route 404.html at 320px",
+      "status": "PASS",
+      "width": 320,
+      "height": 844,
+      "photos_loaded": 0,
+      "route": "/404"
+    },
+    {
+      "name": "clean route maintenance.html at 320px",
+      "status": "PASS",
+      "width": 320,
+      "height": 844,
+      "photos_loaded": 0,
+      "route": "/maintenance"
+    },
+    {
+      "name": "clean route article-all-japan-first-season-2026.html at 320px",
+      "status": "PASS",
+      "width": 320,
+      "height": 844,
+      "photos_loaded": 0,
+      "route": "/article-all-japan-first-season-2026"
+    },
+    {
+      "name": "clean route index.html at 1366px",
+      "status": "PASS",
+      "width": 1366,
+      "height": 900,
+      "photos_loaded": 19,
+      "route": "/"
+    },
+    {
+      "name": "clean route profile.html at 1366px",
+      "status": "PASS",
+      "width": 1366,
+      "height": 900,
+      "photos_loaded": 2,
+      "route": "/profile"
+    },
+    {
+      "name": "clean route race.html at 1366px",
+      "status": "PASS",
+      "width": 1366,
+      "height": 900,
+      "photos_loaded": 1,
+      "route": "/race"
+    },
+    {
+      "name": "clean route news.html at 1366px",
+      "status": "PASS",
+      "width": 1366,
+      "height": 900,
+      "photos_loaded": 0,
+      "route": "/news"
+    },
+    {
+      "name": "clean route sponsor.html at 1366px",
+      "status": "PASS",
+      "width": 1366,
+      "height": 900,
+      "photos_loaded": 1,
+      "route": "/sponsor"
+    },
+    {
+      "name": "clean route support.html at 1366px",
+      "status": "PASS",
+      "width": 1366,
+      "height": 900,
+      "photos_loaded": 1,
+      "route": "/support"
+    },
+    {
+      "name": "clean route contact.html at 1366px",
+      "status": "PASS",
+      "width": 1366,
+      "height": 900,
+      "photos_loaded": 0,
+      "route": "/contact"
+    },
+    {
+      "name": "clean route partners.html at 1366px",
+      "status": "PASS",
+      "width": 1366,
+      "height": 900,
+      "photos_loaded": 0,
+      "route": "/partners"
+    },
+    {
+      "name": "clean route messages.html at 1366px",
+      "status": "PASS",
+      "width": 1366,
+      "height": 900,
+      "photos_loaded": 0,
+      "route": "/messages"
+    },
+    {
+      "name": "clean route 404.html at 1366px",
+      "status": "PASS",
+      "width": 1366,
+      "height": 900,
+      "photos_loaded": 0,
+      "route": "/404"
+    },
+    {
+      "name": "clean route maintenance.html at 1366px",
+      "status": "PASS",
+      "width": 1366,
+      "height": 900,
+      "photos_loaded": 0,
+      "route": "/maintenance"
+    },
+    {
+      "name": "clean route article-all-japan-first-season-2026.html at 1366px",
+      "status": "PASS",
+      "width": 1366,
+      "height": 900,
+      "photos_loaded": 0,
+      "route": "/article-all-japan-first-season-2026"
+    },
+    {
+      "name": "HTML links, mobile menu, keyboard and article round trip",
+      "status": "PASS",
+      "redirects": [
+        {
+          "from": "/index.html",
+          "to": "/",
+          "fixture_status": 302
+        },
+        {
+          "from": "/news.html",
+          "to": "/news",
+          "fixture_status": 302
+        },
+        {
+          "from": "/article-all-japan-first-season-2026.html",
+          "to": "/article-all-japan-first-season-2026",
+          "fixture_status": 302
+        },
+        {
+          "from": "/news.html",
+          "to": "/news",
+          "fixture_status": 302
+        }
+      ],
+      "scope": "Loopback fixture 302 only; real Cloudflare redirect status unverified"
+    },
+    {
+      "name": "JavaScript-disabled activity list and detail",
+      "status": "PASS",
+      "javascript_enabled": false,
+      "scope": "Generated list and detail HTML at extensionless routes"
+    },
+    {
+      "name": "Multiple inline article photos on extensionless detail route",
+      "status": "PASS",
+      "photos_loaded": 2,
+      "scope": "Local CMS-format JSON fixture, not a real CMS save"
+    },
+    {
+      "name": "Nested missing URL retains 404 and root assets",
+      "status": "PASS",
+      "http_fixture_status": 404,
+      "scope": "Local missing-path response; absolute root assets verified"
+    }
+  ],
+  "not_executed": [
+    "Actual Cloudflare build, deployment, routing and response-header application",
+    "Public DNS, TLS certificate, real device, Safari and Edge checks",
+    "Real Pages CMS UI save, Git commit and public CDN reflection",
+    "Real Google Forms submission and owner receipt"
+  ],
+  "publication_id": "7cbb222965c0ffa29ec2",
+  "site_url": "https://yusuke-official-website.pages.dev/",
+  "pages": [
+    "index.html",
+    "profile.html",
+    "race.html",
+    "news.html",
+    "sponsor.html",
+    "support.html",
+    "contact.html",
+    "partners.html",
+    "messages.html",
+    "404.html",
+    "maintenance.html",
+    "article-all-japan-first-season-2026.html"
+  ],
+  "elapsed_seconds": 27.56,
+  "summary": {
+    "PASS": 28,
+    "FAIL": 0,
+    "SKIP": 4
+  }
+}

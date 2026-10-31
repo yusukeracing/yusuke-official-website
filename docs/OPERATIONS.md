@@ -4,6 +4,8 @@
 
 2026-10-31追記：Cloudflare Pagesの無料URLへの移行準備を追加しました。移行前のGitHub Pagesは維持します。Cloudflareの作成画面・環境変数・CMS確認・切り替え・GitHub側の停止用変数`PAGES_HOSTING`は[専用手順](CLOUDFLARE_PAGES.md)を参照してください。移行後の公開反映はGitHub ActionsだけでなくCloudflareのDeploymentsで確認します。
 
+同日更新：Cloudflareの本番デプロイ成功は利用者の管理画面で確認され、最新CMS保存`07fc58e`はメンテナンスOFFです。以下の「調査開始時にON」の記録は前回の経緯であり、現在の設定をONへ戻す指示ではありません。[今回の反映調査](UPDATE_REFLECTION_AUDIT.md)を参照してください。
+
 ## 1. 作業前とビルド
 
 1. 最新 `main` を取り込み、未コミット変更を確認する。CMSとコード編集を並行する場合は互いのコミットを取り込む。

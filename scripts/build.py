@@ -52,6 +52,27 @@ CLOUDFLARE_HEADERS = """/*
 """
 
 
+def cloudflare_headers(pages) -> str:
+    # Keep only content-hashed images immutable. CMS data and every document
+    # route must be checked again instead of retaining an old maintenance view.
+    rules = [CLOUDFLARE_HEADERS.rstrip(), "/data/*\n  Cache-Control: no-store"]
+    routes = {"/"}
+    for page in pages:
+        routes.add("/" + page)
+        if page != "index.html":
+            routes.add("/" + page.removesuffix(".html"))
+    rules.extend(route + "\n  Cache-Control: no-cache, max-age=0, must-revalidate"
+                 for route in sorted(routes))
+    return "\n\n".join(rules) + "\n"
+
+
+def source_commit() -> str | None:
+    value = os.environ.get("CF_PAGES_COMMIT_SHA") or os.environ.get("GITHUB_SHA")
+    # These are public commit identifiers. Never copy arbitrary environment
+    # values into the public manifest or logs if a variable is misconfigured.
+    return value.lower() if isinstance(value, str) and re.fullmatch(r"(?:[a-fA-F0-9]{40}|[a-fA-F0-9]{64})", value) else None
+
+
 def page_url(base: str, page: str, *, clean_urls: bool = False) -> str:
     route = "" if page == "index.html" else page
     if clean_urls and route.endswith(".html"):
@@ -412,6 +433,7 @@ def build_site(*, normal_preview=False, cloudflare=False):
     # provider's CMS setting. Source JSON is never rewritten by a build.
     settings = raw["site"] = {**raw["site"], "url": base}
     maintenance = maintenance_enabled(settings)
+    configured_maintenance = maintenance
     if normal_preview:
         settings = {**settings, "maintenanceEnabled": False}
         raw["site"] = settings
@@ -474,13 +496,14 @@ def build_site(*, normal_preview=False, cloudflare=False):
             (stage / "data" / filename).write_text(json.dumps(published[Path(filename).stem], ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         media.write_manifest()
         publication = {"version": 1, "contentId": identifier, "url": base, "platform": platform,
+                       "sourceCommit": source_commit(),
                        "maintenanceEnabled": maintenance, "pages": list(pages),
                        "articlePages": list(articles), "sourcePhotosPublished": False}
         (stage / "data/publication.json").write_text(json.dumps(publication, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         (stage / ".nojekyll").touch()
         write_discovery(stage, base, maintenance, tuple(articles), clean_urls=cloudflare)
         if cloudflare:
-            (stage / "_headers").write_text(CLOUDFLARE_HEADERS, encoding="utf-8")
+            (stage / "_headers").write_text(cloudflare_headers(pages), encoding="utf-8")
         previous = stage.with_name(stage.name + "-previous")
         if OUTPUT.exists():
             os.replace(OUTPUT, previous)
@@ -496,6 +519,8 @@ def build_site(*, normal_preview=False, cloudflare=False):
     print(f"Built {len(pages)} pages and {count} public files in {OUTPUT}")
     print(f"Public URL: {base}")
     print(f"Platform: {platform}")
+    print("Source commit: " + (publication["sourceCommit"] or "not supplied by the build environment"))
+    print("CMS maintenanceEnabled: " + str(configured_maintenance).lower())
     print("Maintenance mode: " + ("ON (all HTML URLs show the notice)" if maintenance else "OFF"))
     print("Publication: " + identifier)
     if normal_preview:

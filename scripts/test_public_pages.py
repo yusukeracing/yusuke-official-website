@@ -253,16 +253,63 @@ def main():
                 try:
                     data_route(context, "sponsors", lambda route: route.fulfill(json={"items": []}))
                     data_route(context, "messages", lambda route: route.fulfill(json={"items": []}))
+                    # Model a cached document from before the last entry was
+                    # deleted. Empty JSON must remove that old content too.
+                    for filename, marker, stale in (
+                        ("partners.html", "data-partner-directory", '<article class="partner-entry">削除前のスポンサー</article>'),
+                        ("messages.html", "data-message-list", '<article class="support-message">削除前のメッセージ</article>'),
+                    ):
+                        original = (root / filename).read_text(encoding="utf-8")
+                        html = re.sub(r'(<div\b[^>]*\b' + marker + r'\b[^>]*>)',
+                                      lambda match, stale=stale: match[1] + stale, original, count=1)
+                        assert stale in html
+                        context.route(base + "/" + filename, lambda route, _request, html=html: route.fulfill(
+                            status=200, content_type="text/html; charset=utf-8", body=html))
                     page = context.new_page()
                     for filename, target in (("partners.html", "[data-partner-directory]"), ("messages.html", "[data-message-list]")):
                         page.goto(base + "/" + filename, wait_until="networkidle")
                         expect(page.locator(target + " .community-empty")).to_be_visible()
+                        expect(page.locator(target + " .partner-entry, " + target + " .support-message")).to_have_count(0)
+                        expect(page.locator(target)).not_to_contain_text("削除前")
                         expect(page.locator("[data-community-status]")).to_contain_text("0件")
                     assert_clean(requests)
                 finally:
                     context.close()
 
-            run("empty public lists display an honest empty state", empty_pages)
+            run("empty public lists remove deleted entries from a cached document", empty_pages)
+
+            def unavailable_public_lists():
+                context, requests = context_for_test()
+                try:
+                    # A valid response with no list is a content failure, not a
+                    # deletion. Avoid a browser-generated HTTP error so the
+                    # test can still require an otherwise clean console.
+                    data_route(context, "sponsors", lambda route: route.fulfill(json={"unavailable": True}))
+                    data_route(context, "messages", lambda route: route.fulfill(json={"unavailable": True}))
+                    for filename, marker, content in (
+                        ("partners.html", "data-partner-directory", '<article class="partner-entry">掲載済みのスポンサー</article>'),
+                        ("messages.html", "data-message-list", '<article class="support-message">掲載済みのメッセージ</article>'),
+                    ):
+                        original = (root / filename).read_text(encoding="utf-8")
+                        html = re.sub(r'(<div\b[^>]*\b' + marker + r'\b[^>]*>)',
+                                      lambda match, content=content: match[1] + content, original, count=1)
+                        assert content in html
+                        context.route(base + "/" + filename, lambda route, _request, html=html: route.fulfill(
+                            status=200, content_type="text/html; charset=utf-8", body=html))
+                    page = context.new_page()
+                    for filename, target, expected in (
+                        ("partners.html", "[data-partner-directory]", "掲載済みのスポンサー"),
+                        ("messages.html", "[data-message-list]", "掲載済みのメッセージ"),
+                    ):
+                        page.goto(base + "/" + filename, wait_until="networkidle")
+                        expect(page.locator(target)).to_contain_text(expected)
+                        expect(page.locator(".data-notice")).to_contain_text("最新情報を確認できませんでした")
+                        expect(page.locator("[data-community-status]")).to_contain_text("確認に失敗")
+                    assert_clean(requests)
+                finally:
+                    context.close()
+
+            run("unavailable public JSON preserves compiled listings and explains the failure", unavailable_public_lists)
 
             def responsive_pages():
                 context, requests = context_for_test()
