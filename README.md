@@ -6,6 +6,7 @@
 
 - CMSはPages CMS、保存先はGitHub `main` の `data/*.json` です。
 - GitHub Actionsが必要なファイルだけを `dist/` に生成し、GitHub Pagesへ公開します。`docs/` は説明資料で、サイトの公開フォルダではありません。
+- Cloudflare Pagesの無料URLへ移行する準備も追加しています。現在の公開を維持したまま、Cloudflareでは独立した公開URL・拡張子なしのcanonical・HTTPヘッダー設定を生成できます。[作成画面の入力手順](docs/CLOUDFLARE_PAGES.md)を参照してください。Cloudflareアカウントの設定・実デプロイは別途行います。
 - 利用者がCMSで設定した **メンテナンスONを保持**しています。解除はCMSの「サイト設定・SNS」→「メンテナンス画面を表示する」をOFFにして保存します。
 - 通常サイトは、設定を変更しない `--normal-preview` で別に確認できます。
 - トップ画像の設定は `assets/images/yusuke.gallery_09.jpg` です。公開時はその写真から作った配信用WebPを使います。
@@ -25,6 +26,8 @@
 詳しくは [写真付き記事の操作手順](docs/CMS.md)、保存したのに変わらない場合は [反映不具合の切り分け](docs/CMS_DIAGNOSIS.md) を参照してください。
 
 ## ビルドと確認
+
+Cloudflare Pagesの作成画面では、Build commandを`bash scripts/build_cloudflare.sh`、出力先を`dist`にします。環境変数`SITE_URL`へ確定した`https://名前.pages.dev/`を設定します。これはCMS原本を変更せず、Cloudflareの生成物にだけ使うURLです。詳しい入力値・GitHub Pages停止の順序は[移行手順](docs/CLOUDFLARE_PAGES.md)にまとめています。
 
 Python 3.11以上が目安です。ビルド依存は固定版のPillowです。
 
@@ -80,6 +83,8 @@ python3 scripts/test_photo_loading.py --directory dist-preview
 | --- | --- |
 | 総合報告・原因・公開判定 | [AUDIT_REPORT](docs/AUDIT_REPORT.md) |
 | 写真付き記事の更新 | [CMS](docs/CMS.md) |
+| Cloudflare Pages無料公開・移行 | [CLOUDFLARE_PAGES](docs/CLOUDFLARE_PAGES.md) |
+| Cloudflare移行準備の検証・未実施項目 | [CLOUDFLARE_VALIDATION](docs/CLOUDFLARE_VALIDATION.md) |
 | CMS保存・反映の診断 | [CMS_DIAGNOSIS](docs/CMS_DIAGNOSIS.md) |
 | 削除したファイルと保持理由 | [CLEANUP](docs/CLEANUP.md) |
 | テスト結果・未実施 | [RELEASE_TESTS](docs/RELEASE_TESTS.md) |

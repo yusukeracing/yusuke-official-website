@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Create the GitHub Pages artifact; no third-party build tools are required."""
+"""Create the checked static artifact for GitHub Pages or Cloudflare Pages."""
 from __future__ import annotations
 
 import argparse
@@ -42,6 +42,29 @@ SCRIPT = re.compile(r"<script\b([^>]*)>(.*?)</script\s*>", re.I | re.S)
 CANONICAL = re.compile(r'(<link\b[^>]*\brel=["\']canonical["\'][^>]*\bhref=["\'])([^"\']+)', re.I)
 DEFAULT_MAINTENANCE_MESSAGE = "現在、Webサイトのメンテナンスを行っています。\nご不便をおかけしますが、公開再開までしばらくお待ちください。"
 CONFLICT_MARKER = re.compile(r"^(?:<<<<<<< |=======\s*$|>>>>>>> )", re.M)
+CLOUDFLARE_HEADERS = """/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Content-Security-Policy: frame-ancestors 'none'
+
+/assets/optimized/*
+  Cache-Control: public, max-age=31536000, immutable
+"""
+
+
+def page_url(base: str, page: str, *, clean_urls: bool = False) -> str:
+    route = "" if page == "index.html" else page
+    if clean_urls and route.endswith(".html"):
+        route = route[:-5]
+    return urljoin(base, route)
+
+
+def cloudflare_metadata(text: str, base: str, page: str) -> str:
+    """Match Cloudflare's extension-less HTML routes without changing files."""
+    canonical = escape(page_url(base, page, clean_urls=True), quote=True)
+    text = CANONICAL.sub(lambda match: match[1] + canonical, text)
+    return re.sub(r'(<meta\b[^>]*\bproperty=["\']og:url["\'][^>]*\bcontent=["\'])[^"\']+',
+                  lambda match: match[1] + canonical, text, flags=re.I)
 
 
 def maintenance_enabled(settings: dict) -> bool:
@@ -196,15 +219,21 @@ def read_source_json(filename: str) -> dict:
 
 
 def site_url() -> str:
-    value = read_source_json("site.json").get("url")
-    error = "data/site.json: url must be the public HTTPS site URL without credentials, query or fragment"
+    # A Cloudflare project can use its own URL while the existing GitHub
+    # publication and CMS source setting remain intact during migration.
+    override = os.environ.get("SITE_URL")
+    value = override if override is not None else read_source_json("site.json").get("url")
+    label = "SITE_URL" if override is not None else "data/site.json: url"
+    error = label + " must be the public HTTPS site URL without credentials, query or fragment"
     if not isinstance(value, str):
         raise ValueError(error)
     try:
         parsed = urlsplit(value)
+        parsed.port
     except ValueError:
         raise ValueError(error) from None
-    if (parsed.scheme != "https" or not parsed.netloc or parsed.username or parsed.password
+    if (re.search(r"[\s\x00-\x1f\x7f\\]", value)
+            or parsed.scheme != "https" or not parsed.hostname or parsed.username or parsed.password
             or parsed.query or parsed.fragment or "xxx" in parsed.netloc):
         raise ValueError(error)
     return value.rstrip("/") + "/"
@@ -311,29 +340,31 @@ def update_page(text: str, base: str, settings: dict | None = None, profile: dic
     return text
 
 
-def write_discovery(destination: Path, base: str, maintenance: bool = False, articles=()) -> None:
+def write_discovery(destination: Path, base: str, maintenance: bool = False, articles=(), *, clean_urls=False) -> None:
     namespace = "http://www.sitemaps.org/schemas/sitemap/0.9"
     ET.register_namespace("", namespace)
     root = ET.Element(f"{{{namespace}}}urlset")
     for page in (() if maintenance else (*PUBLIC_PAGES, *articles)):
         item = ET.SubElement(root, f"{{{namespace}}}url")
-        ET.SubElement(item, f"{{{namespace}}}loc").text = urljoin(base, "" if page == "index.html" else page)
+        ET.SubElement(item, f"{{{namespace}}}loc").text = page_url(base, page, clean_urls=clean_urls)
     ET.indent(root)
     ET.ElementTree(root).write(destination / "sitemap.xml", encoding="utf-8", xml_declaration=True)
     path = urlsplit(base).path
     robots = "User-agent: *\nAllow: /\n"
     if not maintenance:
-        robots += f"Disallow: {path}maintenance.html\nDisallow: {path}404.html\n"
+        suffix = "" if clean_urls else ".html"
+        robots += f"Disallow: {path}maintenance{suffix}\nDisallow: {path}404{suffix}\n"
     robots += f"\nSitemap: {base}sitemap.xml\n"
     (destination / "robots.txt").write_text(robots, encoding="utf-8")
 
 
-def publication_id(source_pages, data, root):
+def publication_id(source_pages, data, root, *, platform="github-pages"):
     """Content identifier stays stable across rebuilds of the same publication."""
     fingerprint = deepcopy(data)
     if not fingerprint.get("site", {}).get("maintenanceEnabled"):
         fingerprint.get("site", {}).pop("maintenanceMessage", None)
     digest = hashlib.sha256(json.dumps(fingerprint, ensure_ascii=False, sort_keys=True).encode())
+    digest.update(platform.encode())
     for name, text in sorted(source_pages.items()):
         digest.update(name.encode())
         digest.update(text.encode())
@@ -366,15 +397,20 @@ def publication_markup(text, identifier):
     return re.sub(r'(\b(?:src|href)\s*=\s*)(["\'])(.*?)\2', version, text, flags=re.I | re.S)
 
 
-def build_site(*, normal_preview=False):
+def build_site(*, normal_preview=False, cloudflare=False):
     resolved_root, resolved_output = ROOT.resolve(), OUTPUT.resolve()
     if resolved_output == resolved_root or resolved_root.is_relative_to(resolved_output):
         raise ValueError("Output directory must not replace the source checkout or one of its parents")
     if OUTPUT.exists() and not OUTPUT.is_dir():
         raise ValueError("Output path must be a directory")
     base = site_url()
+    if cloudflare and urlsplit(base).path != "/":
+        raise ValueError("Cloudflare Pages: SITE_URL must be the public site root, without a project subdirectory")
+    platform = "cloudflare" if cloudflare else "github-pages"
     raw = {Path(name).stem: read_source_json(name) for name in SOURCE_DATA}
-    settings = raw["site"]
+    # The browser must receive the effective build URL, not the other hosting
+    # provider's CMS setting. Source JSON is never rewritten by a build.
+    settings = raw["site"] = {**raw["site"], "url": base}
     maintenance = maintenance_enabled(settings)
     if normal_preview:
         settings = {**settings, "maintenanceEnabled": False}
@@ -404,7 +440,7 @@ def build_site(*, normal_preview=False):
         media = MediaPipeline(ROOT, stage, base)
         published = media.rewrite_data(raw)
         published["site"]["socials"] = normalize_social_links(settings.get("socials"))
-        identifier = publication_id(source_pages, published, ROOT)
+        identifier = publication_id(source_pages, published, ROOT, platform=platform)
         pages = {}
         for page in PAGES:
             text = update_page(source_pages[page], base, published["site"], published["profile"])
@@ -425,6 +461,8 @@ def build_site(*, normal_preview=False):
         if maintenance:
             template = pages["maintenance.html"]
             pages = {page: without_content_loader(maintenance_page(template, page, base)) for page in pages}
+        if cloudflare:
+            pages = {page: cloudflare_metadata(text, base, page) for page, text in pages.items()}
         pages = {name: publication_markup(text, identifier) for name, text in pages.items()}
         pages["404.html"] = absolute_error_references(without_content_loader(pages["404.html"]), base)
         for page, text in pages.items():
@@ -435,12 +473,14 @@ def build_site(*, normal_preview=False):
         for filename in SOURCE_DATA:
             (stage / "data" / filename).write_text(json.dumps(published[Path(filename).stem], ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         media.write_manifest()
-        publication = {"version": 1, "contentId": identifier, "url": base,
+        publication = {"version": 1, "contentId": identifier, "url": base, "platform": platform,
                        "maintenanceEnabled": maintenance, "pages": list(pages),
                        "articlePages": list(articles), "sourcePhotosPublished": False}
         (stage / "data/publication.json").write_text(json.dumps(publication, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         (stage / ".nojekyll").touch()
-        write_discovery(stage, base, maintenance, tuple(articles))
+        write_discovery(stage, base, maintenance, tuple(articles), clean_urls=cloudflare)
+        if cloudflare:
+            (stage / "_headers").write_text(CLOUDFLARE_HEADERS, encoding="utf-8")
         previous = stage.with_name(stage.name + "-previous")
         if OUTPUT.exists():
             os.replace(OUTPUT, previous)
@@ -455,6 +495,7 @@ def build_site(*, normal_preview=False):
     count = sum(1 for path in OUTPUT.rglob("*") if path.is_file())
     print(f"Built {len(pages)} pages and {count} public files in {OUTPUT}")
     print(f"Public URL: {base}")
+    print(f"Platform: {platform}")
     print("Maintenance mode: " + ("ON (all HTML URLs show the notice)" if maintenance else "OFF"))
     print("Publication: " + identifier)
     if normal_preview:
@@ -467,12 +508,13 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, help="Output directory (default: dist)")
     parser.add_argument("--normal-preview", action="store_true", help="Build a normal-site review artifact without changing the CMS maintenance setting")
+    parser.add_argument("--cloudflare", action="store_true", help="Use Cloudflare's extension-less canonical URLs and static response header rules")
     args = parser.parse_args([] if argv is None else argv)
     previous_output = OUTPUT
     try:
         if args.output is not None:
             OUTPUT = args.output.resolve()
-        return build_site(normal_preview=args.normal_preview)
+        return build_site(normal_preview=args.normal_preview, cloudflare=args.cloudflare)
     finally:
         OUTPUT = previous_output
 

@@ -26,6 +26,7 @@ content:
   - name: url
     label: 公開URL（末尾 /）
     type: string
+    description: 実際の公開先のHTTPS URL。Cloudflare Pages利用時は、Cloudflareの環境変数SITE_URLも同じ値へ変更して再ビルドしてください。
   - name: season
     label: シーズン
     type: string
