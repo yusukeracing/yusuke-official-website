@@ -1,10 +1,17 @@
 {
   "next": {
-    "round": "TBA",
-    "date": "TBA",
-    "circuit": "TBA",
-    "url": ""
+    "round": "全日本ロードレース選手権 最終戦 Rd.鈴鹿 ",
+    "date": "2026-10-24,25",
+    "circuit": "鈴鹿サーキット",
+    "url": "https://www.jrr.jp/rider/yusuke-ikeda/"
   },
-  "results": [],
-  "schedule": []
+  "results": [
+    {
+      "round": "全日本ロードレース選手権 最終戦 Rd.鈴鹿 ",
+      "date": "2026-10-24,25",
+      "circuit": "鈴鹿サーキット",
+      "qualify": "予選 22位（レイン）2：31.792 ",
+      "race": "決勝 19位（レイン）2：31.162"
+    }
+  ]
 }
