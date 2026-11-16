@@ -81,6 +81,20 @@ class PublicationPipelineTests(unittest.TestCase):
         with patch.object(build, "ROOT", self.root), patch.object(build, "OUTPUT", self.output), redirect_stdout(StringIO()):
             return build.build_site(normal_preview=preview, cloudflare=cloudflare)
 
+    def test_cms_empty_race_lists_are_normalized_without_rewriting_source(self):
+        for source in ({"next": {}}, {"results": None, "schedule": None},
+                       {"results": [{"round": "鈴鹿"}]}):
+            with self.subTest(source=source):
+                self.save("races", source)
+                self.publish()
+                self.assertEqual(self.load("races")["schedule"], [])
+                self.assertEqual(self.load("races")["results"], source.get("results") or [])
+                self.assertEqual(self.load("races", source=True), source)
+        for invalid in ("", {}, ["invalid"]):
+            self.save("races", {"schedule": invalid})
+            with self.subTest(invalid=invalid), self.assertRaisesRegex(ValueError, "schedule must be an array of objects"):
+                self.publish()
+
     def test_cloudflare_override_aligns_public_urls_without_changing_cms_source(self):
         original = (self.root / "data/site.json").read_bytes()
         base = "https://racing.pages.dev/"

@@ -429,6 +429,16 @@ def build_site(*, normal_preview=False, cloudflare=False):
         raise ValueError("Cloudflare Pages: SITE_URL must be the public site root, without a project subdirectory")
     platform = "cloudflare" if cloudflare else "github-pages"
     raw = {Path(name).stem: read_source_json(name) for name in SOURCE_DATA}
+    # Pages CMS omits empty optional lists when saving a file. Keep the
+    # publication schema stable without requiring owners to edit JSON by hand.
+    races = raw["races"]
+    if not isinstance(races, dict):
+        raise ValueError("data/races.json: expected an object")
+    for field in ("results", "schedule"):
+        if races.get(field) is None:
+            races[field] = []
+        if not isinstance(races[field], list) or not all(isinstance(item, dict) for item in races[field]):
+            raise ValueError(f"data/races.json: {field} must be an array of objects")
     # The browser must receive the effective build URL, not the other hosting
     # provider's CMS setting. Source JSON is never rewritten by a build.
     settings = raw["site"] = {**raw["site"], "url": base}

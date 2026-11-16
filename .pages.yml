@@ -299,7 +299,10 @@ content:
       label: 記事URLの名前（半角英数字・ハイフン）
       type: string
       required: true
-      description: 例：sugo-report-2026。記事ごとに別の名前を設定し、公開後は変更しないでください。
+      pattern:
+        regex: "^[a-z0-9]+(-[a-z0-9]+)*$"
+        message: 半角小文字の英数字とハイフンのみで入力してください（例：suzuka-final-round-2026）。日本語・空白は使えません。
+      description: 80文字以内。記事ごとに別の名前を設定し、公開後は変更しないでください。日本語の見出しは「タイトル」に入力します。
     - name: published
       label: サイトへ掲載する
       type: boolean
@@ -337,7 +340,7 @@ content:
       type: image
       description: 記事一覧と詳細冒頭に表示。写真を選んだら代替テキストも入力してください。未設定は空欄にします。
     - name: imageAlt
-      label: サムネイルの代替テキスト
+      label: サムネイルの代替テキスト（写真を選んだ場合は必須）
       type: string
       description: 写真に実際に写る内容を短く説明します。サムネイルを指定した場合は必須です。
     - name: imageCaption
