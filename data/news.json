@@ -11,7 +11,7 @@
       "isSample": false
     },
     {
-      "slug": "全日本ロードレース選手権 最終戦 Rd.鈴鹿 を終えて",
+      "slug": "suzuka-final-round-2026",
       "published": true,
       "date": "2026-11-16",
       "category": "ACTIVITY",
@@ -24,7 +24,8 @@
         {
           "type": "text"
         }
-      ]
+      ],
+      "imageAlt": "ゼッケン29のマシンでコーナーを走行する池田優介"
     }
   ]
 }

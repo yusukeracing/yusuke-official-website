@@ -117,6 +117,34 @@ class MaintenancePublicationTests(unittest.TestCase):
         errors, _ = validate(self.output)
         self.assertEqual(errors, [])
 
+    def test_invalid_cms_article_blocks_off_until_metadata_is_fixed(self):
+        self.save_settings(maintenanceEnabled=True)
+        self.publish()
+        previous = (self.output / "index.html").read_bytes()
+        path = self.root / "data/news.json"
+        news = json.loads(path.read_text(encoding="utf-8"))
+        item = {"slug": "全日本 最終戦", "published": True,
+                "title": "鈴鹿の活動報告", "date": "2026-11-16",
+                "image": "assets/images/yusuke.gallery_09.jpg",
+                "blocks": [{"type": "text"}]}
+        news["items"].append(item)
+        self.save_settings(maintenanceEnabled=False)
+        for error in ("slug must be unique", "thumbnail alternative text is required"):
+            path.write_text(json.dumps(news, ensure_ascii=False), encoding="utf-8")
+            with self.assertRaisesRegex(ValueError, error):
+                self.publish()
+            self.assertEqual((self.output / "index.html").read_bytes(), previous)
+            item["slug"] = "suzuka-recovery-fixture-2026"
+        item["imageAlt"] = "コーナーを走行するライダー"
+        path.write_text(json.dumps(news, ensure_ascii=False), encoding="utf-8")
+        recovered = self.publish()
+        self.assertFalse(recovered["maintenanceEnabled"])
+        self.assertNotIn('data-maintenance-mode="true"', (self.output / "index.html").read_text())
+        article = self.output / "article-suzuka-recovery-fixture-2026.html"
+        self.assertIn("鈴鹿の活動報告", article.read_text())
+        errors, _ = validate(self.output)
+        self.assertEqual(errors, [])
+
     def test_text_false_is_rejected_without_removing_previous_artifact(self):
         self.output.mkdir()
         marker = self.output / "keep.txt"
